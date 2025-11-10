@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Présentation Bloc 1 - Virgile Allix</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="logo">Virgile Allix - BTS SIO SLAM</h1>
+            <ul class="nav-menu">
+                <li><a href="#presentation" class="nav-link">Présentation</a></li>
+                <li><a href="#mtconges" class="nav-link">MT-Congés</a></li>
+                <li><a href="#portfolio" class="nav-link">Portfolio 3D</a></li>
+                <li><a href="#veille" class="nav-link">Veille</a></li>
+            </ul>
+            <div class="timer-display" id="timer">10:00</div>
+        </div>
+    </nav>
+
+    <!-- Barre de progression de la présentation -->
+    <div class="presentation-progress">
+        <div class="presentation-progress-bar"></div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Présentation Oral Bloc 1</h1>
+            <p class="hero-subtitle">BTS SIO SLAM - Épreuve E4</p>
+            <p class="hero-duration">Durée : 10 minutes</p>
+            <button class="cta-button" onclick="scrollToSection('presentation')">Commencer la présentation</button>
+        </div>
+    </section>
+
+    <!-- Section 1: Présentation Personnelle -->
+    <section id="presentation" class="section section-light">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-number">01</span>
+                <h2 class="section-title">Présentation Personnelle</h2>
+                <span class="section-time">1min30</span>
+            </div>
+
+            <div class="content-grid">
+                <div class="card">
+                    <h3>Qui suis-je ?</h3>
+                    <ul>
+                        <li><strong>Nom :</strong> Virgile Allix</li>
+                        <li><strong>Formation :</strong> BTS SIO option SLAM</li>
+                        <li><strong>Statut :</strong> Étudiant en alternance - Développeur</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>Mon parcours</h3>
+                    <ul>
+                        <li>Passionné par le développement logiciel</li>
+                        <li>Intérêt pour la cybersécurité</li>
+                        <li>Formation en programmation orientée objet</li>
+                        <li>Expérience en alternance</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>Compétences techniques</h3>
+                    <div class="skills">
+                        <span class="skill-tag">Java</span>
+                        <span class="skill-tag">JavaScript</span>
+                        <span class="skill-tag">HTML/CSS</span>
+                        <span class="skill-tag">MySQL</span>
+                        <span class="skill-tag">Firebase</span>
+                        <span class="skill-tag">MVC</span>
+                        <span class="skill-tag">Git</span>
+                        <span class="skill-tag">WebGL</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Objectifs professionnels</h3>
+                    <ul>
+                        <li>Devenir développeur full-stack</li>
+                        <li>Approfondir la cybersécurité</li>
+                        <li>Contribuer à des projets innovants</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: Projet MT-Congés -->
+    <section id="mtconges" class="section section-dark">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-number">02</span>
+                <h2 class="section-title">Projet MT-Congés</h2>
+                <span class="section-time">3min</span>
+            </div>
+
+            <div class="project-intro">
+                <h3>Contexte et Problématique</h3>
+                <p><strong>Type :</strong> Projet scolaire (3 mois - 2024)</p>
+                <p class="highlight">Comment gérer efficacement les demandes de congés dans une organisation avec différents niveaux de hiérarchie tout en garantissant la sécurité des données ?</p>
+            </div>
+
+            <div class="content-grid">
+                <div class="card">
+                    <h3>Technologies</h3>
+                    <ul>
+                        <li><strong>Backend :</strong> Java 17</li>
+                        <li><strong>Interface :</strong> Java Swing</li>
+                        <li><strong>BDD :</strong> MySQL</li>
+                        <li><strong>Architecture :</strong> MVC</li>
+                        <li><strong>Patterns :</strong> DAO, POJO</li>
+                        <li><strong>Versionning :</strong> Git</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>Fonctionnalités</h3>
+                    <ul>
+                        <li><strong>Authentification sécurisée</strong>
+                            <ul>
+                                <li>Verrouillage après tentatives échouées</li>
+                                <li>Réinitialisation mot de passe</li>
+                                <li>Sessions limitées</li>
+                            </ul>
+                        </li>
+                        <li><strong>Gestion des rôles</strong>
+                            <ul>
+                                <li>Administrateur : gestion utilisateurs</li>
+                                <li>Responsable : validation d'équipe</li>
+                                <li>Employé : demandes personnelles</li>
+                            </ul>
+                        </li>
+                        <li><strong>Système de logging</strong></li>
+                    </ul>
+                </div>
+
+                <div class="card card-highlight">
+                    <h3>Difficultés & Solutions</h3>
+                    <div class="difficulty-item">
+                        <h4>🔒 Sécurité des données</h4>
+                        <p><strong>Problème :</strong> Risques d'injection SQL</p>
+                        <p><strong>Solution :</strong> Pattern DAO, validation des entrées</p>
+                    </div>
+                    <div class="difficulty-item">
+                        <h4>🏗️ Complexité architecturale</h4>
+                        <p><strong>Problème :</strong> Architecture difficile à maintenir</p>
+                        <p><strong>Solution :</strong> MVC strict, séparation des responsabilités</p>
+                    </div>
+                    <div class="difficulty-item">
+                        <h4>⚖️ Conformité RGPD</h4>
+                        <p><strong>Problème :</strong> Données personnelles sensibles</p>
+                        <p><strong>Solution :</strong> Intégration dès la conception</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Résultats</h3>
+                    <ul>
+                        <li>Application fonctionnelle et sécurisée</li>
+                        <li>Maîtrise de l'architecture MVC</li>
+                        <li>Compréhension des enjeux de sécurité</li>
+                        <li>Gestion de projet complète</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Portfolio & Constructeur 3D -->
+    <section id="portfolio" class="section section-light">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-number">03</span>
+                <h2 class="section-title">Portfolio & Constructeur 3D Minecraft</h2>
+                <span class="section-time">3min</span>
+            </div>
+
+            <div class="project-intro">
+                <h3>Contexte et Problématique</h3>
+                <p><strong>Type :</strong> Projet personnel et professionnel</p>
+                <p class="highlight">Comment créer un portfolio interactif et innovant qui démontre mes compétences techniques tout en proposant une expérience utilisateur unique ?</p>
+            </div>
+
+            <div class="content-grid">
+                <div class="card">
+                    <h3>Technologies</h3>
+                    <ul>
+                        <li><strong>Frontend :</strong> HTML5, CSS3, JavaScript</li>
+                        <li><strong>3D :</strong> WebGL (rendu 3D natif)</li>
+                        <li><strong>Backend :</strong> Firebase (Authentication, Firestore, Hosting)</li>
+                        <li><strong>PWA :</strong> Service Worker, Manifest</li>
+                        <li><strong>Architecture :</strong> Modularité ES6+</li>
+                    </ul>
+                </div>
+
+                <div class="card card-highlight">
+                    <h3>🎮 Constructeur 3D Minecraft (Feature phare)</h3>
+                    <p><strong>Innovation majeure :</strong> Outil interactif de construction 3D</p>
+                    <ul>
+                        <li>Rendu 3D avec WebGL pur (sans bibliothèque)</li>
+                        <li>Manipulation de blocs en temps réel</li>
+                        <li>Interface intuitive avec contrôles souris</li>
+                        <li>Gestion des matrices de transformation</li>
+                        <li>Optimisation du rendu (culling, batching)</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>🕹️ Mini-jeux & Projets Personnels</h3>
+                    <p><strong>Démonstration de créativité et compétences variées</strong></p>
+                    <ul>
+                        <li><strong>Jeu du Serpent (Snake)</strong>
+                            <ul>
+                                <li>Canvas 2D avec logique de jeu</li>
+                                <li>Gestion des collisions</li>
+                                <li>Système de score</li>
+                            </ul>
+                        </li>
+                        <li><strong>Système d'achievements</strong>
+                            <ul>
+                                <li>Gamification complète</li>
+                                <li>Déblocage progressif</li>
+                                <li>Sauvegarde locale (localStorage)</li>
+                            </ul>
+                        </li>
+                        <li><strong>Easter eggs interactifs</strong>
+                            <ul>
+                                <li>Commandes cachées (Konami code)</li>
+                                <li>Animations surprises</li>
+                                <li>Engagement utilisateur</li>
+                            </ul>
+                        </li>
+                        <li><strong>Mini-simulations</strong>
+                            <ul>
+                                <li>Physique simple (gravité, collisions)</li>
+                                <li>Expérimentations JavaScript</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>🌐 Fonctionnalités Cloud (Firebase)</h3>
+                    <ul>
+                        <li><strong>Authentification</strong>
+                            <ul>
+                                <li>Gestion des utilisateurs</li>
+                                <li>Connexion sécurisée</li>
+                            </ul>
+                        </li>
+                        <li><strong>Base de données en temps réel</strong>
+                            <ul>
+                                <li>Firestore pour les scores</li>
+                                <li>Synchronisation automatique</li>
+                                <li>Classements en ligne</li>
+                            </ul>
+                        </li>
+                        <li><strong>Hébergement</strong>
+                            <ul>
+                                <li>Déploiement Firebase Hosting</li>
+                                <li>CDN global</li>
+                                <li>HTTPS automatique</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>Architecture modulaire</h3>
+                    <div class="code-structure">
+                        <code>minecraft-builder-3d.js</code>
+                        <code>achievements.js</code>
+                        <code>easter-eggs.js</code>
+                        <code>sounds.js</code>
+                        <code>minigames.js</code>
+                    </div>
+                </div>
+
+                <div class="card card-highlight">
+                    <h3>Difficultés & Solutions</h3>
+                    <div class="difficulty-item">
+                        <h4>⚡ Performance WebGL</h4>
+                        <p><strong>Solution :</strong> Optimisation vertices, culling</p>
+                    </div>
+                    <div class="difficulty-item">
+                        <h4>🌐 Compatibilité navigateurs</h4>
+                        <p><strong>Solution :</strong> Tests multi-navigateurs, fallbacks</p>
+                    </div>
+                    <div class="difficulty-item">
+                        <h4>👤 UX Interface 3D</h4>
+                        <p><strong>Solution :</strong> Tutoriel intégré, contrôles intuitifs</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Résultats & Compétences</h3>
+                    <ul>
+                        <li>Portfolio unique et mémorable</li>
+                        <li>Plus de 38 commits</li>
+                        <li>Démonstration de compétences variées</li>
+                        <li>Maîtrise du Cloud avec Firebase</li>
+                        <li>Expérience en backend as a service (BaaS)</li>
+                        <li>Feedback positifs</li>
+                    </ul>
+                    <a href="https://virgileallix.github.io/portfolio/" target="_blank" class="btn-link">Voir le portfolio en ligne →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Veille Technologique -->
+    <section id="veille" class="section section-dark">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-number">04</span>
+                <h2 class="section-title">Veille Technologique</h2>
+                <span class="section-time">2min30</span>
+            </div>
+
+            <div class="veille-intro">
+                <h3>Sujet de Veille</h3>
+                <p class="highlight-large">"L'essor des attaques par intelligence artificielle"</p>
+                <p><strong>Pourquoi ce sujet ?</strong></p>
+                <ul>
+                    <li>Thématique d'actualité en cybersécurité</li>
+                    <li>Lien direct avec mes compétences</li>
+                    <li>Importance croissante de l'IA dans la sécurité</li>
+                </ul>
+            </div>
+
+            <div class="content-grid">
+                <div class="card">
+                    <h3>🎯 Axes de Recherche</h3>
+                    <div class="veille-axis">
+                        <h4>1. Attaques alimentées par l'IA</h4>
+                        <ul>
+                            <li>Phishing sophistiqué</li>
+                            <li>Code malveillant automatisé</li>
+                            <li>Social engineering</li>
+                        </ul>
+                    </div>
+                    <div class="veille-axis">
+                        <h4>2. Défense par l'IA</h4>
+                        <ul>
+                            <li>Analyse comportementale</li>
+                            <li>Détection d'anomalies</li>
+                            <li>Réponse automatisée</li>
+                        </ul>
+                    </div>
+                    <div class="veille-axis">
+                        <h4>3. Course technologique</h4>
+                        <ul>
+                            <li>Compétition attaquants/défenseurs</li>
+                            <li>Évolution rapide des techniques</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>📚 Méthodologie de Veille</h3>
+                    <ul>
+                        <li><strong>Sources</strong>
+                            <ul>
+                                <li>Articles de recherche</li>
+                                <li>Conférences et webinaires</li>
+                                <li>Blogs spécialisés</li>
+                                <li>Actualités tech</li>
+                            </ul>
+                        </li>
+                        <li><strong>Fréquence</strong>
+                            <ul>
+                                <li>Veille quotidienne</li>
+                                <li>Analyse hebdomadaire</li>
+                                <li>Synthèse mensuelle</li>
+                            </ul>
+                        </li>
+                        <li><strong>Outils</strong>
+                            <ul>
+                                <li>Flux RSS</li>
+                                <li>Alertes Google</li>
+                                <li>LinkedIn, Twitter</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card card-highlight">
+                    <h3>💡 Enseignements & Applications</h3>
+                    <div class="application-item">
+                        <h4>Pour mes projets</h4>
+                        <p>Intégration de bonnes pratiques de sécurité, anticipation des vulnérabilités</p>
+                    </div>
+                    <div class="application-item">
+                        <h4>Pour ma formation</h4>
+                        <p>Compréhension des enjeux actuels, culture technique à jour</p>
+                    </div>
+                    <div class="application-item">
+                        <h4>Pour ma carrière</h4>
+                        <p>Spécialisation possible en cybersécurité, compétences recherchées</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Conclusion -->
+    <section class="conclusion">
+        <div class="container">
+            <h2>Conclusion</h2>
+            <div class="conclusion-content">
+                <div class="card">
+                    <h3>Compétences Acquises</h3>
+                    <ul>
+                        <li>Développement d'applications complètes</li>
+                        <li>Maîtrise des architectures logicielles</li>
+                        <li>Conscience des enjeux de sécurité</li>
+                        <li>Créativité et innovation technique</li>
+                        <li>Veille technologique active</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Projet Professionnel</h3>
+                    <ul>
+                        <li>Formation continue sur les technologies émergentes</li>
+                        <li>Approfondissement cybersécurité et IA</li>
+                        <li>Contribution à des projets ambitieux</li>
+                        <li>Développeur full-stack avec expertise sécurité</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="questions-section">
+                <h3>Questions ?</h3>
+                <p>Je suis prêt à répondre à vos questions sur mes projets et ma démarche.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Virgile Allix - BTS SIO SLAM Bloc 1</p>
+            <p>Portfolio en ligne : <a href="https://virgileallix.github.io/portfolio/" target="_blank">virgileallix.github.io/portfolio</a></p>
+        </div>
+    </footer>
+
+    <!-- Timer Control -->
+    <div class="timer-control">
+        <button id="startTimer" class="timer-btn">Démarrer le chronomètre</button>
+        <button id="resetTimer" class="timer-btn">Réinitialiser</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
