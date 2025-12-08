@@ -1,14 +1,10 @@
-// Scene 3D - Setup Gamer Hyte Y70 Style
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
-import { EffectComposer } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/postprocessing/EffectComposer.js';
-import { RenderPass } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/postprocessing/RenderPass.js';
-import { UnrealBloomPass } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/postprocessing/UnrealBloomPass.js';
-
+// Scene 3D - Setup Gamer Hyte Y70 Style (Full Immersive)
 class GamerSetup3D {
     constructor() {
         this.scene = null;
         this.camera = null;
         this.renderer = null;
+        this.controls = null;
         this.composer = null;
         this.pcCase = null;
         this.rgbLights = [];
@@ -43,22 +39,28 @@ class GamerSetup3D {
         this.camera.position.set(0, 2, 8);
         this.camera.lookAt(0, 0, 0);
 
-        // Renderer
+        // Renderer - plein écran
+        const canvas = document.getElementById('scene3d');
         this.renderer = new THREE.WebGLRenderer({
+            canvas: canvas,
             antialias: true,
-            alpha: true
+            alpha: false
         });
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
         this.renderer.toneMappingExposure = 1.2;
 
-        // Ajouter le canvas au body en arrière-plan
-        this.renderer.domElement.style.position = 'fixed';
-        this.renderer.domElement.style.top = '0';
-        this.renderer.domElement.style.left = '0';
-        this.renderer.domElement.style.zIndex = '-1';
-        document.body.prepend(this.renderer.domElement);
+        // OrbitControls pour zoom et rotation
+        this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+        this.controls.enableDamping = true;
+        this.controls.dampingFactor = 0.05;
+        this.controls.minDistance = 3;
+        this.controls.maxDistance = 15;
+        this.controls.maxPolarAngle = Math.PI / 1.5;
+        this.controls.enablePan = false;
+        this.controls.autoRotate = true;
+        this.controls.autoRotateSpeed = 0.5;
 
         // Post-processing pour le bloom RGB
         this.setupPostProcessing();
@@ -84,12 +86,12 @@ class GamerSetup3D {
     }
 
     setupPostProcessing() {
-        this.composer = new EffectComposer(this.renderer);
+        this.composer = new THREE.EffectComposer(this.renderer);
 
-        const renderPass = new RenderPass(this.scene, this.camera);
+        const renderPass = new THREE.RenderPass(this.scene, this.camera);
         this.composer.addPass(renderPass);
 
-        const bloomPass = new UnrealBloomPass(
+        const bloomPass = new THREE.UnrealBloomPass(
             new THREE.Vector2(window.innerWidth, window.innerHeight),
             1.5, // strength
             0.4, // radius
@@ -625,18 +627,9 @@ class GamerSetup3D {
     }
 
     onMouseMove(event) {
-        const mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-        const mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
-
         // Update mouse position for raycasting
-        this.mouse.x = mouseX;
-        this.mouse.y = mouseY;
-
-        // Parallax effect
-        if (this.pcCase) {
-            this.pcCase.rotation.y = mouseX * 0.3;
-            this.pcCase.rotation.x = mouseY * 0.1;
-        }
+        this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
         // Raycasting for hover effects
         this.raycaster.setFromCamera(this.mouse, this.camera);
@@ -662,6 +655,16 @@ class GamerSetup3D {
                 this.hoveredObject = object;
                 this.applyObjectHover(object);
                 document.body.style.cursor = 'pointer';
+
+                // Arrêter l'auto-rotation pendant le hover
+                if (this.controls) {
+                    this.controls.autoRotate = false;
+                }
+            }
+        } else {
+            // Reprendre l'auto-rotation quand pas de hover
+            if (this.controls) {
+                this.controls.autoRotate = true;
             }
         }
     }
@@ -762,10 +765,16 @@ class GamerSetup3D {
     }
 
     navigateToSection(sectionId) {
-        const element = document.getElementById(sectionId);
-        if (element) {
-            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+        // Pour l'instant, juste afficher une alerte
+        // Plus tard, on pourra zoomer sur le composant ou afficher un overlay
+        const sectionNames = {
+            'presentation': 'Présentation Personnelle',
+            'mtconges': 'Projet 1 : MT-Congés',
+            'projet2': 'Projet 2 : RFTG',
+            'veille': 'Veille Technologique'
+        };
+
+        alert(`Navigation vers: ${sectionNames[sectionId] || sectionId}\n\nEn cours de développement...`);
     }
 
     onWindowResize() {
@@ -778,6 +787,11 @@ class GamerSetup3D {
     animate() {
         requestAnimationFrame(() => this.animate());
         this.time += 0.01;
+
+        // Update controls
+        if (this.controls) {
+            this.controls.update();
+        }
 
         // Animer les ventilateurs RGB
         this.rgbLights.forEach((fan, index) => {
@@ -808,11 +822,6 @@ class GamerSetup3D {
         this.particles.forEach(particles => {
             particles.rotation.y = this.time * 0.1;
         });
-
-        // Rotation douce du boîtier PC
-        if (this.pcCase) {
-            this.pcCase.rotation.y = Math.sin(this.time * 0.3) * 0.2;
-        }
 
         // Update tooltips for hovered component
         if (this.hoveredObject && this.hoveredObject.userData.updateTooltip) {
