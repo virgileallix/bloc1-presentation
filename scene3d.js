@@ -16,6 +16,14 @@ class GamerSetup3D {
         this.codeMatrix = [];
         this.time = 0;
 
+        // Interactive elements
+        this.interactiveObjects = [];
+        this.raycaster = new THREE.Raycaster();
+        this.mouse = new THREE.Vector2();
+        this.hoveredObject = null;
+        this.monitors = [];
+        this.folderIcons = [];
+
         this.init();
     }
 
@@ -65,6 +73,11 @@ class GamerSetup3D {
         // Event listeners
         window.addEventListener('resize', () => this.onWindowResize());
         document.addEventListener('mousemove', (e) => this.onMouseMove(e));
+        document.addEventListener('click', (e) => this.onClick(e));
+
+        // Create interactive elements
+        this.createMonitors();
+        this.createFolderIcons();
 
         // Animation loop
         this.animate();
@@ -142,7 +155,10 @@ class GamerSetup3D {
         glass.position.z = 1.01;
         group.add(glass);
 
-        // GPU - Carte graphique avec RGB
+        // === COMPOSANTS CLIQUABLES ===
+
+        // GPU - Carte graphique (PROJET 1 - MT-Congés)
+        const gpuGroup = new THREE.Group();
         const gpuGeometry = new THREE.BoxGeometry(1.5, 0.3, 0.8);
         const gpuMaterial = new THREE.MeshStandardMaterial({
             color: 0x202020,
@@ -152,11 +168,123 @@ class GamerSetup3D {
             emissiveIntensity: 0.5
         });
         const gpu = new THREE.Mesh(gpuGeometry, gpuMaterial);
-        gpu.position.set(0, -0.5, 0);
-        gpu.rotation.y = Math.PI / 8;
-        group.add(gpu);
+        gpuGroup.add(gpu);
 
-        // LED strips RGB
+        // GPU label
+        const gpuLabelGeometry = new THREE.PlaneGeometry(1.2, 0.2);
+        const gpuLabelMaterial = new THREE.MeshBasicMaterial({
+            color: 0xff00ff,
+            transparent: true,
+            opacity: 0.8
+        });
+        const gpuLabel = new THREE.Mesh(gpuLabelGeometry, gpuLabelMaterial);
+        gpuLabel.position.y = 0.3;
+        gpuLabel.position.z = 0.5;
+        gpuGroup.add(gpuLabel);
+
+        gpuGroup.position.set(0, -0.5, 0);
+        gpuGroup.rotation.y = Math.PI / 8;
+        gpuGroup.userData = {
+            section: 'mtconges',
+            name: 'GPU - Projet 1',
+            description: 'MT-Congés',
+            isInteractive: true,
+            component: 'gpu',
+            originalColor: 0xff00ff,
+            originalEmissive: 0.5
+        };
+        group.add(gpuGroup);
+        this.interactiveObjects.push(gpuGroup);
+        this.createComponentTooltip(gpuGroup, 'PROJET 1', 'MT-Congés', 0xff00ff);
+
+        // CPU - Processeur (PRÉSENTATION)
+        const cpuGroup = new THREE.Group();
+        const cpuGeometry = new THREE.BoxGeometry(0.6, 0.1, 0.6);
+        const cpuMaterial = new THREE.MeshStandardMaterial({
+            color: 0x303030,
+            metalness: 0.9,
+            roughness: 0.1,
+            emissive: 0x00ff00,
+            emissiveIntensity: 0.5
+        });
+        const cpu = new THREE.Mesh(cpuGeometry, cpuMaterial);
+        cpuGroup.add(cpu);
+
+        cpuGroup.position.set(0, 0.8, 0);
+        cpuGroup.userData = {
+            section: 'presentation',
+            name: 'CPU - Présentation',
+            description: 'Qui suis-je ?',
+            isInteractive: true,
+            component: 'cpu',
+            originalColor: 0x00ff00,
+            originalEmissive: 0.5
+        };
+        group.add(cpuGroup);
+        this.interactiveObjects.push(cpuGroup);
+        this.createComponentTooltip(cpuGroup, 'PRÉSENTATION', 'Virgile Allix', 0x00ff00);
+
+        // RAM - Mémoire (PROJET 2 - RFTG)
+        for (let i = 0; i < 2; i++) {
+            const ramGroup = new THREE.Group();
+            const ramGeometry = new THREE.BoxGeometry(0.2, 1, 0.05);
+            const ramMaterial = new THREE.MeshStandardMaterial({
+                color: 0x1a1a1a,
+                metalness: 0.8,
+                roughness: 0.2,
+                emissive: 0x00ffff,
+                emissiveIntensity: 0.5
+            });
+            const ram = new THREE.Mesh(ramGeometry, ramMaterial);
+            ramGroup.add(ram);
+
+            ramGroup.position.set(-0.5 + i * 0.3, 0.3, 0.3);
+
+            if (i === 0) { // Seulement le premier module est cliquable
+                ramGroup.userData = {
+                    section: 'projet2',
+                    name: 'RAM - Projet 2',
+                    description: 'RFTG',
+                    isInteractive: true,
+                    component: 'ram',
+                    originalColor: 0x00ffff,
+                    originalEmissive: 0.5
+                };
+                this.interactiveObjects.push(ramGroup);
+                this.createComponentTooltip(ramGroup, 'PROJET 2', 'RFTG', 0x00ffff);
+            }
+
+            group.add(ramGroup);
+        }
+
+        // SSD - Stockage (VEILLE TECHNOLOGIQUE)
+        const ssdGroup = new THREE.Group();
+        const ssdGeometry = new THREE.BoxGeometry(0.8, 0.1, 0.5);
+        const ssdMaterial = new THREE.MeshStandardMaterial({
+            color: 0x202020,
+            metalness: 0.7,
+            roughness: 0.3,
+            emissive: 0xff0080,
+            emissiveIntensity: 0.5
+        });
+        const ssd = new THREE.Mesh(ssdGeometry, ssdMaterial);
+        ssdGroup.add(ssd);
+
+        ssdGroup.position.set(0, -1.2, 0.5);
+        ssdGroup.userData = {
+            section: 'veille',
+            name: 'SSD - Veille',
+            description: 'Veille Technologique',
+            isInteractive: true,
+            component: 'ssd',
+            originalColor: 0xff0080,
+            originalEmissive: 0.5
+        };
+        group.add(ssdGroup);
+        this.interactiveObjects.push(ssdGroup);
+        this.createComponentTooltip(ssdGroup, 'VEILLE TECH', 'IA & Cybersécurité', 0xff0080);
+
+        // LED strips RGB (décoratifs)
         for (let i = 0; i < 4; i++) {
             const ledGeometry = new THREE.CylinderGeometry(0.02, 0.02, 3, 8);
             const ledColor = [0xff00ff, 0x00ffff, 0xff0080, 0x00ff00][i];
@@ -171,9 +299,10 @@ class GamerSetup3D {
             led.position.x = Math.cos(angle) * 0.9;
             led.position.z = Math.sin(angle) * 0.9;
             group.add(led);
+            this.rgbLights.push(led);
         }
 
-        // Fans RGB (3 ventilateurs)
+        // Fans RGB (3 ventilateurs décoratifs)
         for (let i = 0; i < 3; i++) {
             const fanGroup = new THREE.Group();
 
@@ -211,6 +340,62 @@ class GamerSetup3D {
         group.position.y = 0;
         this.scene.add(group);
         this.pcCase = group;
+    }
+
+    createComponentTooltip(component, title, subtitle, color) {
+        const labelDiv = document.createElement('div');
+        labelDiv.className = 'component-tooltip';
+        labelDiv.innerHTML = `
+            <div class="tooltip-title">${title}</div>
+            <div class="tooltip-subtitle">${subtitle}</div>
+            <div class="tooltip-hint">Cliquer pour voir</div>
+        `;
+        labelDiv.style.cssText = `
+            position: absolute;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            border: 2px solid #${color.toString(16).padStart(6, '0')};
+            border-radius: 8px;
+            padding: 10px 15px;
+            color: #${color.toString(16).padStart(6, '0')};
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            text-align: center;
+            pointer-events: none;
+            text-shadow: 0 0 10px #${color.toString(16).padStart(6, '0')};
+            box-shadow: 0 0 20px rgba(${parseInt(color.toString(16).substr(0,2), 16)}, ${parseInt(color.toString(16).substr(2,2), 16)}, ${parseInt(color.toString(16).substr(4,2), 16)}, 0.5);
+            z-index: 1000;
+            display: none;
+        `;
+
+        const titleDiv = labelDiv.querySelector('.tooltip-title');
+        titleDiv.style.cssText = 'font-size: 16px; margin-bottom: 4px;';
+
+        const subtitleDiv = labelDiv.querySelector('.tooltip-subtitle');
+        subtitleDiv.style.cssText = 'font-size: 12px; opacity: 0.8; margin-bottom: 6px;';
+
+        const hintDiv = labelDiv.querySelector('.tooltip-hint');
+        hintDiv.style.cssText = 'font-size: 10px; opacity: 0.6; font-style: italic;';
+
+        document.body.appendChild(labelDiv);
+
+        component.userData.tooltip = labelDiv;
+        component.userData.updateTooltip = (show = false) => {
+            if (!show) {
+                labelDiv.style.display = 'none';
+                return;
+            }
+
+            const vector = component.getWorldPosition(new THREE.Vector3());
+            vector.project(this.camera);
+
+            const x = (vector.x * 0.5 + 0.5) * window.innerWidth;
+            const y = (vector.y * -0.5 + 0.5) * window.innerHeight;
+
+            labelDiv.style.left = (x - labelDiv.offsetWidth / 2) + 'px';
+            labelDiv.style.top = (y - labelDiv.offsetHeight - 30) + 'px';
+            labelDiv.style.display = vector.z < 1 ? 'block' : 'none';
+        };
     }
 
     createCodeMatrix() {
@@ -297,14 +482,289 @@ class GamerSetup3D {
         this.scene.add(floor);
     }
 
+    createMonitors() {
+        // Moniteur principal - grand écran gaming
+        const mainMonitor = this.createMonitor(5, 3, 'VIRGILE ALLIX\nBTS SIO SLAM', 0xff00ff);
+        mainMonitor.position.set(-5, 2, -2);
+        mainMonitor.rotation.y = Math.PI / 6;
+        this.scene.add(mainMonitor);
+        this.monitors.push(mainMonitor);
+    }
+
+    createMonitor(width, height, text, glowColor) {
+        const group = new THREE.Group();
+
+        // Frame du moniteur
+        const frameGeometry = new THREE.BoxGeometry(width + 0.2, height + 0.2, 0.1);
+        const frameMaterial = new THREE.MeshStandardMaterial({
+            color: 0x1a1a1a,
+            metalness: 0.9,
+            roughness: 0.1
+        });
+        const frame = new THREE.Mesh(frameGeometry, frameMaterial);
+        frame.position.z = -0.05;
+        group.add(frame);
+
+        // Écran
+        const screenGeometry = new THREE.PlaneGeometry(width, height);
+        const screenMaterial = new THREE.MeshBasicMaterial({
+            color: glowColor,
+            transparent: true,
+            opacity: 0.8
+        });
+        const screen = new THREE.Mesh(screenGeometry, screenMaterial);
+        group.add(screen);
+
+        // Support
+        const standGeometry = new THREE.CylinderGeometry(0.1, 0.2, 1, 8);
+        const standMaterial = new THREE.MeshStandardMaterial({
+            color: 0x2a2a2a,
+            metalness: 0.8,
+            roughness: 0.2
+        });
+        const stand = new THREE.Mesh(standGeometry, standMaterial);
+        stand.position.y = -height / 2 - 0.5;
+        group.add(stand);
+
+        return group;
+    }
+
+    createFolderIcons() {
+        // Ne rien créer - on utilise les composants du PC directement
+        // Les composants seront créés dans createPCCase()
+    }
+
+    createTextLabel(parent, title, subtitle, color) {
+        // Create HTML label overlay
+        const labelDiv = document.createElement('div');
+        labelDiv.className = 'folder-label-3d';
+        labelDiv.innerHTML = `
+            <div class="folder-title">${title}</div>
+            <div class="folder-subtitle">${subtitle}</div>
+        `;
+        labelDiv.style.cssText = `
+            position: absolute;
+            color: #${color.toString(16).padStart(6, '0')};
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            text-align: center;
+            pointer-events: none;
+            text-shadow: 0 0 10px #${color.toString(16).padStart(6, '0')};
+            z-index: 100;
+        `;
+
+        const titleDiv = labelDiv.querySelector('.folder-title');
+        titleDiv.style.cssText = 'font-size: 14px; margin-bottom: 2px;';
+
+        const subtitleDiv = labelDiv.querySelector('.folder-subtitle');
+        subtitleDiv.style.cssText = 'font-size: 10px; opacity: 0.8;';
+
+        document.body.appendChild(labelDiv);
+
+        parent.userData.label = labelDiv;
+        parent.userData.updateLabel = () => {
+            const vector = parent.position.clone();
+            vector.y += 0.5; // Offset above the folder
+            vector.project(this.camera);
+
+            const x = (vector.x * 0.5 + 0.5) * window.innerWidth;
+            const y = (vector.y * -0.5 + 0.5) * window.innerHeight;
+
+            labelDiv.style.left = x + 'px';
+            labelDiv.style.top = y + 'px';
+            labelDiv.style.opacity = vector.z < 1 ? '1' : '0';
+        };
+    }
+
+    createFolderIcon(label, color) {
+        const group = new THREE.Group();
+
+        // Corps du dossier
+        const bodyGeometry = new THREE.BoxGeometry(0.8, 0.6, 0.1);
+        const bodyMaterial = new THREE.MeshStandardMaterial({
+            color: color,
+            metalness: 0.3,
+            roughness: 0.7,
+            transparent: true,
+            opacity: 0.9
+        });
+        const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+        group.add(body);
+
+        // Onglet du dossier
+        const tabGeometry = new THREE.BoxGeometry(0.3, 0.1, 0.1);
+        const tab = new THREE.Mesh(tabGeometry, bodyMaterial);
+        tab.position.set(-0.2, 0.35, 0);
+        group.add(tab);
+
+        // Bordure lumineuse
+        const edgesGeometry = new THREE.EdgesGeometry(bodyGeometry);
+        const edgesMaterial = new THREE.LineBasicMaterial({
+            color: color,
+            transparent: true,
+            opacity: 0.8
+        });
+        const edges = new THREE.LineSegments(edgesGeometry, edgesMaterial);
+        group.add(edges);
+
+        // Glow effect
+        const glowGeometry = new THREE.PlaneGeometry(1, 0.8);
+        const glowMaterial = new THREE.MeshBasicMaterial({
+            color: color,
+            transparent: true,
+            opacity: 0.2,
+            side: THREE.DoubleSide
+        });
+        const glow = new THREE.Mesh(glowGeometry, glowMaterial);
+        glow.position.z = -0.1;
+        group.add(glow);
+
+        group.userData.meshes = { body, edges, glow };
+
+        return group;
+    }
+
     onMouseMove(event) {
         const mouseX = (event.clientX / window.innerWidth) * 2 - 1;
         const mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+
+        // Update mouse position for raycasting
+        this.mouse.x = mouseX;
+        this.mouse.y = mouseY;
 
         // Parallax effect
         if (this.pcCase) {
             this.pcCase.rotation.y = mouseX * 0.3;
             this.pcCase.rotation.x = mouseY * 0.1;
+        }
+
+        // Raycasting for hover effects
+        this.raycaster.setFromCamera(this.mouse, this.camera);
+        const intersects = this.raycaster.intersectObjects(this.interactiveObjects, true);
+
+        // Reset previous hover
+        if (this.hoveredObject) {
+            this.resetObjectHover(this.hoveredObject);
+            this.hoveredObject = null;
+            document.body.style.cursor = 'default';
+        }
+
+        // Apply hover to new object
+        if (intersects.length > 0) {
+            let object = intersects[0].object;
+
+            // Find the parent group if clicked on a child mesh
+            while (object.parent && !object.userData.isInteractive) {
+                object = object.parent;
+            }
+
+            if (object.userData.isInteractive) {
+                this.hoveredObject = object;
+                this.applyObjectHover(object);
+                document.body.style.cursor = 'pointer';
+            }
+        }
+    }
+
+    onClick(event) {
+        this.raycaster.setFromCamera(this.mouse, this.camera);
+        const intersects = this.raycaster.intersectObjects(this.interactiveObjects, true);
+
+        if (intersects.length > 0) {
+            let object = intersects[0].object;
+
+            // Find the parent group
+            while (object.parent && !object.userData.isInteractive) {
+                object = object.parent;
+            }
+
+            if (object.userData.isInteractive && object.userData.section) {
+                // Trigger click animation
+                this.animateClick(object);
+
+                // Navigate to section
+                setTimeout(() => {
+                    this.navigateToSection(object.userData.section);
+                }, 300);
+            }
+        }
+    }
+
+    applyObjectHover(object) {
+        // Scale up
+        object.scale.set(1.15, 1.15, 1.15);
+
+        // Brighten emissive for components
+        object.traverse((child) => {
+            if (child.isMesh && child.material.emissive) {
+                child.material.emissiveIntensity = 1.5;
+            }
+        });
+
+        // Show tooltip
+        if (object.userData.updateTooltip) {
+            object.userData.updateTooltip(true);
+        }
+    }
+
+    resetObjectHover(object) {
+        // Scale down
+        object.scale.set(1, 1, 1);
+
+        // Reset emissive
+        object.traverse((child) => {
+            if (child.isMesh && child.material.emissive) {
+                child.material.emissiveIntensity = object.userData.originalEmissive || 0.5;
+            }
+        });
+
+        // Hide tooltip
+        if (object.userData.updateTooltip) {
+            object.userData.updateTooltip(false);
+        }
+    }
+
+    animateClick(object) {
+        // Quick scale animation
+        const originalScale = object.scale.clone();
+
+        object.scale.set(0.8, 0.8, 0.8);
+
+        // Play click sound effect (using Web Audio API)
+        this.playClickSound();
+
+        setTimeout(() => {
+            object.scale.copy(originalScale);
+        }, 150);
+    }
+
+    playClickSound() {
+        try {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            oscillator.frequency.value = 800;
+            oscillator.type = 'sine';
+
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.1);
+        } catch (e) {
+            // Fallback si Web Audio API non disponible
+            console.log('Click sound not available');
+        }
+    }
+
+    navigateToSection(sectionId) {
+        const element = document.getElementById(sectionId);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     }
 
@@ -352,6 +812,11 @@ class GamerSetup3D {
         // Rotation douce du boîtier PC
         if (this.pcCase) {
             this.pcCase.rotation.y = Math.sin(this.time * 0.3) * 0.2;
+        }
+
+        // Update tooltips for hovered component
+        if (this.hoveredObject && this.hoveredObject.userData.updateTooltip) {
+            this.hoveredObject.userData.updateTooltip(true);
         }
 
         // Render avec post-processing
