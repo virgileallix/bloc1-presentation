@@ -34,8 +34,25 @@ class GamerSetup3D {
             }
         };
 
-        this.currentProject = 'presentation';
+        this.currentProject = 'desktop'; // Start on desktop
         this.clickableObjects = [];
+        this.isZoomed = false;
+        this.windows = []; // Array to store open windows
+        this.activeWindow = null;
+        this.raycaster = new THREE.Raycaster();
+        this.mouseVector = new THREE.Vector2();
+
+        // Desktop UI State
+        this.desktopState = {
+            mouseX: 0,
+            mouseY: 0,
+            icons: [
+                { id: 'presentation', name: 'Présentation', icon: '📝', x: 20, y: 20 },
+                { id: 'mtconges', name: 'MT-Congés', icon: '📅', x: 20, y: 120 },
+                { id: 'rftg', name: 'RFTG', icon: '💿', x: 20, y: 220 },
+                { id: 'veille', name: 'Veille Tech', icon: '🛡️', x: 20, y: 320 }
+            ]
+        };
 
         this.init();
     }
@@ -76,7 +93,14 @@ class GamerSetup3D {
         this.controls.maxDistance = 20;
         this.controls.maxPolarAngle = Math.PI / 2.2;
         this.controls.target.set(0, 2, 0);
+        this.controls.target.set(0, 2, 0);
+        this.controls.enableDamping = true;
+        this.controls.maxPolarAngle = Math.PI / 2; // Limit angle to not go below floor
         this.controls.update();
+
+        // Save original camera position for un-zoom
+        this.defaultCameraPos = { x: 0, y: 5, z: 10 };
+        this.defaultTarget = { x: 0, y: 2, z: 0 };
 
         // Lights
         this.createLights();
@@ -88,7 +112,9 @@ class GamerSetup3D {
         this.createPCCase();
         this.createKeyboard();
         this.createMousePad();
-        this.createButtons();
+        this.createMousePad();
+        this.createMouse(); // New mouse method
+        // this.createButtons(); // Removed Buttons
 
         // Events
         window.addEventListener('resize', () => this.onWindowResize());
@@ -226,38 +252,44 @@ class GamerSetup3D {
         monitorGroup.add(pole);
 
         // Monitor frame
-        const frameGeometry = new THREE.BoxGeometry(3.5, 2, 0.1);
+        // Monitor frame - Larger
+        const frameGeometry = new THREE.BoxGeometry(7, 4, 0.2); // Doubled size roughly
         const frameMaterial = new THREE.MeshStandardMaterial({
             color: 0x0a0a0a,
             roughness: 0.2,
             metalness: 0.8
         });
         const frame = new THREE.Mesh(frameGeometry, frameMaterial);
-        frame.position.set(0, 3.5, 0);
+        frame.position.set(0, 4.5, 0); // Raised position
         frame.castShadow = true;
         monitorGroup.add(frame);
 
-        // Screen (canvas pour afficher du texte)
-        const screenGeometry = new THREE.PlaneGeometry(3.3, 1.85);
+        // Screen (canvas pour afficher du texte) - Larger
+        const screenGeometry = new THREE.PlaneGeometry(6.6, 3.7);
 
-        // Create canvas texture
+        // Create canvas texture - High Res
         const canvas = document.createElement('canvas');
-        canvas.width = 1024;
-        canvas.height = 576;
+        canvas.width = 1920;
+        canvas.height = 1080;
         const ctx = canvas.getContext('2d');
 
         // Initial screen content
-        this.updateScreenContent(ctx, this.currentProject);
+        this.updateOS(ctx); // Renamed method
 
         const screenTexture = new THREE.CanvasTexture(canvas);
+        screenTexture.minFilter = THREE.LinearFilter;
+        screenTexture.magFilter = THREE.LinearFilter; // Better quality
+
         const screenMaterial = new THREE.MeshBasicMaterial({
             map: screenTexture,
-            emissive: 0x4488ff,
-            emissiveIntensity: 0.2
+            emissive: 0xffffff, // White emissive for brightness
+            emissiveMap: screenTexture, // Use same texture for emission
+            emissiveIntensity: 0.1
         });
 
         const screen = new THREE.Mesh(screenGeometry, screenMaterial);
-        screen.position.set(0, 3.5, 0.06);
+        screen.position.set(0, 4.5, 0.11);
+        screen.userData = { isScreen: true }; // Tag for raycasting
         monitorGroup.add(screen);
 
         this.screenMesh = screen;
@@ -265,59 +297,129 @@ class GamerSetup3D {
         this.screenCanvas = canvas;
         this.screenCtx = ctx;
 
+        // Add screen to clickable objects
+        this.clickableObjects.push(screen);
+
         monitorGroup.position.z = -0.5;
         this.scene.add(monitorGroup);
         this.monitor = monitorGroup;
     }
 
-    updateScreenContent(ctx, projectKey) {
-        const project = this.projects[projectKey];
+    updateOS(ctx) {
+        // Clear screen
+        ctx.fillStyle = '#1a1a2e'; // Wallpaper color
+        ctx.fillRect(0, 0, 1920, 1080);
 
-        // Background gradient
-        const gradient = ctx.createLinearGradient(0, 0, 0, 576);
-        gradient.addColorStop(0, '#1a1a2e');
-        gradient.addColorStop(1, '#0f0f1e');
-        ctx.fillStyle = gradient;
-        ctx.fillRect(0, 0, 1024, 576);
-
-        // Title
-        ctx.fillStyle = '#00ffff';
-        ctx.font = 'bold 48px Arial';
-        ctx.textAlign = 'center';
-        ctx.fillText(project.title, 512, 80);
-
-        // Underline
-        ctx.strokeStyle = '#ff00ff';
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.moveTo(200, 100);
-        ctx.lineTo(824, 100);
-        ctx.stroke();
-
-        // Content
-        ctx.fillStyle = '#ffffff';
-        ctx.font = '32px Courier New';
-        ctx.textAlign = 'left';
-
-        const lines = project.content.split('\n');
-        let y = 180;
-        lines.forEach(line => {
-            if (line.startsWith('•')) {
-                ctx.fillStyle = '#ff00ff';
-                ctx.fillText('▸', 120, y);
-                ctx.fillStyle = '#ffffff';
-                ctx.fillText(line.substring(1), 170, y);
-            } else {
-                ctx.fillStyle = line.match(/^[A-Z\s:]+$/) ? '#00ffff' : '#ffffff';
-                ctx.fillText(line, 120, y);
+        // Draw Wallpaper Pattern (Hexagons)
+        ctx.strokeStyle = '#2a2a3e';
+        ctx.lineWidth = 2;
+        for (let i = 0; i < 20; i++) {
+            for (let j = 0; j < 12; j++) {
+                ctx.beginPath();
+                ctx.arc(i * 100, j * 100, 30, 0, Math.PI * 2);
+                ctx.stroke();
             }
-            y += 45;
+        }
+
+        // Draw Desktop Icons
+        this.desktopState.icons.forEach(icon => {
+            // Icon Background
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+            ctx.fillRect(icon.x, icon.y, 80, 80);
+
+            // Emoji Icon
+            ctx.font = '40px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(icon.icon, icon.x + 40, icon.y + 35);
+
+            // Label
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '12px Arial';
+            ctx.fillText(icon.name, icon.x + 40, icon.y + 70);
         });
 
-        // Update texture
-        if (this.screenTexture) {
-            this.screenTexture.needsUpdate = true;
+        // Draw Windows
+        this.windows.forEach(win => this.drawWindow(ctx, win));
+
+        // Draw Taskbar
+        ctx.fillStyle = 'rgba(20, 20, 30, 0.9)';
+        ctx.fillRect(0, 1030, 1920, 50);
+
+        // Start Button
+        ctx.fillStyle = '#00ffff';
+        ctx.fillRect(0, 1030, 60, 50);
+        ctx.fillStyle = '#000000';
+        ctx.font = 'bold 20px Arial';
+        ctx.fillText('WIN', 30, 1062);
+
+        // Clock
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString();
+        ctx.fillStyle = '#ffffff';
+        ctx.textAlign = 'right';
+        ctx.fillText(timeStr, 1900, 1062);
+
+        // Virtual Cursor (if zoomed)
+        if (this.isZoomed) {
+            ctx.fillStyle = '#ff00ff';
+            ctx.beginPath();
+            ctx.moveTo(this.desktopState.mouseX, this.desktopState.mouseY);
+            ctx.lineTo(this.desktopState.mouseX + 20, this.desktopState.mouseY + 20);
+            ctx.lineTo(this.desktopState.mouseX, this.desktopState.mouseY + 25);
+            ctx.fill();
         }
+
+        if (this.screenTexture) this.screenTexture.needsUpdate = true;
+    }
+
+    drawWindow(ctx, win) {
+        // Window Shadow
+        ctx.shadowColor = 'rgba(0,0,0,0.5)';
+        ctx.shadowBlur = 20;
+
+        // Window Body
+        ctx.fillStyle = '#252526';
+        ctx.fillRect(win.x, win.y, win.w, win.h);
+        ctx.shadowBlur = 0; // Reset shadow
+
+        // Title Bar
+        ctx.fillStyle = '#333333';
+        ctx.fillRect(win.x, win.y, win.w, 40);
+
+        // Title
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 16px Arial';
+        ctx.textAlign = 'left';
+        ctx.fillText(win.title, win.x + 15, win.y + 26);
+
+        // Close Button (red)
+        ctx.fillStyle = '#ff5555';
+        ctx.fillRect(win.x + win.w - 40, win.y, 40, 40);
+        ctx.fillStyle = '#ffffff';
+        ctx.textAlign = 'center';
+        ctx.fillText('✕', win.x + win.w - 20, win.y + 26);
+
+        // Content Area
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(win.x, win.y + 40, win.w, win.h - 40);
+        ctx.clip();
+
+        // Content Text
+        ctx.fillStyle = '#cccccc';
+        ctx.font = '16px Monospace';
+        const project = this.projects[win.id];
+        if (project) {
+            const lines = project.content.split('\n');
+            let ly = win.y + 70;
+            lines.forEach(line => {
+                ctx.fillText(line, win.x + 20, ly);
+                ly += 25;
+            });
+        }
+
+        ctx.restore();
     }
 
     createPCCase() {
@@ -418,77 +520,175 @@ class GamerSetup3D {
         this.scene.add(pad);
     }
 
-    createButtons() {
-        const buttonData = [
-            { name: 'Présentation', project: 'presentation', x: -1.5, color: 0x00ff00 },
-            { name: 'MT-Congés', project: 'mtconges', x: -0.5, color: 0xff00ff },
-            { name: 'RFTG', project: 'rftg', x: 0.5, color: 0x00ffff },
-            { name: 'Veille', project: 'veille', x: 1.5, color: 0xff0080 }
-        ];
+    createMouse() {
+        const mouseGroup = new THREE.Group();
 
-        buttonData.forEach(data => {
-            const button = new THREE.Mesh(
-                new THREE.BoxGeometry(0.3, 0.1, 0.2),
-                new THREE.MeshStandardMaterial({
-                    color: data.color,
-                    emissive: data.color,
-                    emissiveIntensity: 0.3,
-                    roughness: 0.3,
-                    metalness: 0.7
-                })
-            );
-            button.position.set(data.x, 2.15, 1.3);
-            button.castShadow = true;
-            button.userData = {
-                type: 'button',
-                project: data.project,
-                name: data.name,
-                originalEmissive: 0.3
-            };
-            this.scene.add(button);
-            this.clickableObjects.push(button);
-        });
+        // Body
+        const bodyGeo = new THREE.BoxGeometry(0.6, 0.3, 1);
+        const bodyMat = new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: 0.5 });
+        const body = new THREE.Mesh(bodyGeo, bodyMat);
+        body.position.y = 0.15;
+        body.castShadow = true;
+        mouseGroup.add(body);
+
+        // RGB Line
+        const rgbGeo = new THREE.BoxGeometry(0.62, 0.05, 1.02);
+        const rgbMat = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+        const rgb = new THREE.Mesh(rgbGeo, rgbMat);
+        rgb.position.y = 0.05;
+        mouseGroup.add(rgb);
+        this.mouseRgb = rgb; // Store for animation
+
+        mouseGroup.position.set(2.5, 2.05, 1.5);
+        this.scene.add(mouseGroup);
+        this.mouseModel = mouseGroup;
     }
 
+    // Removed createButtons
+
+
     onMouseMove(event) {
+        // Standard raycasting for interaction
         this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
         this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
-        this.raycaster.setFromCamera(this.mouse, this.camera);
-        const intersects = this.raycaster.intersectObjects(this.clickableObjects);
+        if (this.isZoomed) {
+            // Calculate mouse position on the virtual screen
+            this.raycaster.setFromCamera(this.mouse, this.camera);
+            const intersects = this.raycaster.intersectObject(this.screenMesh);
 
-        // Reset all buttons
-        this.clickableObjects.forEach(obj => {
-            obj.material.emissiveIntensity = obj.userData.originalEmissive;
-            obj.scale.set(1, 1, 1);
-        });
-
-        // Highlight hovered button
-        if (intersects.length > 0) {
-            const obj = intersects[0].object;
-            obj.material.emissiveIntensity = 0.8;
-            obj.scale.set(1.1, 1.1, 1.1);
-            document.body.style.cursor = 'pointer';
+            if (intersects.length > 0) {
+                const uv = intersects[0].uv;
+                this.desktopState.mouseX = uv.x * 1920;
+                this.desktopState.mouseY = (1 - uv.y) * 1080;
+                document.body.style.cursor = 'none'; // Hide real cursor
+            } else {
+                document.body.style.cursor = 'default';
+            }
+            this.updateOS(this.screenCtx);
         } else {
-            document.body.style.cursor = 'default';
+            // Check if hovering Screen to change cursor
+            this.raycaster.setFromCamera(this.mouse, this.camera);
+            const intersects = this.raycaster.intersectObjects(this.clickableObjects);
+            if (intersects.length > 0) {
+                document.body.style.cursor = 'pointer';
+            } else {
+                document.body.style.cursor = 'default';
+            }
         }
     }
 
     onClick(event) {
         this.raycaster.setFromCamera(this.mouse, this.camera);
-        const intersects = this.raycaster.intersectObjects(this.clickableObjects);
 
-        if (intersects.length > 0) {
-            const obj = intersects[0].object;
-            if (obj.userData.type === 'button') {
-                this.currentProject = obj.userData.project;
-                this.updateScreenContent(this.screenCtx, this.currentProject);
-
-                // Click animation
-                obj.scale.set(0.9, 0.9, 0.9);
-                setTimeout(() => obj.scale.set(1, 1, 1), 100);
+        if (!this.isZoomed) {
+            // Check if clicked screen
+            const intersects = this.raycaster.intersectObject(this.screenMesh);
+            if (intersects.length > 0) {
+                this.zoomIn();
+            }
+        } else {
+            // Logic for clicking INSIDE the OS
+            const hitScreen = this.raycaster.intersectObject(this.screenMesh);
+            if (hitScreen.length > 0) {
+                this.handleOSClick(this.desktopState.mouseX, this.desktopState.mouseY);
+            } else {
+                // Clicked outside -> Zoom out
+                this.zoomOut();
             }
         }
+    }
+
+    zoomIn() {
+        this.isZoomed = true;
+
+        // Disable orbit controls
+        this.controls.enabled = false;
+
+        // Animate Camera to positions
+        gsap.to(this.camera.position, {
+            x: 0, y: 4.5, z: 4.5, // Close to screen
+            duration: 1.5,
+            ease: "power2.inOut"
+        });
+
+        gsap.to(this.controls.target, {
+            x: 0, y: 4.5, z: 0, // Look at screen center
+            duration: 1.5,
+            ease: "power2.inOut",
+            onUpdate: () => this.camera.lookAt(this.controls.target)
+        });
+    }
+
+    zoomOut() {
+        this.isZoomed = false;
+        this.controls.enabled = true;
+        document.body.style.cursor = 'default';
+
+        gsap.to(this.camera.position, {
+            x: this.defaultCameraPos.x,
+            y: this.defaultCameraPos.y,
+            z: this.defaultCameraPos.z,
+            duration: 1.5,
+            ease: "power2.inOut"
+        });
+
+        gsap.to(this.controls.target, {
+            x: this.defaultTarget.x,
+            y: this.defaultTarget.y,
+            z: this.defaultTarget.z,
+            duration: 1.5,
+            ease: "power2.inOut",
+            onUpdate: () => this.camera.lookAt(this.controls.target)
+        });
+    }
+
+    handleOSClick(x, y) {
+        // Check Windows (Close buttons or focus)
+        let clickedWindow = false;
+        // Iterate backwards (top windows first)
+        for (let i = this.windows.length - 1; i >= 0; i--) {
+            const win = this.windows[i];
+            // Hit test
+            if (x >= win.x && x <= win.x + win.w && y >= win.y && y <= win.y + win.h) {
+                clickedWindow = true;
+
+                // Check Close Button
+                if (x >= win.x + win.w - 40 && y <= win.y + 40) {
+                    this.windows.splice(i, 1);
+                } else {
+                    // Bring to front
+                    this.windows.push(this.windows.splice(i, 1)[0]);
+                }
+                break;
+            }
+        }
+
+        if (!clickedWindow) {
+            // Check Icons
+            this.desktopState.icons.forEach(icon => {
+                if (x >= icon.x && x <= icon.x + 80 && y >= icon.y && y <= icon.y + 80) {
+                    this.openWindow(icon);
+                }
+            });
+        }
+
+        this.updateOS(this.screenCtx);
+    }
+
+    openWindow(icon) {
+        // Check if already open
+        const existing = this.windows.find(w => w.id === icon.id);
+        if (existing) return;
+
+        this.windows.push({
+            id: icon.id,
+            title: icon.name,
+            x: 200 + this.windows.length * 30,
+            y: 100 + this.windows.length * 30,
+            w: 800,
+            h: 600
+        });
     }
 
     onWindowResize() {

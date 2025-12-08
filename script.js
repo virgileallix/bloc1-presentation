@@ -337,19 +337,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // });
 
     // document.querySelector('.timer-control').insertBefore(presentationBtn, fullscreenBtn);
-
-    // Welcome message
-    setTimeout(() => {
-        showNotification('Appuyez sur Espace pour démarrer le chronomètre', 'success');
-    }, 1000);
-
-    // Console easter egg
-    console.log('%c🎓 Présentation BTS SIO SLAM Bloc 1', 'font-size: 20px; color: #2563eb; font-weight: bold;');
-    console.log('%c📚 Raccourcis clavier:', 'font-size: 14px; color: #10b981;');
-    console.log('  - Espace/Entrée : Démarrer/Pause chronomètre');
-    console.log('  - Ctrl+R : Réinitialiser chronomètre');
-    console.log('  - 1-4 : Aller à la section correspondante');
-    console.log('%cBonne présentation! 🚀', 'font-size: 14px; color: #f59e0b;');
 });
 
 // Export functions for potential external use
