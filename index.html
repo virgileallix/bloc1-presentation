@@ -13,8 +13,8 @@
             <h1 class="logo">Virgile Allix - BTS SIO SLAM</h1>
             <ul class="nav-menu">
                 <li><a href="#presentation" class="nav-link">Présentation</a></li>
-                <li><a href="#mtconges" class="nav-link">MT-Congés</a></li>
-                <li><a href="#portfolio" class="nav-link">Portfolio 3D</a></li>
+                <li><a href="#mtconges" class="nav-link">Projet 1</a></li>
+                <li><a href="#projet2" class="nav-link">Projet 2</a></li>
                 <li><a href="#veille" class="nav-link">Veille</a></li>
             </ul>
             <div class="timer-display" id="timer">10:00</div>
@@ -75,7 +75,6 @@
                         <span class="skill-tag">Firebase</span>
                         <span class="skill-tag">MVC</span>
                         <span class="skill-tag">Git</span>
-                        <span class="skill-tag">WebGL</span>
                     </div>
                 </div>
 
@@ -84,7 +83,6 @@
                     <ul>
                         <li>Devenir développeur full-stack</li>
                         <li>Approfondir la cybersécurité</li>
-                        <li>Contribuer à des projets innovants</li>
                     </ul>
                 </div>
             </div>
@@ -96,47 +94,82 @@
         <div class="container">
             <div class="section-header">
                 <span class="section-number">02</span>
-                <h2 class="section-title">Projet MT-Congés</h2>
+                <h2 class="section-title">Projet 1 : MT-Congés</h2>
                 <span class="section-time">3min</span>
             </div>
 
             <div class="project-intro">
-                <h3>Contexte et Problématique</h3>
-                <p><strong>Type :</strong> Projet scolaire (3 mois - 2024)</p>
-                <p class="highlight">Comment gérer efficacement les demandes de congés dans une organisation avec différents niveaux de hiérarchie tout en garantissant la sécurité des données ?</p>
+                <h3>Application de gestion des congés - Java / MVC</h3>
+                <p><strong>Type :</strong> Projet BTS SIO SLAM (3 mois - 2024)</p>
+                <p class="highlight">MT-Congés est une application de gestion des congés développée en Java 17 avec une interface Swing et une base de données MySQL. Elle suit une architecture MVC structurée permettant une séparation claire entre logique métier, interface et persistance des données.</p>
             </div>
 
             <div class="content-grid">
                 <div class="card">
-                    <h3>Technologies</h3>
+                    <h3>Objectifs du projet</h3>
+                    <p>Créer une solution complète permettant aux employés de demander des congés, aux responsables de les valider et aux administrateurs de gérer les comptes utilisateurs, le tout dans un environnement sécurisé et conforme aux bonnes pratiques.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Technologies & Architecture</h3>
                     <ul>
-                        <li><strong>Backend :</strong> Java 17</li>
-                        <li><strong>Interface :</strong> Java Swing</li>
-                        <li><strong>BDD :</strong> MySQL</li>
-                        <li><strong>Architecture :</strong> MVC</li>
-                        <li><strong>Patterns :</strong> DAO, POJO</li>
+                        <li><strong>Langage :</strong> Java 17</li>
+                        <li><strong>Interface :</strong> Java Swing (UI adaptative)</li>
+                        <li><strong>Base de données :</strong> MySQL</li>
+                        <li><strong>Architecture :</strong> Modèle MVC
+                            <ul>
+                                <li>Modèle : POJO + DAO (connexion MySQL sécurisée)</li>
+                                <li>Vue : interfaces Java Swing adaptatives selon rôle</li>
+                                <li>Contrôleur : logique métier et gestion des flux</li>
+                            </ul>
+                        </li>
                         <li><strong>Versionning :</strong> Git</li>
                     </ul>
                 </div>
 
                 <div class="card">
-                    <h3>Fonctionnalités</h3>
+                    <h3>Fonctionnalités principales</h3>
                     <ul>
                         <li><strong>Authentification sécurisée</strong>
                             <ul>
-                                <li>Verrouillage après tentatives échouées</li>
-                                <li>Réinitialisation mot de passe</li>
-                                <li>Sessions limitées</li>
+                                <li>Connexion avec verrouillage automatique</li>
+                                <li>Réinitialisation de mot de passe</li>
+                                <li>Contrôles de session et validation d'entrées</li>
                             </ul>
                         </li>
                         <li><strong>Gestion des rôles</strong>
                             <ul>
-                                <li>Administrateur : gestion utilisateurs</li>
-                                <li>Responsable : validation d'équipe</li>
-                                <li>Employé : demandes personnelles</li>
+                                <li>Admin : gestion des utilisateurs et validations</li>
+                                <li>Responsable : traitement des demandes de l'équipe</li>
+                                <li>Employé : dépôt et suivi des demandes</li>
                             </ul>
                         </li>
-                        <li><strong>Système de logging</strong></li>
+                    </ul>
+                </div>
+
+                <div class="card card-highlight">
+                    <h3>Aspects techniques et sécurité</h3>
+                    <ul>
+                        <li><strong>Protection contre injections SQL</strong>
+                            <ul>
+                                <li>Utilisation de PreparedStatements</li>
+                                <li>Pattern DAO pour isolation des requêtes</li>
+                            </ul>
+                        </li>
+                        <li><strong>Durée de session limitée</strong></li>
+                        <li><strong>Vérifications côté client et serveur</strong></li>
+                        <li><strong>Système de logging complet</strong>
+                            <ul>
+                                <li>Traçage des actions utilisateurs</li>
+                                <li>Débogage et audits de sécurité</li>
+                            </ul>
+                        </li>
+                        <li><strong>Conformité RGPD</strong>
+                            <ul>
+                                <li>Protection des données personnelles</li>
+                                <li>Gestion des droits d'accès</li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
 
@@ -144,171 +177,190 @@
                     <h3>Difficultés & Solutions</h3>
                     <div class="difficulty-item">
                         <h4>🔒 Sécurité des données</h4>
-                        <p><strong>Problème :</strong> Risques d'injection SQL</p>
-                        <p><strong>Solution :</strong> Pattern DAO, validation des entrées</p>
+                        <p><strong>Problème :</strong> Risques d'injection SQL et accès non autorisés</p>
+                        <p><strong>Solution :</strong> Pattern DAO, PreparedStatements, validation stricte des entrées, système de rôles granulaire</p>
                     </div>
                     <div class="difficulty-item">
                         <h4>🏗️ Complexité architecturale</h4>
-                        <p><strong>Problème :</strong> Architecture difficile à maintenir</p>
-                        <p><strong>Solution :</strong> MVC strict, séparation des responsabilités</p>
+                        <p><strong>Problème :</strong> Maintenir une architecture cohérente et évolutive</p>
+                        <p><strong>Solution :</strong> MVC strict avec séparation claire des responsabilités, utilisation de POJO pour la modélisation</p>
                     </div>
                     <div class="difficulty-item">
                         <h4>⚖️ Conformité RGPD</h4>
-                        <p><strong>Problème :</strong> Données personnelles sensibles</p>
-                        <p><strong>Solution :</strong> Intégration dès la conception</p>
+                        <p><strong>Problème :</strong> Gestion des données personnelles sensibles</p>
+                        <p><strong>Solution :</strong> Privacy by design, durée de rétention des données, droits utilisateurs implémentés</p>
                     </div>
                 </div>
 
                 <div class="card">
-                    <h3>Résultats</h3>
+                    <h3>Points forts du projet</h3>
                     <ul>
-                        <li>Application fonctionnelle et sécurisée</li>
-                        <li>Maîtrise de l'architecture MVC</li>
-                        <li>Compréhension des enjeux de sécurité</li>
-                        <li>Gestion de projet complète</li>
+                        <li>Application fonctionnelle et modulable</li>
+                        <li>Interface utilisateur adaptée à chaque rôle</li>
+                        <li>Sécurité renforcée et gestion des droits</li>
+                        <li>Logging intégré pour audits et diagnostics</li>
+                        <li>Architecture professionnelle basée sur MVC et DAO</li>
                     </ul>
+                </div>
+
+                <div class="card">
+                    <h3>Compétences développées</h3>
+                    <div class="skills">
+                        <span class="skill-tag">Développement Java 17 & Swing</span>
+                        <span class="skill-tag">Architecture logicielle MVC</span>
+                        <span class="skill-tag">Conception BDD MySQL</span>
+                        <span class="skill-tag">DAO & POJO</span>
+                        <span class="skill-tag">Sécurité & RGPD</span>
+                        <span class="skill-tag">Authentification</span>
+                        <span class="skill-tag">Logging & débogage</span>
+                        <span class="skill-tag">Gestion des rôles</span>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Section 3: Portfolio & Constructeur 3D -->
-    <section id="portfolio" class="section section-light">
+    <!-- Section 3: Projet 2 -->
+    <section id="projet2" class="section section-light">
         <div class="container">
             <div class="section-header">
                 <span class="section-number">03</span>
-                <h2 class="section-title">Portfolio & Constructeur 3D Minecraft</h2>
+                <h2 class="section-title">Projet 2 : RFTG</h2>
                 <span class="section-time">3min</span>
             </div>
 
             <div class="project-intro">
-                <h3>Contexte et Problématique</h3>
-                <p><strong>Type :</strong> Projet personnel et professionnel</p>
-                <p class="highlight">Comment créer un portfolio interactif et innovant qui démontre mes compétences techniques tout en proposant une expérience utilisateur unique ?</p>
+                <h3>Système de location de DVD pour parc de vacances</h3>
+                <p><strong>Type :</strong> Projet BTS SIO SLAM - Application Web & Mobile</p>
+                <p><strong>Commanditaires :</strong> Emet Brown & Biff Tannen</p>
+                <p class="highlight">RFTG est un système complet de gestion de location de DVD destiné aux vacanciers d'un parc de vacances. Le projet comprend une application web pour les vacanciers et une application mobile pour les administrateurs.</p>
             </div>
 
             <div class="content-grid">
                 <div class="card">
-                    <h3>Technologies</h3>
+                    <h3>Architecture du projet</h3>
+                    <p>Deux applications complémentaires :</p>
                     <ul>
-                        <li><strong>Frontend :</strong> HTML5, CSS3, JavaScript</li>
-                        <li><strong>3D :</strong> WebGL (rendu 3D natif)</li>
-                        <li><strong>Backend :</strong> Firebase (Authentication, Firestore, Hosting)</li>
-                        <li><strong>PWA :</strong> Service Worker, Manifest</li>
-                        <li><strong>Architecture :</strong> Modularité ES6+</li>
+                        <li><strong>Application Web "Mario"</strong>
+                            <ul>
+                                <li>Interface pour les vacanciers</li>
+                                <li>Navigation et réservation de films</li>
+                            </ul>
+                        </li>
+                        <li><strong>Application Mobile "Luigi"</strong>
+                            <ul>
+                                <li>Interface pour les administrateurs</li>
+                                <li>Gestion complète du catalogue et des stocks</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>Technologies & Architecture</h3>
+                    <ul>
+                        <li><strong>Base de données :</strong> MySQL (Sakila DB existante)</li>
+                        <li><strong>Frontend Web :</strong> HTML5, CSS3, JavaScript</li>
+                        <li><strong>Mobile :</strong> Application native/hybride</li>
+                        <li><strong>Backend :</strong> API REST</li>
+                        <li><strong>Contrainte :</strong> Utilisation de la base Sakila existante</li>
                     </ul>
                 </div>
 
                 <div class="card card-highlight">
-                    <h3>🎮 Constructeur 3D Minecraft (Feature phare)</h3>
-                    <p><strong>Innovation majeure :</strong> Outil interactif de construction 3D</p>
+                    <h3>Application Mobile "Luigi" - Administration</h3>
+                    <p><strong>Gestion complète du système</strong></p>
                     <ul>
-                        <li>Rendu 3D avec WebGL pur (sans bibliothèque)</li>
-                        <li>Manipulation de blocs en temps réel</li>
-                        <li>Interface intuitive avec contrôles souris</li>
-                        <li>Gestion des matrices de transformation</li>
-                        <li>Optimisation du rendu (culling, batching)</li>
-                    </ul>
-                </div>
-
-                <div class="card">
-                    <h3>🕹️ Mini-jeux & Projets Personnels</h3>
-                    <p><strong>Démonstration de créativité et compétences variées</strong></p>
-                    <ul>
-                        <li><strong>Jeu du Serpent (Snake)</strong>
+                        <li><strong>Objets gérés :</strong>
                             <ul>
-                                <li>Canvas 2D avec logique de jeu</li>
-                                <li>Gestion des collisions</li>
-                                <li>Système de score</li>
+                                <li>Listes DVD physiques</li>
+                                <li>Supports DVD</li>
+                                <li>Listes films en numérique</li>
+                                <li>Films (catalogue)</li>
+                                <li>Utilisateurs et vendeurs</li>
+                                <li>Catégories</li>
                             </ul>
                         </li>
-                        <li><strong>Système d'achievements</strong>
+                        <li><strong>Fonctionnalités principales :</strong>
                             <ul>
-                                <li>Gamification complète</li>
-                                <li>Déblocage progressif</li>
-                                <li>Sauvegarde locale (localStorage)</li>
-                            </ul>
-                        </li>
-                        <li><strong>Easter eggs interactifs</strong>
-                            <ul>
-                                <li>Commandes cachées (Konami code)</li>
-                                <li>Animations surprises</li>
-                                <li>Engagement utilisateur</li>
-                            </ul>
-                        </li>
-                        <li><strong>Mini-simulations</strong>
-                            <ul>
-                                <li>Physique simple (gravité, collisions)</li>
-                                <li>Expérimentations JavaScript</li>
+                                <li>Identification client</li>
+                                <li>Affichage liste films avec filtres et tris</li>
+                                <li>Détails des films</li>
+                                <li>Gestion du panier</li>
+                                <li>Validation des réservations</li>
                             </ul>
                         </li>
                     </ul>
                 </div>
 
-                <div class="card">
-                    <h3>🌐 Fonctionnalités Cloud (Firebase)</h3>
+                <div class="card card-highlight">
+                    <h3>Application Web "Mario" - Vacanciers</h3>
+                    <p><strong>Interface utilisateur pour la location</strong></p>
                     <ul>
-                        <li><strong>Authentification</strong>
+                        <li><strong>Objets gérés :</strong>
                             <ul>
-                                <li>Gestion des utilisateurs</li>
-                                <li>Connexion sécurisée</li>
+                                <li>Catalogue complet (DVD + numérique)</li>
+                                <li>Clients et utilisateurs</li>
+                                <li>Vendeurs et catégories</li>
+                                <li>Entrepôts</li>
                             </ul>
                         </li>
-                        <li><strong>Base de données en temps réel</strong>
+                        <li><strong>Fonctionnalités principales :</strong>
                             <ul>
-                                <li>Firestore pour les scores</li>
-                                <li>Synchronisation automatique</li>
-                                <li>Classements en ligne</li>
-                            </ul>
-                        </li>
-                        <li><strong>Hébergement</strong>
-                            <ul>
-                                <li>Déploiement Firebase Hosting</li>
-                                <li>CDN global</li>
-                                <li>HTTPS automatique</li>
+                                <li>Affichage et détails des films</li>
+                                <li>Ajout de films au catalogue</li>
+                                <li>Modification de la liste des films</li>
+                                <li>Ajout de DVD physiques</li>
+                                <li>Consultation état des films et DVD</li>
+                                <li>Consultation état des réservations</li>
                             </ul>
                         </li>
                     </ul>
-                </div>
-
-                <div class="card">
-                    <h3>Architecture modulaire</h3>
-                    <div class="code-structure">
-                        <code>minecraft-builder-3d.js</code>
-                        <code>achievements.js</code>
-                        <code>easter-eggs.js</code>
-                        <code>sounds.js</code>
-                        <code>minigames.js</code>
-                    </div>
                 </div>
 
                 <div class="card card-highlight">
                     <h3>Difficultés & Solutions</h3>
                     <div class="difficulty-item">
-                        <h4>⚡ Performance WebGL</h4>
-                        <p><strong>Solution :</strong> Optimisation vertices, culling</p>
+                        <h4>🗄️ Base de données existante</h4>
+                        <p><strong>Problème :</strong> S'adapter à la structure de Sakila DB</p>
+                        <p><strong>Solution :</strong> Analyse de la base existante, adaptation du modèle de données, utilisation des tables et relations déjà présentes</p>
                     </div>
                     <div class="difficulty-item">
-                        <h4>🌐 Compatibilité navigateurs</h4>
-                        <p><strong>Solution :</strong> Tests multi-navigateurs, fallbacks</p>
+                        <h4>🔄 Synchronisation Web/Mobile</h4>
+                        <p><strong>Problème :</strong> Cohérence des données entre les deux applications</p>
+                        <p><strong>Solution :</strong> API REST centralisée, gestion temps réel des stocks et réservations</p>
                     </div>
                     <div class="difficulty-item">
-                        <h4>👤 UX Interface 3D</h4>
-                        <p><strong>Solution :</strong> Tutoriel intégré, contrôles intuitifs</p>
+                        <h4>📦 Gestion des stocks DVD</h4>
+                        <p><strong>Problème :</strong> Disponibilité en temps réel des supports physiques</p>
+                        <p><strong>Solution :</strong> Système de réservation avec vérification instantanée des stocks</p>
                     </div>
                 </div>
 
                 <div class="card">
                     <h3>Résultats & Compétences</h3>
                     <ul>
-                        <li>Portfolio unique et mémorable</li>
-                        <li>Plus de 38 commits</li>
-                        <li>Démonstration de compétences variées</li>
-                        <li>Maîtrise du Cloud avec Firebase</li>
-                        <li>Expérience en backend as a service (BaaS)</li>
-                        <li>Feedback positifs</li>
+                        <li>Système complet Web + Mobile fonctionnel</li>
+                        <li>Expérience cross-platform (Web et Mobile)</li>
+                        <li>Gestion de base de données complexe</li>
+                        <li>Architecture API REST</li>
+                        <li>Gestion des stocks en temps réel</li>
+                        <li>Travail sur code legacy (Sakila DB)</li>
                     </ul>
-                    <a href="https://virgileallix.github.io/portfolio/" target="_blank" class="btn-link">Voir le portfolio en ligne →</a>
+                </div>
+
+                <div class="card">
+                    <h3>Compétences développées</h3>
+                    <div class="skills">
+                        <span class="skill-tag">Développement Web</span>
+                        <span class="skill-tag">Développement Mobile</span>
+                        <span class="skill-tag">API REST</span>
+                        <span class="skill-tag">Base de données MySQL</span>
+                        <span class="skill-tag">Sakila DB</span>
+                        <span class="skill-tag">Gestion des stocks</span>
+                        <span class="skill-tag">Architecture cross-platform</span>
+                        <span class="skill-tag">Legacy code</span>
+                    </div>
                 </div>
             </div>
         </div>
