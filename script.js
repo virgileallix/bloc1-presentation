@@ -277,65 +277,66 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    document.querySelector('.timer-control').appendChild(autoScrollBtn);
+    // Désactivé en mode 3D - timer-control n'existe plus
+    // document.querySelector('.timer-control').appendChild(autoScrollBtn);
 
-    // Check time markers and auto-scroll
-    let lastSection = '';
-    setInterval(() => {
-        if (!isRunning || !autoScrollEnabled) return;
+    // Check time markers and auto-scroll (désactivé en mode 3D)
+    // let lastSection = '';
+    // setInterval(() => {
+    //     if (!isRunning || !autoScrollEnabled) return;
 
-        const elapsed = totalSeconds - currentSeconds;
-        const currentMarker = timeMarkers.find(marker =>
-            elapsed >= marker.start && elapsed < (marker.start + marker.duration)
-        );
+    //     const elapsed = totalSeconds - currentSeconds;
+    //     const currentMarker = timeMarkers.find(marker =>
+    //         elapsed >= marker.start && elapsed < (marker.start + marker.duration)
+    //     );
 
-        if (currentMarker && currentMarker.section !== lastSection) {
-            scrollToSection(currentMarker.section);
-            lastSection = currentMarker.section;
-            showNotification(`Section: ${currentMarker.section}`, 'success');
-        }
-    }, 1000);
+    //     if (currentMarker && currentMarker.section !== lastSection) {
+    //         scrollToSection(currentMarker.section);
+    //         lastSection = currentMarker.section;
+    //         showNotification(`Section: ${currentMarker.section}`, 'success');
+    //     }
+    // }, 1000);
 
-    // Fullscreen toggle
-    const fullscreenBtn = document.createElement('button');
-    fullscreenBtn.className = 'timer-btn';
-    fullscreenBtn.textContent = 'Plein écran';
-    fullscreenBtn.style.background = '#6366f1';
-    fullscreenBtn.addEventListener('click', () => {
-        if (!document.fullscreenElement) {
-            document.documentElement.requestFullscreen();
-            fullscreenBtn.textContent = 'Quitter plein écran';
-        } else {
-            document.exitFullscreen();
-            fullscreenBtn.textContent = 'Plein écran';
-        }
-    });
+    // Fullscreen toggle (désactivé en mode 3D - timer-control n'existe plus)
+    // const fullscreenBtn = document.createElement('button');
+    // fullscreenBtn.className = 'timer-btn';
+    // fullscreenBtn.textContent = 'Plein écran';
+    // fullscreenBtn.style.background = '#6366f1';
+    // fullscreenBtn.addEventListener('click', () => {
+    //     if (!document.fullscreenElement) {
+    //         document.documentElement.requestFullscreen();
+    //         fullscreenBtn.textContent = 'Quitter plein écran';
+    //     } else {
+    //         document.exitFullscreen();
+    //         fullscreenBtn.textContent = 'Plein écran';
+    //     }
+    // });
 
-    document.querySelector('.timer-control').insertBefore(fullscreenBtn, autoScrollBtn);
+    // document.querySelector('.timer-control').insertBefore(fullscreenBtn, autoScrollBtn);
 
-    // Add presentation mode
-    let presentationMode = false;
-    const presentationBtn = document.createElement('button');
-    presentationBtn.className = 'timer-btn';
-    presentationBtn.textContent = 'Mode présentation';
-    presentationBtn.style.background = '#8b5cf6';
-    presentationBtn.addEventListener('click', () => {
-        presentationMode = !presentationMode;
-        document.body.classList.toggle('presentation-mode');
-        presentationBtn.textContent = presentationMode ? 'Mode normal' : 'Mode présentation';
+    // Add presentation mode (désactivé en mode 3D)
+    // let presentationMode = false;
+    // const presentationBtn = document.createElement('button');
+    // presentationBtn.className = 'timer-btn';
+    // presentationBtn.textContent = 'Mode présentation';
+    // presentationBtn.style.background = '#8b5cf6';
+    // presentationBtn.addEventListener('click', () => {
+    //     presentationMode = !presentationMode;
+    //     document.body.classList.toggle('presentation-mode');
+    //     presentationBtn.textContent = presentationMode ? 'Mode normal' : 'Mode présentation';
 
-        if (presentationMode) {
-            // Hide timer controls, increase font size
-            document.querySelector('.timer-control').style.opacity = '0.3';
-            document.body.style.fontSize = '1.1em';
-            showNotification('Mode présentation activé', 'success');
-        } else {
-            document.querySelector('.timer-control').style.opacity = '1';
-            document.body.style.fontSize = '1em';
-        }
-    });
+    //     if (presentationMode) {
+    //         // Hide timer controls, increase font size
+    //         document.querySelector('.timer-control').style.opacity = '0.3';
+    //         document.body.style.fontSize = '1.1em';
+    //         showNotification('Mode présentation activé', 'success');
+    //     } else {
+    //         document.querySelector('.timer-control').style.opacity = '1';
+    //         document.body.style.fontSize = '1em';
+    //     }
+    // });
 
-    document.querySelector('.timer-control').insertBefore(presentationBtn, fullscreenBtn);
+    // document.querySelector('.timer-control').insertBefore(presentationBtn, fullscreenBtn);
 
     // Welcome message
     setTimeout(() => {
