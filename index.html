@@ -7,19 +7,18 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Timer en overlay -->
-    <div class="timer-overlay" id="timer">10:00</div>
-
-    <!-- Instructions en overlay -->
-    <div class="instructions-overlay">
-        <div class="instruction-item">🖱️ Cliquez et glissez pour tourner</div>
-        <div class="instruction-item">🔍 Molette pour zoomer</div>
-        <div class="instruction-item">💻 GPU = Projet 1 | CPU = Présentation</div>
-        <div class="instruction-item">💾 RAM = Projet 2 | SSD = Veille</div>
-    </div>
-
     <!-- Canvas 3D plein écran -->
     <canvas id="scene3d"></canvas>
+
+    <!-- Loading screen -->
+    <div id="loading-screen">
+        <div class="loading-content">
+            <h2>Chargement de la scène 3D...</h2>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+        </div>
+    </div>
 
     <!-- Scripts Three.js via CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
