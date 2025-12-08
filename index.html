@@ -99,77 +99,29 @@
             </div>
 
             <div class="project-intro">
-                <h3>Application de gestion des congés - Java / MVC</h3>
-                <p><strong>Type :</strong> Projet BTS SIO SLAM (3 mois - 2024)</p>
-                <p class="highlight">MT-Congés est une application de gestion des congés développée en Java 17 avec une interface Swing et une base de données MySQL. Elle suit une architecture MVC structurée permettant une séparation claire entre logique métier, interface et persistance des données.</p>
+                <h3>Application de gestion des congés</h3>
+                <p><strong>Type :</strong> Projet BTS SIO SLAM</p>
+                <p class="highlight">Application de gestion des congés avec système d'authentification et gestion des rôles (Admin, Responsable, Employé).</p>
             </div>
 
             <div class="content-grid">
                 <div class="card">
-                    <h3>Objectifs du projet</h3>
-                    <p>Créer une solution complète permettant aux employés de demander des congés, aux responsables de les valider et aux administrateurs de gérer les comptes utilisateurs, le tout dans un environnement sécurisé et conforme aux bonnes pratiques.</p>
-                </div>
-
-                <div class="card">
-                    <h3>Technologies & Architecture</h3>
+                    <h3>Technologies</h3>
                     <ul>
                         <li><strong>Langage :</strong> Java 17</li>
-                        <li><strong>Interface :</strong> Java Swing (UI adaptative)</li>
+                        <li><strong>Interface :</strong> Java Swing</li>
                         <li><strong>Base de données :</strong> MySQL</li>
-                        <li><strong>Architecture :</strong> Modèle MVC
-                            <ul>
-                                <li>Modèle : POJO + DAO (connexion MySQL sécurisée)</li>
-                                <li>Vue : interfaces Java Swing adaptatives selon rôle</li>
-                                <li>Contrôleur : logique métier et gestion des flux</li>
-                            </ul>
-                        </li>
-                        <li><strong>Versionning :</strong> Git</li>
+                        <li><strong>Architecture :</strong> MVC (POJO + DAO)</li>
                     </ul>
                 </div>
 
                 <div class="card">
-                    <h3>Fonctionnalités principales</h3>
+                    <h3>Fonctionnalités</h3>
                     <ul>
-                        <li><strong>Authentification sécurisée</strong>
-                            <ul>
-                                <li>Connexion avec verrouillage automatique</li>
-                                <li>Réinitialisation de mot de passe</li>
-                                <li>Contrôles de session et validation d'entrées</li>
-                            </ul>
-                        </li>
-                        <li><strong>Gestion des rôles</strong>
-                            <ul>
-                                <li>Admin : gestion des utilisateurs et validations</li>
-                                <li>Responsable : traitement des demandes de l'équipe</li>
-                                <li>Employé : dépôt et suivi des demandes</li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="card card-highlight">
-                    <h3>Aspects techniques et sécurité</h3>
-                    <ul>
-                        <li><strong>Protection contre injections SQL</strong>
-                            <ul>
-                                <li>Utilisation de PreparedStatements</li>
-                                <li>Pattern DAO pour isolation des requêtes</li>
-                            </ul>
-                        </li>
-                        <li><strong>Durée de session limitée</strong></li>
-                        <li><strong>Vérifications côté client et serveur</strong></li>
-                        <li><strong>Système de logging complet</strong>
-                            <ul>
-                                <li>Traçage des actions utilisateurs</li>
-                                <li>Débogage et audits de sécurité</li>
-                            </ul>
-                        </li>
-                        <li><strong>Conformité RGPD</strong>
-                            <ul>
-                                <li>Protection des données personnelles</li>
-                                <li>Gestion des droits d'accès</li>
-                            </ul>
-                        </li>
+                        <li>Authentification sécurisée avec verrouillage</li>
+                        <li>Gestion multi-rôles (Admin, Responsable, Employé)</li>
+                        <li>Demande et validation de congés</li>
+                        <li>Système de logging</li>
                     </ul>
                 </div>
 
@@ -177,43 +129,23 @@
                     <h3>Difficultés & Solutions</h3>
                     <div class="difficulty-item">
                         <h4>🔒 Sécurité des données</h4>
-                        <p><strong>Problème :</strong> Risques d'injection SQL et accès non autorisés</p>
-                        <p><strong>Solution :</strong> Pattern DAO, PreparedStatements, validation stricte des entrées, système de rôles granulaire</p>
+                        <p><strong>Solution :</strong> PreparedStatements, pattern DAO, validation des entrées</p>
                     </div>
                     <div class="difficulty-item">
-                        <h4>🏗️ Complexité architecturale</h4>
-                        <p><strong>Problème :</strong> Maintenir une architecture cohérente et évolutive</p>
-                        <p><strong>Solution :</strong> MVC strict avec séparation claire des responsabilités, utilisation de POJO pour la modélisation</p>
+                        <h4>🏗️ Architecture MVC</h4>
+                        <p><strong>Solution :</strong> Séparation stricte des responsabilités</p>
                     </div>
-                    <div class="difficulty-item">
-                        <h4>⚖️ Conformité RGPD</h4>
-                        <p><strong>Problème :</strong> Gestion des données personnelles sensibles</p>
-                        <p><strong>Solution :</strong> Privacy by design, durée de rétention des données, droits utilisateurs implémentés</p>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h3>Points forts du projet</h3>
-                    <ul>
-                        <li>Application fonctionnelle et modulable</li>
-                        <li>Interface utilisateur adaptée à chaque rôle</li>
-                        <li>Sécurité renforcée et gestion des droits</li>
-                        <li>Logging intégré pour audits et diagnostics</li>
-                        <li>Architecture professionnelle basée sur MVC et DAO</li>
-                    </ul>
                 </div>
 
                 <div class="card">
                     <h3>Compétences développées</h3>
                     <div class="skills">
-                        <span class="skill-tag">Développement Java 17 & Swing</span>
-                        <span class="skill-tag">Architecture logicielle MVC</span>
-                        <span class="skill-tag">Conception BDD MySQL</span>
+                        <span class="skill-tag">Java 17 & Swing</span>
+                        <span class="skill-tag">Architecture MVC</span>
+                        <span class="skill-tag">MySQL</span>
                         <span class="skill-tag">DAO & POJO</span>
-                        <span class="skill-tag">Sécurité & RGPD</span>
-                        <span class="skill-tag">Authentification</span>
-                        <span class="skill-tag">Logging & débogage</span>
-                        <span class="skill-tag">Gestion des rôles</span>
+                        <span class="skill-tag">Sécurité</span>
+                        <span class="skill-tag">RGPD</span>
                     </div>
                 </div>
             </div>
@@ -231,135 +163,71 @@
 
             <div class="project-intro">
                 <h3>Système de location de DVD pour parc de vacances</h3>
-                <p><strong>Type :</strong> Projet BTS SIO SLAM - Application Web & Mobile</p>
+                <p><strong>Type :</strong> Projet BTS SIO SLAM</p>
                 <p><strong>Commanditaires :</strong> Emet Brown & Biff Tannen</p>
-                <p class="highlight">RFTG est un système complet de gestion de location de DVD destiné aux vacanciers d'un parc de vacances. Le projet comprend une application web pour les vacanciers et une application mobile pour les administrateurs.</p>
+                <p class="highlight">Système de location de DVD avec application web d'administration et application mobile pour les clients.</p>
             </div>
 
             <div class="content-grid">
                 <div class="card">
-                    <h3>Architecture du projet</h3>
-                    <p>Deux applications complémentaires :</p>
+                    <h3>Architecture</h3>
                     <ul>
-                        <li><strong>Application Web "Mario"</strong>
-                            <ul>
-                                <li>Interface pour les vacanciers</li>
-                                <li>Navigation et réservation de films</li>
-                            </ul>
-                        </li>
-                        <li><strong>Application Mobile "Luigi"</strong>
-                            <ul>
-                                <li>Interface pour les administrateurs</li>
-                                <li>Gestion complète du catalogue et des stocks</li>
-                            </ul>
-                        </li>
+                        <li><strong>Application Web "Mario"</strong> - Administration (Laravel)</li>
+                        <li><strong>Application Mobile "Luigi"</strong> - Client (Android Studio)</li>
+                        <li><strong>Base de données :</strong> MySQL (Sakila DB)</li>
                     </ul>
                 </div>
 
                 <div class="card">
-                    <h3>Technologies & Architecture</h3>
+                    <h3>Technologies</h3>
                     <ul>
-                        <li><strong>Base de données :</strong> MySQL (Sakila DB existante)</li>
-                        <li><strong>Frontend Web :</strong> HTML5, CSS3, JavaScript</li>
-                        <li><strong>Mobile :</strong> Application native/hybride</li>
-                        <li><strong>Backend :</strong> API REST</li>
-                        <li><strong>Contrainte :</strong> Utilisation de la base Sakila existante</li>
+                        <li><strong>Backend Web :</strong> Laravel (PHP)</li>
+                        <li><strong>Mobile :</strong> Android Studio (Java/Kotlin)</li>
+                        <li><strong>BDD :</strong> MySQL Sakila</li>
+                        <li><strong>API :</strong> REST</li>
                     </ul>
                 </div>
 
                 <div class="card card-highlight">
-                    <h3>Application Mobile "Luigi" - Administration</h3>
-                    <p><strong>Gestion complète du système</strong></p>
+                    <h3>Application Mobile "Luigi" - Client</h3>
                     <ul>
-                        <li><strong>Objets gérés :</strong>
-                            <ul>
-                                <li>Listes DVD physiques</li>
-                                <li>Supports DVD</li>
-                                <li>Listes films en numérique</li>
-                                <li>Films (catalogue)</li>
-                                <li>Utilisateurs et vendeurs</li>
-                                <li>Catégories</li>
-                            </ul>
-                        </li>
-                        <li><strong>Fonctionnalités principales :</strong>
-                            <ul>
-                                <li>Identification client</li>
-                                <li>Affichage liste films avec filtres et tris</li>
-                                <li>Détails des films</li>
-                                <li>Gestion du panier</li>
-                                <li>Validation des réservations</li>
-                            </ul>
-                        </li>
+                        <li>Identification client</li>
+                        <li>Liste films avec filtres et tris</li>
+                        <li>Détails des films</li>
+                        <li>Panier et validation</li>
                     </ul>
                 </div>
 
                 <div class="card card-highlight">
-                    <h3>Application Web "Mario" - Vacanciers</h3>
-                    <p><strong>Interface utilisateur pour la location</strong></p>
+                    <h3>Application Web "Mario" - Administration</h3>
                     <ul>
-                        <li><strong>Objets gérés :</strong>
-                            <ul>
-                                <li>Catalogue complet (DVD + numérique)</li>
-                                <li>Clients et utilisateurs</li>
-                                <li>Vendeurs et catégories</li>
-                                <li>Entrepôts</li>
-                            </ul>
-                        </li>
-                        <li><strong>Fonctionnalités principales :</strong>
-                            <ul>
-                                <li>Affichage et détails des films</li>
-                                <li>Ajout de films au catalogue</li>
-                                <li>Modification de la liste des films</li>
-                                <li>Ajout de DVD physiques</li>
-                                <li>Consultation état des films et DVD</li>
-                                <li>Consultation état des réservations</li>
-                            </ul>
-                        </li>
+                        <li>Gestion catalogue films et DVD</li>
+                        <li>Ajout et modification films</li>
+                        <li>Gestion stocks et entrepôts</li>
+                        <li>Consultation réservations</li>
                     </ul>
                 </div>
 
                 <div class="card card-highlight">
                     <h3>Difficultés & Solutions</h3>
                     <div class="difficulty-item">
-                        <h4>🗄️ Base de données existante</h4>
-                        <p><strong>Problème :</strong> S'adapter à la structure de Sakila DB</p>
-                        <p><strong>Solution :</strong> Analyse de la base existante, adaptation du modèle de données, utilisation des tables et relations déjà présentes</p>
+                        <h4>🗄️ Base Sakila existante</h4>
+                        <p><strong>Solution :</strong> Adaptation au schéma existant</p>
                     </div>
                     <div class="difficulty-item">
                         <h4>🔄 Synchronisation Web/Mobile</h4>
-                        <p><strong>Problème :</strong> Cohérence des données entre les deux applications</p>
-                        <p><strong>Solution :</strong> API REST centralisée, gestion temps réel des stocks et réservations</p>
+                        <p><strong>Solution :</strong> API REST centralisée</p>
                     </div>
-                    <div class="difficulty-item">
-                        <h4>📦 Gestion des stocks DVD</h4>
-                        <p><strong>Problème :</strong> Disponibilité en temps réel des supports physiques</p>
-                        <p><strong>Solution :</strong> Système de réservation avec vérification instantanée des stocks</p>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h3>Résultats & Compétences</h3>
-                    <ul>
-                        <li>Système complet Web + Mobile fonctionnel</li>
-                        <li>Expérience cross-platform (Web et Mobile)</li>
-                        <li>Gestion de base de données complexe</li>
-                        <li>Architecture API REST</li>
-                        <li>Gestion des stocks en temps réel</li>
-                        <li>Travail sur code legacy (Sakila DB)</li>
-                    </ul>
                 </div>
 
                 <div class="card">
                     <h3>Compétences développées</h3>
                     <div class="skills">
-                        <span class="skill-tag">Développement Web</span>
-                        <span class="skill-tag">Développement Mobile</span>
+                        <span class="skill-tag">Laravel</span>
+                        <span class="skill-tag">Android Studio</span>
                         <span class="skill-tag">API REST</span>
-                        <span class="skill-tag">Base de données MySQL</span>
-                        <span class="skill-tag">Sakila DB</span>
-                        <span class="skill-tag">Gestion des stocks</span>
-                        <span class="skill-tag">Architecture cross-platform</span>
-                        <span class="skill-tag">Legacy code</span>
+                        <span class="skill-tag">MySQL Sakila</span>
+                        <span class="skill-tag">Cross-platform</span>
                     </div>
                 </div>
             </div>
