@@ -180,47 +180,48 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize timer display
     updateTimerDisplay();
 
-    // Attach timer event listeners
-    document.getElementById('startTimer').addEventListener('click', toggleTimer);
-    document.getElementById('resetTimer').addEventListener('click', resetTimer);
+    // Attach timer event listeners (désactivé pour mode 3D immersif)
+    // Les boutons n'existent plus dans la version 3D
+    // document.getElementById('startTimer').addEventListener('click', toggleTimer);
+    // document.getElementById('resetTimer').addEventListener('click', resetTimer);
 
-    // Observe cards for animation
-    const cards = document.querySelectorAll('.card');
-    cards.forEach(card => {
-        observer.observe(card);
-    });
+    // Observe cards for animation (désactivé pour mode 3D)
+    // const cards = document.querySelectorAll('.card');
+    // cards.forEach(card => {
+    //     observer.observe(card);
+    // });
 
-    // Add active state to nav links based on scroll
-    const sections = document.querySelectorAll('.section');
-    const navLinks = document.querySelectorAll('.nav-link');
+    // Add active state to nav links based on scroll (désactivé pour mode 3D)
+    // const sections = document.querySelectorAll('.section');
+    // const navLinks = document.querySelectorAll('.nav-link');
 
-    window.addEventListener('scroll', () => {
-        let current = '';
+    // window.addEventListener('scroll', () => {
+    //     let current = '';
 
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
-            if (window.pageYOffset >= (sectionTop - 200)) {
-                current = section.getAttribute('id');
-            }
-        });
+    //     sections.forEach(section => {
+    //         const sectionTop = section.offsetTop;
+    //         const sectionHeight = section.clientHeight;
+    //         if (window.pageYOffset >= (sectionTop - 200)) {
+    //             current = section.getAttribute('id');
+    //         }
+    //     });
 
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href').slice(1) === current) {
-                link.classList.add('active');
-            }
-        });
-    });
+    //     navLinks.forEach(link => {
+    //         link.classList.remove('active');
+    //         if (link.getAttribute('href').slice(1) === current) {
+    //             link.classList.add('active');
+    //         }
+    //     });
+    // });
 
-    // Add click handlers to nav links
-    navLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const targetId = link.getAttribute('href').slice(1);
-            scrollToSection(targetId);
-        });
-    });
+    // // Add click handlers to nav links
+    // navLinks.forEach(link => {
+    //     link.addEventListener('click', (e) => {
+    //         e.preventDefault();
+    //         const targetId = link.getAttribute('href').slice(1);
+    //         scrollToSection(targetId);
+    //     });
+    // });
 
     // Keyboard shortcuts
     document.addEventListener('keydown', (e) => {
