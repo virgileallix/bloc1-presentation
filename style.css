@@ -1,20 +1,22 @@
-/* Variables CSS */
+/* Variables CSS - Gamer RGB Theme */
 :root {
-    --primary-color: #2563eb;
-    --secondary-color: #1e40af;
-    --accent-color: #3b82f6;
-    --dark-bg: #1e293b;
-    --darker-bg: #0f172a;
-    --light-bg: #f8fafc;
-    --text-dark: #1e293b;
-    --text-light: #f8fafc;
-    --card-bg: #ffffff;
-    --card-dark-bg: #334155;
-    --success-color: #10b981;
-    --warning-color: #f59e0b;
-    --danger-color: #ef4444;
-    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --primary-color: #ff00ff;
+    --secondary-color: #00ffff;
+    --accent-color: #ff0080;
+    --dark-bg: rgba(10, 10, 15, 0.85);
+    --darker-bg: rgba(5, 5, 10, 0.95);
+    --light-bg: rgba(30, 30, 40, 0.8);
+    --text-dark: #f0f0f0;
+    --text-light: #ffffff;
+    --card-bg: rgba(20, 20, 30, 0.7);
+    --card-dark-bg: rgba(15, 15, 25, 0.85);
+    --success-color: #00ff00;
+    --warning-color: #ffff00;
+    --danger-color: #ff0000;
+    --shadow: 0 8px 32px 0 rgba(255, 0, 255, 0.2);
+    --shadow-lg: 0 8px 32px 0 rgba(0, 255, 255, 0.3);
+    --glow-pink: 0 0 20px rgba(255, 0, 255, 0.5);
+    --glow-cyan: 0 0 20px rgba(0, 255, 255, 0.5);
 }
 
 /* Reset et Base */
@@ -27,20 +29,39 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
-    color: var(--text-dark);
+    color: var(--text-light);
     overflow-x: hidden;
+    background: #0a0a0f;
+    position: relative;
 }
 
-/* Navigation */
+/* Glassmorphism effect for all content */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Navigation - Glassmorphism */
 .navbar {
     position: fixed;
     top: 0;
     width: 100%;
     background: var(--darker-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 0, 255, 0.2);
     color: var(--text-light);
     padding: 1rem 0;
     z-index: 1000;
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-lg), var(--glow-pink);
 }
 
 .nav-container {
@@ -84,6 +105,14 @@ body {
     font-weight: bold;
     font-size: 1.2rem;
     font-family: 'Courier New', monospace;
+    box-shadow: var(--glow-pink);
+    border: 1px solid rgba(255, 0, 255, 0.3);
+    animation: pulse-glow 2s infinite;
+}
+
+@keyframes pulse-glow {
+    0%, 100% { box-shadow: var(--glow-pink); }
+    50% { box-shadow: 0 0 30px rgba(255, 0, 255, 0.8); }
 }
 
 /* Hero Section */
@@ -92,11 +121,13 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    background: transparent;
     color: var(--text-light);
     text-align: center;
     padding: 2rem;
     margin-top: 60px;
+    position: relative;
+    z-index: 1;
 }
 
 .hero-content {
@@ -139,18 +170,28 @@ body {
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
-/* Sections */
+/* Sections - Glassmorphism */
 .section {
     padding: 5rem 2rem;
+    position: relative;
+    z-index: 1;
 }
 
 .section-light {
     background: var(--light-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(0, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(0, 255, 255, 0.1);
 }
 
 .section-dark {
     background: var(--dark-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     color: var(--text-light);
+    border-top: 1px solid rgba(255, 0, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 0, 255, 0.1);
 }
 
 .container {
@@ -201,29 +242,49 @@ body {
     margin-top: 2rem;
 }
 
-/* Cards */
+/* Cards - Glassmorphism RGB */
 .card {
     background: var(--card-bg);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
     padding: 2rem;
-    border-radius: 12px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: var(--shadow);
-    transition: transform 0.3s, box-shadow 0.3s;
+    transition: transform 0.3s, box-shadow 0.3s, border 0.3s;
 }
 
 .section-dark .card {
     background: var(--card-dark-bg);
     color: var(--text-light);
+    border: 1px solid rgba(255, 0, 255, 0.2);
+}
+
+.section-light .card {
+    border: 1px solid rgba(0, 255, 255, 0.2);
 }
 
 .card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-lg);
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: var(--shadow-lg), var(--glow-pink);
+    border-color: rgba(255, 0, 255, 0.5);
+}
+
+.section-light .card:hover {
+    box-shadow: var(--shadow-lg), var(--glow-cyan);
+    border-color: rgba(0, 255, 255, 0.5);
 }
 
 .card h3 {
     color: var(--primary-color);
     margin-bottom: 1rem;
     font-size: 1.5rem;
+    text-shadow: var(--glow-pink);
+}
+
+.section-light .card h3 {
+    color: var(--secondary-color);
+    text-shadow: var(--glow-cyan);
 }
 
 .section-dark .card h3 {
@@ -246,14 +307,32 @@ body {
 
 .card-highlight {
     border-left: 4px solid var(--accent-color);
-    background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
+    background: linear-gradient(135deg, rgba(255, 0, 255, 0.15) 0%, rgba(255, 0, 128, 0.1) 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.card-highlight::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent, rgba(255, 0, 255, 0.1), transparent);
+    animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
 }
 
 .section-dark .card-highlight {
-    background: linear-gradient(135deg, rgba(37, 99, 235, 0.2) 0%, rgba(59, 130, 246, 0.1) 100%);
+    background: linear-gradient(135deg, rgba(255, 0, 255, 0.2) 0%, rgba(0, 255, 255, 0.1) 100%);
 }
 
-/* Skills */
+/* Skills - RGB animated */
 .skills {
     display: flex;
     flex-wrap: wrap;
@@ -261,12 +340,36 @@ body {
 }
 
 .skill-tag {
-    background: var(--primary-color);
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
     color: white;
     padding: 0.5rem 1rem;
     border-radius: 20px;
     font-size: 0.9rem;
     font-weight: 500;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 10px rgba(255, 0, 255, 0.3);
+    transition: all 0.3s;
+    animation: rgb-pulse 3s infinite alternate;
+}
+
+@keyframes rgb-pulse {
+    0% {
+        box-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+        border-color: rgba(255, 0, 255, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        border-color: rgba(0, 255, 255, 0.5);
+    }
+    100% {
+        box-shadow: 0 0 10px rgba(255, 0, 128, 0.5);
+        border-color: rgba(255, 0, 128, 0.5);
+    }
+}
+
+.skill-tag:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 25px rgba(255, 0, 255, 0.8);
 }
 
 /* Project Intro */
