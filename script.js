@@ -263,19 +263,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // Auto-scroll based on timer (optional feature)
     let autoScrollEnabled = false;
 
-    // Add button to toggle auto-scroll
-    const autoScrollBtn = document.createElement('button');
-    autoScrollBtn.className = 'timer-btn';
-    autoScrollBtn.textContent = 'Auto-scroll: OFF';
-    autoScrollBtn.style.background = '#64748b';
-    autoScrollBtn.addEventListener('click', () => {
-        autoScrollEnabled = !autoScrollEnabled;
-        autoScrollBtn.textContent = `Auto-scroll: ${autoScrollEnabled ? 'ON' : 'OFF'}`;
-        autoScrollBtn.style.background = autoScrollEnabled ? '#10b981' : '#64748b';
-        if (autoScrollEnabled) {
-            showNotification('Auto-scroll activé', 'success');
-        }
-    });
+    // Add button to toggle auto-scroll (désactivé en mode 3D)
+    // const autoScrollBtn = document.createElement('button');
+    // autoScrollBtn.className = 'timer-btn';
+    // autoScrollBtn.textContent = 'Auto-scroll: OFF';
+    // autoScrollBtn.style.background = '#64748b';
+    // autoScrollBtn.addEventListener('click', () => {
+    //     autoScrollEnabled = !autoScrollEnabled;
+    //     autoScrollBtn.textContent = `Auto-scroll: ${autoScrollEnabled ? 'ON' : 'OFF'}`;
+    //     autoScrollBtn.style.background = autoScrollEnabled ? '#10b981' : '#64748b';
+    //     if (autoScrollEnabled) {
+    //         showNotification('Auto-scroll activé', 'success');
+    //     }
+    // });
 
     // Désactivé en mode 3D - timer-control n'existe plus
     // document.querySelector('.timer-control').appendChild(autoScrollBtn);
