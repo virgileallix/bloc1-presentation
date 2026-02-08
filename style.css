@@ -70,10 +70,32 @@ body {
 }
 
 .loading-content h2 {
-    font-size: 28px;
-    margin-bottom: 30px;
+    font-size: 32px;
+    margin-bottom: 20px;
     font-family: 'Courier New', monospace;
     text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    background: linear-gradient(90deg, #ff00ff, #00ffff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.loading-info {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.loading-info p {
+    margin: 5px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+}
+
+#loading-percent {
+    font-size: 24px;
+    font-weight: bold;
+    color: #00ffff;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
 }
 
 .loading-bar {
@@ -820,6 +842,95 @@ html {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+}
+
+/* UI Overlay */
+#ui-overlay {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    pointer-events: none;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.camera-controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    pointer-events: all;
+}
+
+.view-btn {
+    background: rgba(20, 20, 30, 0.9);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 0, 255, 0.3);
+    color: #ffffff;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.3s;
+    box-shadow: 0 0 20px rgba(255, 0, 255, 0.2);
+}
+
+.view-btn:hover {
+    background: rgba(255, 0, 255, 0.2);
+    border-color: rgba(255, 0, 255, 0.8);
+    box-shadow: 0 0 30px rgba(255, 0, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+.info-panel {
+    background: rgba(20, 20, 30, 0.9);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(0, 255, 255, 0.3);
+    border-radius: 12px;
+    padding: 15px 20px;
+    pointer-events: all;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+}
+
+.info-panel h3 {
+    margin: 0 0 5px 0;
+    color: #00ffff;
+    font-family: 'Courier New', monospace;
+    font-size: 18px;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+.info-panel p {
+    margin: 3px 0;
+    color: #ffffff;
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+/* Responsive UI */
+@media (max-width: 768px) {
+    #ui-overlay {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .camera-controls {
+        width: 100%;
+    }
+
+    .view-btn {
+        flex: 1;
+        font-size: 12px;
+        padding: 8px 10px;
+    }
+
+    .info-panel {
+        width: 100%;
+    }
 }
 
 /* Enhanced card hover with emoji support */

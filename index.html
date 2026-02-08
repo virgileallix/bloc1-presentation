@@ -15,16 +15,37 @@
     <!-- Loading screen -->
     <div id="loading-screen">
         <div class="loading-content">
-            <h2>Chargement de la scène 3D...</h2>
+            <h2>Chargement du Portfolio 3D</h2>
+            <div class="loading-info">
+                <p id="loading-file">Initialisation...</p>
+                <p id="loading-percent">0%</p>
+            </div>
             <div class="loading-bar">
                 <div class="loading-progress"></div>
             </div>
         </div>
     </div>
 
+    <!-- UI Overlay -->
+    <div id="ui-overlay">
+        <div class="camera-controls">
+            <button class="view-btn" onclick="app.setCameraView('default')">🎮 Vue Globale</button>
+            <button class="view-btn" onclick="app.setCameraView('desk')">🖥️ Vue Bureau</button>
+            <button class="view-btn" onclick="app.setCameraView('screen')">📱 Zoom Écran</button>
+            <button class="view-btn" onclick="app.setCameraView('top')">🔝 Vue Dessus</button>
+        </div>
+
+        <div class="info-panel">
+            <h3>Portfolio Virgile Allix</h3>
+            <p>BTS SIO SLAM</p>
+            <p>Cliquez sur l'écran pour interagir</p>
+        </div>
+    </div>
+
     <!-- Scripts Three.js via CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
