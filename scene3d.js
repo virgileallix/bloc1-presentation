@@ -35,16 +35,60 @@ class GamerSetup3D {
                 title: "Présentation - Virgile Allix",
                 sections: [
                     { type: 'title', text: 'Virgile Allix' },
-                    { type: 'subtitle', text: 'BTS SIO SLAM - Développeur Full Stack' },
-                    { type: 'image', width: 150, height: 150, label: 'Photo' },
-                    { type: 'heading', text: 'Compétences Techniques' },
-                    { type: 'text', text: '• Développement Java (MVC, POO, Design Patterns)' },
-                    { type: 'text', text: '• Web Front-End (JavaScript, HTML5, CSS3, Three.js)' },
-                    { type: 'text', text: '• Base de données (MySQL, Firebase)' },
-                    { type: 'text', text: '• Architecture logicielle & APIs REST' },
-                    { type: 'heading', text: 'Formation' },
+                    { type: 'subtitle', text: 'Développeur Full Stack • BTS SIO SLAM' },
+                    { type: 'text', text: '💻 Passionné de développement' },
+                    { type: 'text', text: '' },
+
+                    { type: 'heading', text: '🎓 Formation' },
                     { type: 'text', text: 'BTS Services Informatiques aux Organisations' },
-                    { type: 'text', text: 'Option SLAM (Solutions Logicielles et Applications Métiers)' }
+                    { type: 'text', text: 'Option SLAM - 2ème année' },
+                    { type: 'text', text: '(Solutions Logicielles et Applications Métiers)' },
+                    { type: 'text', text: '' },
+
+                    { type: 'heading', text: '🛠️ Compétences Techniques' },
+                    { type: 'text', text: 'Back-end & Frameworks' },
+                    { type: 'text', text: '• Laravel / PHP - Framework moderne' },
+                    { type: 'text', text: '• Java - Développement orienté objet (MVC, POO)' },
+                    { type: 'text', text: '• APIs REST - Architecture et intégration' },
+                    { type: 'text', text: '' },
+                    { type: 'text', text: 'Front-end & Interfaces' },
+                    { type: 'text', text: '• JavaScript - ES6+ et frameworks modernes' },
+                    { type: 'text', text: '• HTML5 / CSS3 - Interfaces responsives' },
+                    { type: 'text', text: '• Three.js - Visualisation 3D et WebGL' },
+                    { type: 'text', text: '' },
+                    { type: 'text', text: 'Bases de données' },
+                    { type: 'text', text: '• MySQL - Conception et optimisation' },
+                    { type: 'text', text: '• Firebase - Solutions cloud et temps réel' },
+                    { type: 'text', text: '' },
+                    { type: 'text', text: 'Outils & Méthodes' },
+                    { type: 'text', text: '• Git / GitHub - Versioning et collaboration' },
+                    { type: 'text', text: '• Architecture MVC - Conception logicielle' },
+                    { type: 'text', text: '• Tests et Documentation - Qualité du code' },
+                    { type: 'text', text: '' },
+
+                    { type: 'heading', text: '💼 Expérience Professionnelle' },
+                    { type: 'text', text: '• Mission en entreprise pour un client assureur' },
+                    { type: 'text', text: '• Développement dapplication interne' },
+                    { type: 'text', text: '• Travail en équipe et respect des normes secteur' },
+                    { type: 'text', text: '' },
+
+                    { type: 'heading', text: '🌟 Soft Skills' },
+                    { type: 'text', text: '✓ Autonomie - Capacité à mener des projets' },
+                    { type: 'text', text: '✓ Travail en équipe - Collaboration efficace' },
+                    { type: 'text', text: '✓ Rigueur - Attention au détail et qualité' },
+                    { type: 'text', text: '✓ Curiosité technique - Veille et apprentissage continu' },
+                    { type: 'text', text: '' },
+
+                    { type: 'heading', text: '🎮 Centres dintérêt' },
+                    { type: 'text', text: '• Gaming & Jeux vidéo - Passion et culture gaming' },
+                    { type: 'text', text: '• Développement personnel - Projets side projects' },
+                    { type: 'text', text: '• Nouvelles technologies - Veille technologique' },
+                    { type: 'text', text: '' },
+
+                    { type: 'heading', text: '📧 Contact' },
+                    { type: 'text', text: '📧 Email : virgile.allix11@gmail.com' },
+                    { type: 'text', text: '💻 GitHub : github.com/virgile-allix' },
+                    { type: 'text', text: '🌐 Portfolio : Ce site web' }
                 ]
             },
             projet1: {
@@ -214,22 +258,72 @@ class GamerSetup3D {
                 ]
             },
             projet4: {
-                title: "Projet AP4 - Portfolio 3D Interactif",
+                title: "Anglais-Appli - E-commerce de Figurines 3D",
                 sections: [
-                    { type: 'title', text: 'Portfolio 3D Three.js' },
-                    { type: 'subtitle', text: 'Présentation innovante en 3D' },
-                    { type: 'image', width: 400, height: 200, label: 'Vue 3D du setup' },
-                    { type: 'heading', text: 'Technologies' },
-                    { type: 'text', text: '• Three.js (WebGL) pour le rendu 3D' },
-                    { type: 'text', text: '• GSAP pour les animations' },
-                    { type: 'text', text: '• Modèles 3D au format GLB/GLTF' },
-                    { type: 'text', text: '• Canvas API pour l\'OS virtuel' },
-                    { type: 'heading', text: 'Caractéristiques' },
-                    { type: 'text', text: '🎮 Scène 3D interactive avec contrôles caméra' },
-                    { type: 'text', text: '💻 OS virtuel simulé sur écran 3D' },
-                    { type: 'text', text: '🖱️ Drag & drop des fenêtres' },
-                    { type: 'text', text: '🌈 Effets RGB et particules animées' },
-                    { type: 'text', text: '📱 Design responsive et moderne' }
+                    { type: 'title', text: 'Anglais-Appli' },
+                    { type: 'subtitle', text: 'E-commerce IA • Next.js & TypeScript' },
+                    { type: 'image', width: 500, height: 300, label: 'Page daccueil', src: 'images/acceuil.png' },
+
+                    { type: 'heading', text: '🎯 Présentation' },
+                    { type: 'text', text: 'Plateforme e-commerce innovante permettant de générer' },
+                    { type: 'text', text: 'et vendre des figurines 3D personnalisées grâce à' },
+                    { type: 'text', text: 'lintelligence artificielle.' },
+                    { type: 'text', text: '' },
+
+                    { type: 'heading', text: '✨ Fonctionnalités principales' },
+                    { type: 'text', text: '🤖 Génération de figurines 3D via IA' },
+                    { type: 'text', text: '   • Intégration API Meshy.ia' },
+                    { type: 'text', text: '   • Création personnalisée de modèles 3D' },
+                    { type: 'text', text: '   • Rendu en temps réel' },
+                    { type: 'text', text: '' },
+                    { type: 'text', text: '🛒 Système e-commerce complet' },
+                    { type: 'text', text: '   • Catalogue de produits' },
+                    { type: 'text', text: '   • Panier et gestion des commandes' },
+                    { type: 'text', text: '   • Système de paiement intégré' },
+                    { type: 'text', text: '   • Suivi des ventes' },
+                    { type: 'text', text: '' },
+                    { type: 'image', width: 500, height: 300, label: 'Interface boutique', src: 'images/shop.png' },
+
+                    { type: 'text', text: '💾 Gestion des données' },
+                    { type: 'text', text: '   • Base de données Firebase/Firestore' },
+                    { type: 'text', text: '   • Authentification utilisateurs' },
+                    { type: 'text', text: '   • Règles de sécurité configurées' },
+                    { type: 'text', text: '' },
+
+                    { type: 'heading', text: '🛠️ Stack technique' },
+                    { type: 'text', text: 'Framework : Next.js (React)' },
+                    { type: 'text', text: 'Langage : TypeScript (99.3% du code)' },
+                    { type: 'text', text: 'Styling : Tailwind CSS + PostCSS' },
+                    { type: 'text', text: 'Base de données : Firebase/Firestore' },
+                    { type: 'text', text: 'API IA : Meshy.ia (génération 3D)' },
+                    { type: 'text', text: 'CI/CD : GitHub Actions' },
+                    { type: 'text', text: '' },
+
+                    { type: 'heading', text: '🎨 Architecture' },
+                    { type: 'text', text: '• Architecture Next.js avec App Router' },
+                    { type: 'text', text: '• API Routes pour la logique métier' },
+                    { type: 'text', text: '• Intégration API externe (Meshy.ia)' },
+                    { type: 'text', text: '• Composants React réutilisables' },
+                    { type: 'text', text: '• Type safety avec TypeScript' },
+                    { type: 'text', text: '' },
+
+                    { type: 'heading', text: '💡 Points forts' },
+                    { type: 'text', text: '✓ Intégration dune API IA avancée' },
+                    { type: 'text', text: '✓ E-commerce complet et fonctionnel' },
+                    { type: 'text', text: '✓ Stack moderne et performante' },
+                    { type: 'text', text: '✓ Code type-safe avec TypeScript' },
+                    { type: 'text', text: '✓ Déploiement automatisé (CI/CD)' },
+                    { type: 'text', text: '' },
+
+                    { type: 'heading', text: '📊 Statistiques' },
+                    { type: 'text', text: '• 49 commits sur la branche principale' },
+                    { type: 'text', text: '• 2 contributeurs actifs' },
+                    { type: 'text', text: '• Créé en février 2026' },
+                    { type: 'text', text: '' },
+
+                    { type: 'heading', text: '🔗 Ressources' },
+                    { type: 'text', text: '💻 GitHub : github.com/virgile-allix/anglais-appli' },
+                    { type: 'text', text: '🤖 API IA : Meshy.ia' }
                 ]
             },
             veille: {
@@ -275,10 +369,11 @@ class GamerSetup3D {
             animTime: 0,
             icons: [
                 { id: 'presentation', name: 'Présentation', icon: '📝', x: 30, y: 30, tooltip: 'Ouvrir ma présentation' },
-                { id: 'projet1', name: 'Projet AP1', icon: '📅', x: 30, y: 160, tooltip: 'Voir le projet MT-Congés' },
-                { id: 'projet2', name: 'Projet AP2', icon: '💿', x: 30, y: 290, tooltip: 'Voir le projet RFTG' },
-                { id: 'projet3', name: 'Projet AP3', icon: '🎮', x: 30, y: 420, tooltip: 'Voir ce portfolio 3D' },
-                { id: 'veille', name: 'Veille Tech', icon: '🛡️', x: 30, y: 550, tooltip: 'Ma veille technologique' }
+                { id: 'projet1', name: 'MT-Congés', icon: '📅', x: 30, y: 160, tooltip: 'Voir le projet MT-Congés' },
+                { id: 'projet2', name: 'RFTG', icon: '💿', x: 30, y: 290, tooltip: 'Voir le projet RFTG' },
+                { id: 'projet3', name: 'Mission Assureur', icon: '🏢', x: 30, y: 420, tooltip: 'Voir la mission assureur' },
+                { id: 'projet4', name: 'E-commerce 3D', icon: '🛒', x: 30, y: 550, tooltip: 'E-commerce de figurines IA' },
+                { id: 'veille', name: 'Veille Tech', icon: '🛡️', x: 30, y: 680, tooltip: 'Ma veille technologique' }
             ]
         };
 
@@ -299,8 +394,8 @@ class GamerSetup3D {
 
         // Détection de GPU intégré (Intel, pas de carte graphique dédiée)
         const isIntegrated = renderer.includes('Intel') ||
-                            renderer.includes('HD Graphics') ||
-                            renderer.includes('UHD Graphics');
+            renderer.includes('HD Graphics') ||
+            renderer.includes('UHD Graphics');
 
         // Vérifier aussi les cores CPU et mémoire disponible
         const cores = navigator.hardwareConcurrency || 2;
@@ -612,7 +707,7 @@ class GamerSetup3D {
     createFallbackObject(name) {
         console.log(`⚠️ Fallback pour ${name}`);
 
-        switch(name) {
+        switch (name) {
             case 'chair':
                 this.createChairFallback();
                 break;
@@ -696,7 +791,7 @@ class GamerSetup3D {
     createParticles() {
         // Ajuster le nombre de particules selon performance
         let particleCount;
-        switch(this.performanceMode) {
+        switch (this.performanceMode) {
             case 'low':
                 particleCount = 30; // Minimum pour PC faibles
                 break;
@@ -794,16 +889,16 @@ class GamerSetup3D {
             const hue2rgb = (p, q, t) => {
                 if (t < 0) t += 1;
                 if (t > 1) t -= 1;
-                if (t < 1/6) return p + (q - p) * 6 * t;
-                if (t < 1/2) return q;
-                if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+                if (t < 1 / 6) return p + (q - p) * 6 * t;
+                if (t < 1 / 2) return q;
+                if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
                 return p;
             };
             const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
             const p = 2 * l - q;
-            r = hue2rgb(p, q, h + 1/3);
+            r = hue2rgb(p, q, h + 1 / 3);
             g = hue2rgb(p, q, h);
-            b = hue2rgb(p, q, h - 1/3);
+            b = hue2rgb(p, q, h - 1 / 3);
         }
         return `rgb(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)})`;
     }
@@ -850,7 +945,7 @@ class GamerSetup3D {
         // Text
         ctx.fillStyle = '#ffffff';
         ctx.textAlign = 'center';
-        ctx.fillText(text, tooltipX + tooltipW/2, tooltipY + tooltipH/2 + 6);
+        ctx.fillText(text, tooltipX + tooltipW / 2, tooltipY + tooltipH / 2 + 6);
     }
 
     // Dessiner particules flottantes (adapté selon performance)
@@ -858,7 +953,7 @@ class GamerSetup3D {
         if (!this.floatingParticles) {
             // Nombre de particules adapté selon performance
             let particleCount2D;
-            switch(this.performanceMode) {
+            switch (this.performanceMode) {
                 case 'low':
                     particleCount2D = 10; // Minimum pour PC faibles
                     break;
@@ -1216,11 +1311,11 @@ class GamerSetup3D {
 
             // Shadow pour l'emoji
             ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
-            ctx.fillText(icon.icon, iconX + scaledIconSize/2 + 2, iconY + scaledIconSize * 0.45 + 2);
+            ctx.fillText(icon.icon, iconX + scaledIconSize / 2 + 2, iconY + scaledIconSize * 0.45 + 2);
 
             // Emoji principal
             ctx.fillStyle = isHovered ? '#ffffff' : '#f0f0f0';
-            ctx.fillText(icon.icon, iconX + scaledIconSize/2, iconY + scaledIconSize * 0.45);
+            ctx.fillText(icon.icon, iconX + scaledIconSize / 2, iconY + scaledIconSize * 0.45);
 
             // Label avec glow
             if (isHovered) {
@@ -1230,7 +1325,7 @@ class GamerSetup3D {
             ctx.fillStyle = '#ffffff';
             const labelSize = 16 * Math.min(scaleX, scaleY);
             ctx.font = `bold ${labelSize}px Arial`;
-            ctx.fillText(icon.name, iconX + scaledIconSize/2, iconY + scaledIconSize * 0.86);
+            ctx.fillText(icon.name, iconX + scaledIconSize / 2, iconY + scaledIconSize * 0.86);
             ctx.shadowBlur = 0;
 
             // Tooltip
@@ -1558,7 +1653,7 @@ class GamerSetup3D {
             project.sections.forEach(section => {
                 ctx.textAlign = 'left';
 
-                switch(section.type) {
+                switch (section.type) {
                     case 'title':
                         ctx.fillStyle = '#000000';
                         ctx.font = 'bold 42px -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif';
@@ -1632,7 +1727,7 @@ class GamerSetup3D {
                             ctx.fillStyle = '#999999';
                             ctx.font = '50px Arial';
                             ctx.textAlign = 'center';
-                            ctx.fillText('⏳', leftMargin + section.width/2, yPos + section.height/2 + 18);
+                            ctx.fillText('⏳', leftMargin + section.width / 2, yPos + section.height / 2 + 18);
                         } else {
                             // No src provided, show placeholder
                             ctx.fillStyle = '#e0e0e0';
@@ -1645,21 +1740,22 @@ class GamerSetup3D {
                             ctx.fillStyle = '#999999';
                             ctx.font = '50px Arial';
                             ctx.textAlign = 'center';
-                            ctx.fillText('🖼️', leftMargin + section.width/2, yPos + section.height/2 + 18);
+                            ctx.fillText('🖼️', leftMargin + section.width / 2, yPos + section.height / 2 + 18);
                         }
 
                         // Label
                         ctx.font = 'bold 16px Arial';
                         ctx.fillStyle = '#666666';
                         ctx.textAlign = 'center';
-                        ctx.fillText(section.label, leftMargin + section.width/2, yPos + section.height + 25);
+                        ctx.fillText(section.label, leftMargin + section.width / 2, yPos + section.height + 25);
                         yPos += section.height + 45;
                         break;
                 }
             });
 
             // Store content height for potential scrolling
-            win.contentHeight = yPos - (win.y + 140);
+            // Add extra padding at the bottom so last items are fully visible
+            win.contentHeight = yPos - (win.y + 140) + 100; // +100 for bottom padding
         }
 
         ctx.restore();
@@ -2126,7 +2222,8 @@ class GamerSetup3D {
         const scaleX = this.canvasWidth / 2560;
         const scaleY = this.canvasHeight / 1440;
         const windowWidth = 1200 * scaleX;
-        const windowHeight = (project ? Math.min(950, 850) : 850) * scaleY;
+        // Larger window for presentation, standard for others
+        const windowHeight = (icon.id === 'presentation' ? 1000 : 850) * scaleY;
 
         // Create window with animation properties
         const newWindow = {
