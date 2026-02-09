@@ -92,7 +92,7 @@ class GamerSetup3D {
                 ]
             },
             projet1: {
-                title: "MTCcongés - Application de gestion des congés",
+                title: "MTongés - Application de gestion des congés",
                 sections: [
                     { type: 'title', text: 'MTCcongés' },
                     { type: 'subtitle', text: 'Application Java • BTS SIO SLAM' },
@@ -329,20 +329,47 @@ class GamerSetup3D {
             veille: {
                 title: "Veille Technologique",
                 sections: [
-                    { type: 'title', text: 'Veille Technologique' },
-                    { type: 'subtitle', text: 'IA et Cybersécurité' },
-                    { type: 'image', width: 400, height: 200, label: 'IA et sécurité' },
-                    { type: 'heading', text: 'Thématiques suivies' },
-                    { type: 'text', text: '🤖 Intelligence Artificielle appliquée à la sécurité' },
-                    { type: 'text', text: '⚠️ Nouvelles menaces et attaques par IA' },
-                    { type: 'text', text: '🛡️ Systèmes de défense automatisés' },
-                    { type: 'text', text: '🔐 Authentification et chiffrement modernes' },
-                    { type: 'heading', text: 'Sources et méthodologie' },
-                    { type: 'text', text: '• Veille quotidienne sur flux RSS spécialisés' },
-                    { type: 'text', text: '• Suivi de blogs techniques (KrebsOnSecurity, etc.)' },
-                    { type: 'text', text: '• Conférences et webinaires (Black Hat, DEF CON)' },
-                    { type: 'text', text: '• Expérimentations en environnement contrôlé' },
-                    { type: 'image', width: 350, height: 180, label: 'Dashboard veille' }
+                    { type: 'title', text: 'Ma Veille Tech' },
+                    { type: 'subtitle', text: 'Technologies Web & IA' },
+                    { type: 'text', text: '💡 Passionné par les nouvelles technologies' },
+                    { type: 'text', text: '' },
+
+                    { type: 'heading', text: '🔍 Domaines suivis' },
+                    { type: 'text', text: '' },
+                    { type: 'text', text: '🤖 Intelligence Artificielle' },
+                    { type: 'text', text: '• APIs IA générative (Meshy.ia, OpenAI)' },
+                    { type: 'text', text: '• Intégration IA dans les applications web' },
+                    { type: 'text', text: '• Génération de contenu 3D par IA' },
+                    { type: 'text', text: '' },
+                    { type: 'text', text: '⚛️ Frameworks JavaScript modernes' },
+                    { type: 'text', text: '• Next.js et React 19' },
+                    { type: 'text', text: '• TypeScript et nouveautés ES' },
+                    { type: 'text', text: '• Tailwind CSS et design systems' },
+                    { type: 'text', text: '' },
+                    { type: 'text', text: '☁️ Cloud et Services Backend' },
+                    { type: 'text', text: '• Firebase / Firestore' },
+                    { type: 'text', text: '• APIs REST et GraphQL' },
+                    { type: 'text', text: '• Serverless et Edge Computing' },
+                    { type: 'text', text: '' },
+                    { type: 'text', text: '🎮 3D et WebGL' },
+                    { type: 'text', text: '• Three.js et visualisation 3D' },
+                    { type: 'text', text: '• WebGL et shaders' },
+                    { type: 'text', text: '• Optimisation des performances 3D' },
+                    { type: 'text', text: '' },
+
+                    { type: 'heading', text: '📚 Sources principales' },
+                    { type: 'text', text: '• Documentation officielle (Next.js, React)' },
+                    { type: 'text', text: '• GitHub - Exploration de projets open source' },
+                    { type: 'text', text: '• Dev.to et Medium - Articles techniques' },
+                    { type: 'text', text: '• YouTube - Tutoriels et conférences tech' },
+                    { type: 'text', text: '• Discord - Communautés de développeurs' },
+                    { type: 'text', text: '' },
+
+                    { type: 'heading', text: '🚀 Application concrète' },
+                    { type: 'text', text: '✓ Tests des nouvelles technologies dans mes projets' },
+                    { type: 'text', text: '✓ Side projects pour expérimenter' },
+                    { type: 'text', text: '✓ Veille quotidienne (15-30 min)' },
+                    { type: 'text', text: '✓ Partage avec la communauté dev' }
                 ]
             }
         };
@@ -503,9 +530,9 @@ class GamerSetup3D {
     }
 
     createLights() {
-        // Ambient light
-        const ambient = new THREE.AmbientLight(0xffffff, 0.4);
-        this.scene.add(ambient);
+        // Ambient light - stocker pour pouvoir augmenter en mode zoom
+        this.ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+        this.scene.add(this.ambientLight);
 
         // Main light (plafond) - ombres adaptées selon performance
         const mainLight = new THREE.PointLight(0xffffff, 0.8, 50);
@@ -528,10 +555,10 @@ class GamerSetup3D {
         rgbLight2.position.set(3, 2, -2);
         this.scene.add(rgbLight2);
 
-        // Screen glow
-        const screenLight = new THREE.PointLight(0x4488ff, 0.5, 5);
-        screenLight.position.set(0, 3, 0.5);
-        this.scene.add(screenLight);
+        // Screen glow - stocker pour pouvoir le désactiver en mode zoom
+        this.screenLight = new THREE.PointLight(0x4488ff, 0.5, 5);
+        this.screenLight.position.set(0, 3, 0.5);
+        this.scene.add(this.screenLight);
     }
 
     // Charger tous les modèles du setup
@@ -1641,6 +1668,30 @@ class GamerSetup3D {
         ctx.rect(win.x + 15, win.y + 105, win.w - 30, win.h - 115);
         ctx.clip();
 
+        // Check if this is an image viewer window
+        if (win.isImageViewer && win.viewerImage) {
+            // Center the image in the window
+            const centerX = win.x + win.w / 2;
+            const centerY = win.y + 105 + (win.h - 115) / 2;
+            const imgX = centerX - win.viewerImageWidth / 2;
+            const imgY = centerY - win.viewerImageHeight / 2;
+
+            // Draw black background
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(win.x + 15, win.y + 105, win.w - 30, win.h - 115);
+
+            // Draw the enlarged image
+            ctx.drawImage(win.viewerImage, imgX, imgY, win.viewerImageWidth, win.viewerImageHeight);
+
+            ctx.restore();
+
+            if (win.isAnimating) {
+                ctx.restore();
+            }
+
+            return;
+        }
+
         // Render project content (polices plus grandes)
         const project = this.projects[win.id];
         if (project && project.sections) {
@@ -1649,6 +1700,9 @@ class GamerSetup3D {
             let yPos = win.y + 140 - scrollOffset;
             const leftMargin = win.x + 50;
             const contentWidth = win.w - 100;
+
+            // Store clickable image zones for this window
+            if (!win.clickableImages) win.clickableImages = [];
 
             project.sections.forEach(section => {
                 ctx.textAlign = 'left';
@@ -1693,10 +1747,28 @@ class GamerSetup3D {
                             try {
                                 ctx.drawImage(img, leftMargin, yPos, section.width, section.height);
 
-                                // Border around image
-                                ctx.strokeStyle = '#999999';
-                                ctx.lineWidth = 2;
+                                // Store clickable zone for this image
+                                win.clickableImages.push({
+                                    x: leftMargin,
+                                    y: yPos,
+                                    w: section.width,
+                                    h: section.height,
+                                    src: section.src,
+                                    img: img
+                                });
+
+                                // Border around image + hover effect
+                                ctx.strokeStyle = '#4488ff';
+                                ctx.lineWidth = 3;
                                 ctx.strokeRect(leftMargin, yPos, section.width, section.height);
+
+                                // Add "click to enlarge" icon
+                                ctx.fillStyle = 'rgba(68, 136, 255, 0.8)';
+                                ctx.fillRect(leftMargin + section.width - 35, yPos + 5, 30, 30);
+                                ctx.font = '20px Arial';
+                                ctx.fillStyle = '#ffffff';
+                                ctx.textAlign = 'center';
+                                ctx.fillText('🔍', leftMargin + section.width - 20, yPos + 26);
                             } catch (e) {
                                 // CORS error - draw placeholder instead
                                 console.warn('CORS error drawing image:', section.src);
@@ -1755,7 +1827,7 @@ class GamerSetup3D {
 
             // Store content height for potential scrolling
             // Add extra padding at the bottom so last items are fully visible
-            win.contentHeight = yPos - (win.y + 140) + 100; // +100 for bottom padding
+            win.contentHeight = yPos - (win.y + 140) + 150; // +150 for bottom padding (increased)
         }
 
         ctx.restore();
@@ -2035,18 +2107,44 @@ class GamerSetup3D {
         // Disable orbit controls
         this.controls.enabled = false;
 
-        // Animate Camera to positions
+        // Désactiver le reflet bleu de l'écran mais augmenter la lumière ambiante
+        if (this.screenLight) {
+            gsap.to(this.screenLight, {
+                intensity: 0,
+                duration: 0.5,
+                ease: "power2.inOut"
+            });
+        }
+
+        // Augmenter la lumière ambiante pour compenser
+        if (this.ambientLight) {
+            gsap.to(this.ambientLight, {
+                intensity: 1.2, // Beaucoup plus lumineux
+                duration: 0.5,
+                ease: "power2.inOut"
+            });
+        }
+
+        // Animate Camera to positions - PLEIN ÉCRAN TOTAL
         gsap.to(this.camera.position, {
-            x: 0, y: 4.5, z: 4.5, // Close to screen
-            duration: 1.5,
+            x: 0, y: 4.5, z: 0.8, // Plein écran - très très proche
+            duration: 1.0,
             ease: "power2.inOut"
         });
 
         gsap.to(this.controls.target, {
             x: 0, y: 4.5, z: 0, // Look at screen center
-            duration: 1.5,
+            duration: 1.0,
             ease: "power2.inOut",
             onUpdate: () => this.camera.lookAt(this.controls.target)
+        });
+
+        // Réduire le FOV pour agrandir l'écran (effet plein écran)
+        gsap.to(this.camera, {
+            fov: 45, // Réduction du champ de vision
+            duration: 1.0,
+            ease: "power2.inOut",
+            onUpdate: () => this.camera.updateProjectionMatrix()
         });
     }
 
@@ -2054,6 +2152,32 @@ class GamerSetup3D {
         this.isZoomed = false;
         this.controls.enabled = true;
         document.body.style.cursor = 'default';
+
+        // Réactiver le reflet bleu de l'écran et restaurer lumière ambiante
+        if (this.screenLight) {
+            gsap.to(this.screenLight, {
+                intensity: 0.5,
+                duration: 0.5,
+                ease: "power2.inOut"
+            });
+        }
+
+        // Restaurer lumière ambiante normale
+        if (this.ambientLight) {
+            gsap.to(this.ambientLight, {
+                intensity: 0.4,
+                duration: 0.5,
+                ease: "power2.inOut"
+            });
+        }
+
+        // Restaurer le FOV original
+        gsap.to(this.camera, {
+            fov: 75, // FOV par défaut
+            duration: 1.5,
+            ease: "power2.inOut",
+            onUpdate: () => this.camera.updateProjectionMatrix()
+        });
 
         gsap.to(this.camera.position, {
             x: this.defaultCameraPos.x,
@@ -2080,6 +2204,25 @@ class GamerSetup3D {
             this.desktopState.draggedWindow = null;
             this.updateOS(this.screenCtx);
             return;
+        }
+
+        // Check for image clicks first (iterate backwards to check top windows first)
+        for (let i = this.windows.length - 1; i >= 0; i--) {
+            const win = this.windows[i];
+            if (win.minimized || !win.clickableImages) continue;
+
+            // Check if click is inside window
+            if (x >= win.x && x <= win.x + win.w && y >= win.y + 105 && y <= win.y + win.h) {
+                // Check each clickable image
+                for (const imgZone of win.clickableImages) {
+                    if (x >= imgZone.x && x <= imgZone.x + imgZone.w &&
+                        y >= imgZone.y && y <= imgZone.y + imgZone.h) {
+                        // Image clicked! Open in fullscreen viewer
+                        this.openImageViewer(imgZone.img, imgZone.src);
+                        return;
+                    }
+                }
+            }
         }
 
         // Check Windows (Close, minimize, maximize, drag, or focus)
@@ -2279,6 +2422,59 @@ class GamerSetup3D {
         };
 
         animate();
+    }
+
+    openImageViewer(img, src) {
+        // Create a fullscreen image viewer window
+        const scaleX = this.canvasWidth / 2560;
+        const scaleY = this.canvasHeight / 1440;
+
+        // Calculate image dimensions to fit screen while maintaining aspect ratio
+        const maxWidth = this.canvasWidth * 0.9;
+        const maxHeight = this.canvasHeight * 0.9;
+
+        let displayWidth = img.width;
+        let displayHeight = img.height;
+
+        // Scale down if image is too large
+        if (displayWidth > maxWidth || displayHeight > maxHeight) {
+            const widthRatio = maxWidth / displayWidth;
+            const heightRatio = maxHeight / displayHeight;
+            const scale = Math.min(widthRatio, heightRatio);
+
+            displayWidth = displayWidth * scale;
+            displayHeight = displayHeight * scale;
+        }
+
+        // Create viewer window centered on screen
+        const viewerWindow = {
+            id: 'image-viewer',
+            title: '🖼️ Aperçu Image',
+            x: (this.canvasWidth - displayWidth - 40) / 2,
+            y: (this.canvasHeight - displayHeight - 110) / 2,
+            w: displayWidth + 40,
+            h: displayHeight + 110,
+            minimized: false,
+            maximized: false,
+            scrollOffset: 0,
+            isImageViewer: true,
+            viewerImage: img,
+            viewerImageWidth: displayWidth,
+            viewerImageHeight: displayHeight,
+            // Animation properties
+            animScale: 0.5,
+            animOpacity: 0,
+            isAnimating: true
+        };
+
+        // Close existing image viewer if any
+        const existingViewer = this.windows.findIndex(w => w.isImageViewer);
+        if (existingViewer !== -1) {
+            this.windows.splice(existingViewer, 1);
+        }
+
+        this.windows.push(viewerWindow);
+        this.animateWindowOpen(viewerWindow);
     }
 
     onWindowResize() {
