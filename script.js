@@ -14,6 +14,8 @@ function formatTime(seconds) {
 // Update timer display
 function updateTimerDisplay() {
     const timerDisplay = document.getElementById('timer');
+    if (!timerDisplay) return; // Exit if timer element doesn't exist (3D mode)
+
     timerDisplay.textContent = formatTime(currentSeconds);
 
     // Change color based on time remaining

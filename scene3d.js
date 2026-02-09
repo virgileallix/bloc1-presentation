@@ -26,6 +26,9 @@ class GamerSetup3D {
         this.lastScreenUpdate = 0;
         this.screenUpdateThrottle = this.performanceMode === 'low' ? 50 : 16; // ms between updates
 
+        // Image cache for project images
+        this.imageCache = {};
+
         // Contenu des projets avec images
         this.projects = {
             presentation: {
@@ -45,45 +48,173 @@ class GamerSetup3D {
                 ]
             },
             projet1: {
-                title: "Projet AP1 - Application de Gestion",
+                title: "MTCcongés - Application de gestion des congés",
                 sections: [
-                    { type: 'title', text: 'MT-Congés' },
-                    { type: 'subtitle', text: 'Application de gestion des congés en Java' },
-                    { type: 'image', width: 400, height: 200, label: 'Capture écran principale' },
-                    { type: 'heading', text: 'Technologies utilisées' },
-                    { type: 'text', text: '• Langage: Java 17' },
-                    { type: 'text', text: '• Interface: Swing' },
-                    { type: 'text', text: '• Base de données: MySQL' },
-                    { type: 'text', text: '• Architecture: MVC (POJO + DAO)' },
-                    { type: 'heading', text: 'Fonctionnalités principales' },
-                    { type: 'text', text: '✓ Authentification sécurisée' },
-                    { type: 'text', text: '✓ Gestion multi-rôles (Admin, Manager, Employé)' },
-                    { type: 'text', text: '✓ Demandes et validation de congés' },
-                    { type: 'text', text: '✓ Génération de rapports' },
-                    { type: 'image', width: 350, height: 180, label: 'Diagramme architecture' }
+                    { type: 'title', text: 'MTCcongés' },
+                    { type: 'subtitle', text: 'Application Java • BTS SIO SLAM' },
+                    { type: 'image', width: 450, height: 250, label: 'Écran de connexion', src: 'images/mtconges/mtconges_login-screen.png' },
+
+                    { type: 'heading', text: '📋 Présentation' },
+                    { type: 'text', text: 'Application de gestion des congés développée dans le cadre' },
+                    { type: 'text', text: 'dun projet BTS SIO SLAM. Conçue en Java 17 avec une' },
+                    { type: 'text', text: 'interface Swing et une base MySQL, elle suit une' },
+                    { type: 'text', text: 'architecture MVC structurée.' },
+
+                    { type: 'heading', text: '🎯 Objectifs du projet' },
+                    { type: 'text', text: 'Créer une solution complète permettant aux employés de' },
+                    { type: 'text', text: 'demander des congés, aux responsables de les valider et' },
+                    { type: 'text', text: 'aux administrateurs de gérer les comptes utilisateurs,' },
+                    { type: 'text', text: 'le tout dans un environnement sécurisé et conforme.' },
+
+                    { type: 'image', width: 500, height: 280, label: 'Interface principale avec calendrier', src: 'images/mtconges/mtconges_mainpage_calendrier.png' },
+
+                    { type: 'heading', text: '⚙️ Fonctionnalités principales' },
+                    { type: 'text', text: '🔐 Authentification sécurisée' },
+                    { type: 'text', text: '   • Connexion avec verrouillage automatique' },
+                    { type: 'text', text: '   • Réinitialisation de mot de passe' },
+                    { type: 'text', text: '   • Contrôles de session' },
+                    { type: 'text', text: '' },
+                    { type: 'text', text: '👥 Gestion des rôles' },
+                    { type: 'text', text: '   • Admin: gestion des utilisateurs' },
+                    { type: 'text', text: '   • Responsable: validation des demandes' },
+                    { type: 'text', text: '   • Employé: dépôt et suivi des congés' },
+                    { type: 'text', text: '' },
+                    { type: 'text', text: '🏗️ Architecture MVC' },
+                    { type: 'text', text: '   • Modèle: POJO + DAO' },
+                    { type: 'text', text: '   • Vue: Swing adaptative' },
+                    { type: 'text', text: '   • Contrôleur: logique métier' },
+
+                    { type: 'heading', text: '🔒 Aspects techniques et sécurité' },
+                    { type: 'text', text: '• Protection contre injections SQL' },
+                    { type: 'text', text: '• Durée de session limitée' },
+                    { type: 'text', text: '• Vérifications côté client et serveur' },
+                    { type: 'text', text: '• Système de logging complet pour traçage' },
+                    { type: 'text', text: '• Conformité RGPD' },
+
+                    { type: 'heading', text: '🛠️ Technologies utilisées' },
+                    { type: 'text', text: 'Langage: Java 17' },
+                    { type: 'text', text: 'Interface: Java Swing' },
+                    { type: 'text', text: 'Base de données: MySQL' },
+                    { type: 'text', text: 'Architecture: MVC avec DAO et POJO' },
+                    { type: 'text', text: 'Sécurité: Authentification, RGPD, logging' },
+
+                    { type: 'heading', text: '💡 Compétences développées' },
+                    { type: 'text', text: '✓ Développement Java 17 & Swing' },
+                    { type: 'text', text: '✓ Architecture logicielle MVC' },
+                    { type: 'text', text: '✓ Conception de base de données MySQL' },
+                    { type: 'text', text: '✓ DAO & POJO' },
+                    { type: 'text', text: '✓ Sécurité, authentification, RGPD' },
+                    { type: 'text', text: '✓ Logging, débogage et gestion des erreurs' },
+                    { type: 'text', text: '✓ Gestion des rôles et permissions' }
                 ]
             },
             projet2: {
-                title: "Projet AP2 - Application Web/Mobile",
+                title: "RFTG - Application de réservation de DVD",
                 sections: [
-                    { type: 'title', text: 'RFTG - Location de Films' },
-                    { type: 'subtitle', text: 'Système de gestion de location DVD' },
-                    { type: 'image', width: 400, height: 200, label: 'Interface web admin' },
-                    { type: 'heading', text: 'Stack technique' },
-                    { type: 'text', text: '• Back-office Web: Laravel (PHP)' },
-                    { type: 'text', text: '• Application Mobile: Android Studio (Java)' },
-                    { type: 'text', text: '• Base de données: MySQL (Sakila DB)' },
-                    { type: 'text', text: '• API REST pour communication Mobile <-> Web' },
-                    { type: 'heading', text: 'Fonctionnalités' },
-                    { type: 'text', text: '📀 Catalogue de films consultable' },
-                    { type: 'text', text: '📊 Gestion des stocks et disponibilités' },
-                    { type: 'text', text: '📱 Réservations depuis mobile' },
-                    { type: 'text', text: '👤 Gestion des clients et historique' },
-                    { type: 'image', width: 200, height: 350, label: 'App mobile' }
+                    { type: 'title', text: 'RFTG' },
+                    { type: 'subtitle', text: 'Application Full-Stack • BTS SIO' },
+                    { type: 'image', width: 500, height: 300, label: 'Application RFTG', src: 'images/projet-rftg.jpg' },
+
+                    { type: 'heading', text: '📋 Présentation du projet' },
+                    { type: 'text', text: 'Système complet de gestion de DVD pour un parc à thème,' },
+                    { type: 'text', text: 'incluant une interface web administrative et une' },
+                    { type: 'text', text: 'application mobile pour les utilisateurs.' },
+
+                    { type: 'heading', text: '🏗️ Architecture - Univers Mario' },
+                    { type: 'text', text: 'Le projet RFTG est structuré en quatre composantes' },
+                    { type: 'text', text: 'principales, chacune inspirée de lunivers Mario :' },
+                    { type: 'text', text: '' },
+                    { type: 'text', text: '📱 Luigi - Application Mobile' },
+                    { type: 'text', text: '   • Application Android développée en Java' },
+                    { type: 'text', text: '   • Consultation et réservation de DVD' },
+                    { type: 'text', text: '   • Interface utilisateur intuitive' },
+                    { type: 'text', text: '' },
+                    { type: 'text', text: '🖥️ Mario - Application Web' },
+                    { type: 'text', text: '   • Interface web dadministration en PHP' },
+                    { type: 'text', text: '   • Gestion du catalogue de DVD' },
+                    { type: 'text', text: '   • Gestion des réservations et utilisateurs' },
+                    { type: 'text', text: '' },
+                    { type: 'text', text: '🔌 Toad - API Webservice' },
+                    { type: 'text', text: '   • API REST sécurisée' },
+                    { type: 'text', text: '   • Pont entre applications et base de données' },
+                    { type: 'text', text: '   • Communication fluide et sécurisée' },
+                    { type: 'text', text: '' },
+                    { type: 'text', text: '🗄️ Peach - Base de données' },
+                    { type: 'text', text: '   • Base MySQL inspirée du modèle Sakila' },
+                    { type: 'text', text: '   • Stockage DVD, clients et réservations' },
+
+                    { type: 'heading', text: '🛠️ Technologies utilisées' },
+                    { type: 'text', text: 'Back-end : PHP, MySQL' },
+                    { type: 'text', text: 'Front-end : HTML, CSS, JavaScript' },
+                    { type: 'text', text: 'Mobile : Java, Android Studio, XML' },
+                    { type: 'text', text: 'API : REST API sécurisée' },
+                    { type: 'text', text: 'Base de données : MySQL (modèle Sakila)' },
+
+                    { type: 'heading', text: '📦 Modules principaux' },
+                    { type: 'text', text: '• Gestion des réservations' },
+                    { type: 'text', text: '• Système dauthentification' },
+                    { type: 'text', text: '• Interface mobile et web' },
+                    { type: 'text', text: '• Synchronisation des données' },
+
+                    { type: 'heading', text: '🎯 Objectif' },
+                    { type: 'text', text: 'Créer un système complet de gestion de DVD pour un' },
+                    { type: 'text', text: 'parc à thème avec une expérience utilisateur optimale' },
+                    { type: 'text', text: 'sur mobile et web.' },
+
+                    { type: 'heading', text: '⚡ Défis techniques' },
+                    { type: 'text', text: '• Communication mobile-serveur via API REST' },
+                    { type: 'text', text: '• Gestion multi-interface (web + mobile)' },
+                    { type: 'text', text: '• Synchronisation des données avec MySQL' },
+                    { type: 'text', text: '• Architecture modulaire et scalable' },
+
+                    { type: 'heading', text: '💡 Statut' },
+                    { type: 'text', text: 'Projet en cours de développement' }
                 ]
             },
             projet3: {
-                title: "Projet AP3 - Portfolio 3D Interactif",
+                title: "Mission Assureur - Application interne",
+                sections: [
+                    { type: 'title', text: 'Mission Assureur' },
+                    { type: 'subtitle', text: 'Expérience professionnelle' },
+                    { type: 'image', width: 350, height: 200, label: 'Logo Assureur', src: 'images/assureur_logo.png' },
+
+                    { type: 'heading', text: '📋 Présentation' },
+                    { type: 'text', text: 'Mission réalisée au sein de mon entreprise pour le' },
+                    { type: 'text', text: 'compte dun client assureur. Jai contribué au' },
+                    { type: 'text', text: 'développement complet dune application interne en' },
+                    { type: 'text', text: 'intervenant sur les phases de codage, de tests et' },
+                    { type: 'text', text: 'de documentation.' },
+
+                    { type: 'heading', text: '🎯 Détails de la mission' },
+                    { type: 'text', text: 'Contexte : Mission en entreprise pour un client' },
+                    { type: 'text', text: '           du secteur de lassurance' },
+                    { type: 'text', text: '' },
+                    { type: 'text', text: 'Rôle : Développeur - Participation au développement' },
+                    { type: 'text', text: '       dune application interne' },
+                    { type: 'text', text: '' },
+                    { type: 'text', text: 'Missions principales :' },
+                    { type: 'text', text: '• Développement et codage de fonctionnalités' },
+                    { type: 'text', text: '• Tests et validation de lapplication' },
+                    { type: 'text', text: '• Rédaction de la documentation technique' },
+
+                    { type: 'heading', text: '🛠️ Technologies utilisées' },
+                    { type: 'text', text: 'Framework : Laravel' },
+                    { type: 'text', text: 'Base de données : SQL' },
+                    { type: 'text', text: 'Back-end : PHP' },
+                    { type: 'text', text: 'Front-end : JavaScript' },
+
+                    { type: 'heading', text: '💡 Compétences développées' },
+                    { type: 'text', text: '✓ Travail en équipe dans un contexte client' },
+                    { type: 'text', text: '✓ Respect des normes et procédures du secteur' },
+                    { type: 'text', text: '   de lassurance' },
+                    { type: 'text', text: '✓ Rigueur dans les tests et la documentation' },
+                    { type: 'text', text: '✓ Compréhension des enjeux métier dun assureur' },
+                    { type: 'text', text: '✓ Développement avec le framework Laravel' },
+                    { type: 'text', text: '✓ Gestion de projet en environnement professionnel' }
+                ]
+            },
+            projet4: {
+                title: "Projet AP4 - Portfolio 3D Interactif",
                 sections: [
                     { type: 'title', text: 'Portfolio 3D Three.js' },
                     { type: 'subtitle', text: 'Présentation innovante en 3D' },
@@ -268,6 +399,7 @@ class GamerSetup3D {
         window.addEventListener('resize', () => this.onWindowResize());
         window.addEventListener('click', (e) => this.onClick(e));
         window.addEventListener('mousemove', (e) => this.onMouseMove(e));
+        window.addEventListener('wheel', (e) => this.onWheel(e), { passive: false });
 
         // Hide loading screen - géré par updateLoadingProgress() maintenant
 
@@ -1417,7 +1549,9 @@ class GamerSetup3D {
         // Render project content (polices plus grandes)
         const project = this.projects[win.id];
         if (project && project.sections) {
-            let yPos = win.y + 140;
+            // Apply scroll offset
+            const scrollOffset = win.scrollOffset || 0;
+            let yPos = win.y + 140 - scrollOffset;
             const leftMargin = win.x + 50;
             const contentWidth = win.w - 100;
 
@@ -1457,22 +1591,67 @@ class GamerSetup3D {
                         break;
 
                     case 'image':
-                        // Image placeholder
-                        ctx.fillStyle = '#e0e0e0';
-                        ctx.fillRect(leftMargin, yPos, section.width, section.height);
-                        ctx.strokeStyle = '#999999';
-                        ctx.lineWidth = 3;
-                        ctx.strokeRect(leftMargin, yPos, section.width, section.height);
+                        // Try to load and display real image if src is provided
+                        if (section.src && this.imageCache[section.src] && this.imageCache[section.src] !== 'error') {
+                            // Draw the loaded image
+                            const img = this.imageCache[section.src];
+                            try {
+                                ctx.drawImage(img, leftMargin, yPos, section.width, section.height);
 
-                        // Image icon
-                        ctx.fillStyle = '#999999';
-                        ctx.font = '50px Arial';
-                        ctx.textAlign = 'center';
-                        ctx.fillText('🖼️', leftMargin + section.width/2, yPos + section.height/2 + 18);
+                                // Border around image
+                                ctx.strokeStyle = '#999999';
+                                ctx.lineWidth = 2;
+                                ctx.strokeRect(leftMargin, yPos, section.width, section.height);
+                            } catch (e) {
+                                // CORS error - draw placeholder instead
+                                console.warn('CORS error drawing image:', section.src);
+                                this.imageCache[section.src] = 'error'; // Mark as error to avoid retrying
+                            }
+                        } else if (section.src && !this.imageCache[section.src]) {
+                            // Image not loaded yet, try to load it
+                            const img = new Image();
+                            img.crossOrigin = 'anonymous'; // Try to avoid CORS issues
+                            img.onload = () => {
+                                this.imageCache[section.src] = img;
+                                this.updateOS(this.screenCtx); // Redraw when image loads
+                            };
+                            img.onerror = () => {
+                                console.warn('Failed to load image:', section.src);
+                                this.imageCache[section.src] = 'error'; // Mark as error
+                            };
+                            img.src = section.src;
+
+                            // Show placeholder while loading
+                            ctx.fillStyle = '#e0e0e0';
+                            ctx.fillRect(leftMargin, yPos, section.width, section.height);
+                            ctx.strokeStyle = '#999999';
+                            ctx.lineWidth = 3;
+                            ctx.strokeRect(leftMargin, yPos, section.width, section.height);
+
+                            // Loading icon
+                            ctx.fillStyle = '#999999';
+                            ctx.font = '50px Arial';
+                            ctx.textAlign = 'center';
+                            ctx.fillText('⏳', leftMargin + section.width/2, yPos + section.height/2 + 18);
+                        } else {
+                            // No src provided, show placeholder
+                            ctx.fillStyle = '#e0e0e0';
+                            ctx.fillRect(leftMargin, yPos, section.width, section.height);
+                            ctx.strokeStyle = '#999999';
+                            ctx.lineWidth = 3;
+                            ctx.strokeRect(leftMargin, yPos, section.width, section.height);
+
+                            // Image icon
+                            ctx.fillStyle = '#999999';
+                            ctx.font = '50px Arial';
+                            ctx.textAlign = 'center';
+                            ctx.fillText('🖼️', leftMargin + section.width/2, yPos + section.height/2 + 18);
+                        }
 
                         // Label
                         ctx.font = 'bold 16px Arial';
                         ctx.fillStyle = '#666666';
+                        ctx.textAlign = 'center';
                         ctx.fillText(section.label, leftMargin + section.width/2, yPos + section.height + 25);
                         yPos += section.height + 45;
                         break;
@@ -1487,12 +1666,19 @@ class GamerSetup3D {
 
         // Scrollbar if needed
         if (win.contentHeight && win.contentHeight > win.h - 115) {
+            const scrollbarHeight = win.h - 95;
+
+            // Scrollbar track
             ctx.fillStyle = '#cccccc';
-            ctx.fillRect(win.x + win.w - 20, win.y + 95, 14, win.h - 95);
+            ctx.fillRect(win.x + win.w - 20, win.y + 95, 14, scrollbarHeight);
+
             // Scroll thumb
             ctx.fillStyle = '#888888';
-            const thumbHeight = Math.max(40, (win.h - 95) * (win.h - 95) / win.contentHeight);
-            ctx.fillRect(win.x + win.w - 20, win.y + 95 + (win.scrollOffset || 0), 14, thumbHeight);
+            const thumbHeight = Math.max(40, scrollbarHeight * scrollbarHeight / win.contentHeight);
+            const scrollProgress = (win.scrollOffset || 0) / (win.contentHeight - scrollbarHeight);
+            const thumbY = win.y + 95 + scrollProgress * (scrollbarHeight - thumbHeight);
+
+            ctx.fillRect(win.x + win.w - 20, thumbY, 14, thumbHeight);
         }
 
         // Restore context si animation
@@ -1701,6 +1887,48 @@ class GamerSetup3D {
             } else {
                 // Clicked outside -> Zoom out
                 this.zoomOut();
+            }
+        }
+    }
+
+    onWheel(event) {
+        // Only handle scroll when zoomed in (OS mode)
+        if (!this.isZoomed) return;
+
+        // Prevent default scroll behavior
+        event.preventDefault();
+
+        const x = this.desktopState.mouseX;
+        const y = this.desktopState.mouseY;
+
+        // Find the window under the mouse
+        for (let i = this.windows.length - 1; i >= 0; i--) {
+            const win = this.windows[i];
+
+            // Skip minimized windows
+            if (win.minimized) continue;
+
+            // Check if mouse is over this window
+            if (x >= win.x && x <= win.x + win.w && y >= win.y && y <= win.y + win.h) {
+                // Check if window has scrollable content
+                if (win.contentHeight && win.contentHeight > win.h - 115) {
+                    // Initialize scrollOffset if not exists
+                    if (!win.scrollOffset) win.scrollOffset = 0;
+
+                    // Calculate scroll amount (deltaY is usually in pixels)
+                    const scrollAmount = event.deltaY * 0.5; // Adjust sensitivity
+
+                    // Update scroll position
+                    win.scrollOffset += scrollAmount;
+
+                    // Constrain scroll within bounds
+                    const maxScroll = win.contentHeight - (win.h - 115);
+                    win.scrollOffset = Math.max(0, Math.min(win.scrollOffset, maxScroll));
+
+                    // Update the OS display
+                    this.updateOS(this.screenCtx);
+                }
+                break; // Only scroll the top window
             }
         }
     }
