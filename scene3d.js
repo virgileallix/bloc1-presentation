@@ -382,6 +382,35 @@ class GamerSetup3D {
                     { type: 'text', text: '✓ Veille quotidienne (15-30 min)' },
                     { type: 'text', text: '✓ Partage avec la communauté dev' }
                 ]
+            },
+            rickroll: {
+                title: '🎵 Easter Egg — Never Gonna Give You Up',
+                sections: [
+                    { type: 'title', text: '🎵 Got You!' },
+                    { type: 'subtitle', text: 'Rick Astley — Never Gonna Give You Up (1987)' },
+                    { type: 'heading', text: '🎶 Paroles' },
+                    { type: 'text', text: "We're no strangers to love" },
+                    { type: 'text', text: "You know the rules and so do I" },
+                    { type: 'text', text: "A full commitment's what I'm thinking of" },
+                    { type: 'text', text: "You wouldn't get this from any other guy" },
+                    { type: 'text', text: '' },
+                    { type: 'text', text: "I just wanna tell you how I'm feeling" },
+                    { type: 'text', text: "Gotta make you understand" },
+                    { type: 'text', text: '' },
+                    { type: 'text', text: "🎵 Never gonna give you up" },
+                    { type: 'text', text: "🎵 Never gonna let you down" },
+                    { type: 'text', text: "🎵 Never gonna run around and desert you" },
+                    { type: 'text', text: "🎵 Never gonna make you cry" },
+                    { type: 'text', text: "🎵 Never gonna say goodbye" },
+                    { type: 'text', text: "🎵 Never gonna tell a lie and hurt you" },
+                    { type: 'text', text: '' },
+                    { type: 'heading', text: '🥚 Félicitations !' },
+                    { type: 'text', text: "Tu as trouvé l'easter egg caché dans" },
+                    { type: 'text', text: "ce portfolio 3D. Tu mérites une médaille." },
+                    { type: 'text', text: '' },
+                    { type: 'text', text: "D'autres easter eggs t'attendent..." },
+                    { type: 'text', text: "Format C: / sudo rm -rf / / Mode Matrix 👀" },
+                ]
             }
         };
 
@@ -405,6 +434,9 @@ class GamerSetup3D {
             lastClickedIcon: null,
             tooltip: null,
             animTime: 0,
+            startMenuOpen: false,
+            openMenu: null, // { winId, menuName, x, y }
+            easterEgg: null, // { type, startTime }
             icons: [
                 { id: 'presentation', name: 'Présentation', icon: '📝', x: 30, y: 30, tooltip: 'Ouvrir ma présentation' },
                 { id: 'projet1', name: 'MT-Congés', icon: '📅', x: 30, y: 160, tooltip: 'Voir le projet MT-Congés' },
@@ -1501,6 +1533,11 @@ class GamerSetup3D {
             ctx.stroke();
         }
 
+        // Render start menu, dropdowns, easter eggs on top
+        if (this.desktopState.startMenuOpen) this.renderStartMenu(ctx);
+        if (this.desktopState.openMenu) this.renderDropdownMenu(ctx);
+        if (this.desktopState.easterEgg) this.renderEasterEgg(ctx);
+
         if (this.screenTexture) this.screenTexture.needsUpdate = true;
     }
 
@@ -2225,6 +2262,49 @@ class GamerSetup3D {
             }
         }
 
+        // Check open dropdown menu items
+        if (this.desktopState.openMenu) {
+            const m = this.desktopState.openMenu;
+            const items = this.getMenuItems(m.menuName);
+            const itemH = 38, menuW = 260, padX = m.x, padY = m.y;
+            let iy = padY + 8;
+            for (const item of items) {
+                if (item === '---') { iy += 18; continue; }
+                if (x >= padX && x <= padX + menuW && y >= iy - 4 && y <= iy + 30) {
+                    this.handleMenuAction(m.winId, m.menuName, item);
+                    this.desktopState.openMenu = null;
+                    this.updateOS(this.screenCtx);
+                    return;
+                }
+                iy += itemH;
+            }
+            this.desktopState.openMenu = null;
+            this.updateOS(this.screenCtx);
+            return;
+        }
+
+        // Check start menu items
+        if (this.desktopState.startMenuOpen) {
+            const smX = 0, smW = 380;
+            const smH = 60 + this.desktopState.icons.length * 70 + 80;
+            const smY = this.canvasHeight - 70 - smH;
+            const startItems = [...this.desktopState.icons, { id: '__closeAll', name: 'Fermer tout', icon: '✖️' }];
+            let iy = smY + 80;
+            for (const icon of startItems) {
+                if (x >= smX + 20 && x <= smX + smW - 20 && y >= iy && y <= iy + 60) {
+                    if (icon.id === '__closeAll') { this.windows = []; }
+                    else { this.openWindow(icon); }
+                    this.desktopState.startMenuOpen = false;
+                    this.updateOS(this.screenCtx);
+                    return;
+                }
+                iy += 70;
+            }
+            this.desktopState.startMenuOpen = false;
+            this.updateOS(this.screenCtx);
+            return;
+        }
+
         // Check Windows (Close, minimize, maximize, drag, or focus)
         let clickedWindow = false;
         // Iterate backwards (top windows first)
@@ -2277,6 +2357,20 @@ class GamerSetup3D {
                     return;
                 }
 
+                // Check Menu Bar (Fichier, Édition, Affichage, Insertion)
+                if (y >= win.y + 50 && y <= win.y + 95) {
+                    const menuItems = ['Fichier', 'Édition', 'Affichage', 'Insertion'];
+                    let mx = win.x + 15;
+                    for (const menuName of menuItems) {
+                        if (x >= mx && x < mx + 100) {
+                            this.desktopState.openMenu = { winId: win.id, menuName, x: mx, y: win.y + 95 };
+                            this.updateOS(this.screenCtx);
+                            return;
+                        }
+                        mx += 100;
+                    }
+                }
+
                 // Check Title Bar (start drag)
                 if (y <= win.y + 50 && !win.maximized) {
                     this.desktopState.isDragging = true;
@@ -2297,16 +2391,29 @@ class GamerSetup3D {
         }
 
         if (!clickedWindow) {
+            // Close any open menu/start menu on click outside
+            if (this.desktopState.openMenu || this.desktopState.startMenuOpen) {
+                this.desktopState.openMenu = null;
+                this.desktopState.startMenuOpen = false;
+                this.updateOS(this.screenCtx);
+                return;
+            }
+
             // Check Taskbar buttons
             const taskbarY = this.canvasHeight - 70;
             if (y >= taskbarY) {
+                // WIN button
+                if (x < 80) {
+                    this.desktopState.startMenuOpen = !this.desktopState.startMenuOpen;
+                    this.updateOS(this.screenCtx);
+                    return;
+                }
+
                 let taskbarX = 90;
                 for (let i = 0; i < this.windows.length; i++) {
                     const win = this.windows[i];
                     if (x >= taskbarX && x < taskbarX + 200) {
-                        // Toggle minimize/restore
                         win.minimized = !win.minimized;
-                        // Bring to front if restoring
                         if (!win.minimized) {
                             this.windows.push(this.windows.splice(i, 1)[0]);
                         }
@@ -2345,6 +2452,202 @@ class GamerSetup3D {
         }
 
         this.updateOS(this.screenCtx);
+    }
+
+    getMenuItems(menuName) {
+        const menus = {
+            'Fichier':    ['Nouveau fichier', 'Fermer la fenêtre', 'Fermer tout', '---', '⚠️ Format C:'],
+            'Édition':    ['Copier', 'Coller', 'Annuler', '---', '💀 sudo rm -rf /'],
+            'Affichage':  ['Plein écran', 'Zoom avant', 'Zoom arrière', '---', '🟩 Mode Matrix'],
+            'Insertion':  ['Image', 'Lien hypertexte', '---', '🎵 Never Gonna...'],
+        };
+        return menus[menuName] || [];
+    }
+
+    handleMenuAction(winId, menuName, item) {
+        const win = this.windows.find(w => w.id === winId);
+        if (item === 'Fermer la fenêtre' && win) {
+            this.windows.splice(this.windows.indexOf(win), 1);
+        } else if (item === 'Fermer tout') {
+            this.windows = [];
+        } else if (item === 'Plein écran' && win) {
+            if (!win.maximized) {
+                win.restoreX = win.x; win.restoreY = win.y;
+                win.restoreW = win.w; win.restoreH = win.h;
+                win.x = 10; win.y = 10;
+                win.w = this.canvasWidth - 20;
+                win.h = this.canvasHeight - 90;
+                win.maximized = true;
+            }
+        } else if (item === '⚠️ Format C:') {
+            this.desktopState.easterEgg = { type: 'bsod', startTime: Date.now() };
+            setTimeout(() => { this.desktopState.easterEgg = null; this.updateOS(this.screenCtx); }, 4000);
+        } else if (item === '💀 sudo rm -rf /') {
+            this.desktopState.easterEgg = { type: 'terminal', startTime: Date.now() };
+            setTimeout(() => { this.desktopState.easterEgg = null; this.updateOS(this.screenCtx); }, 4000);
+        } else if (item === '🟩 Mode Matrix') {
+            this.desktopState.easterEgg = { type: 'matrix', startTime: Date.now() };
+            setTimeout(() => { this.desktopState.easterEgg = null; this.updateOS(this.screenCtx); }, 5000);
+        } else if (item === '🎵 Never Gonna...') {
+            this.openWindow({ id: 'rickroll', name: '🎵 Secret', icon: '🎵' });
+        }
+    }
+
+    renderDropdownMenu(ctx) {
+        const m = this.desktopState.openMenu;
+        if (!m) return;
+        const items = this.getMenuItems(m.menuName);
+        const menuW = 260, padX = m.x, padY = m.y;
+        let totalH = 16;
+        items.forEach(i => totalH += i === '---' ? 18 : 38);
+
+        ctx.shadowColor = 'rgba(0,0,0,0.35)';
+        ctx.shadowBlur = 20;
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.roundRect(padX, padY, menuW, totalH, 8);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = 'rgba(0,120,212,0.25)';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        let iy = padY + 8;
+        for (const item of items) {
+            if (item === '---') {
+                ctx.fillStyle = '#e0e0e0';
+                ctx.fillRect(padX + 12, iy + 8, menuW - 24, 1);
+                iy += 18; continue;
+            }
+            const hovered = this.desktopState.mouseX >= padX &&
+                this.desktopState.mouseX <= padX + menuW &&
+                this.desktopState.mouseY >= iy - 4 &&
+                this.desktopState.mouseY <= iy + 30;
+            if (hovered) {
+                ctx.fillStyle = 'rgba(0,120,212,0.1)';
+                ctx.beginPath();
+                ctx.roundRect(padX + 4, iy - 4, menuW - 8, 34, 5);
+                ctx.fill();
+            }
+            const isEgg = item.startsWith('⚠️') || item.startsWith('💀') || item.startsWith('🟩') || item.startsWith('🎵');
+            ctx.fillStyle = isEgg ? '#cc0000' : '#222222';
+            ctx.font = `${isEgg ? 'bold ' : ''}22px -apple-system, Arial, sans-serif`;
+            ctx.textAlign = 'left';
+            ctx.fillText(item, padX + 16, iy + 20);
+            iy += 38;
+        }
+    }
+
+    renderStartMenu(ctx) {
+        const icons = this.desktopState.icons;
+        const smW = 380, smX = 0;
+        const smH = 80 + icons.length * 70 + 90;
+        const smY = this.canvasHeight - 70 - smH;
+
+        ctx.shadowColor = 'rgba(0,0,0,0.5)';
+        ctx.shadowBlur = 30;
+        const grad = ctx.createLinearGradient(smX, smY, smX, smY + smH);
+        grad.addColorStop(0, 'rgba(25,25,40,0.98)');
+        grad.addColorStop(1, 'rgba(15,15,30,0.99)');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.roundRect(smX, smY, smW, smH, [0, 14, 0, 0]);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = 'rgba(0,255,255,0.2)';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        // Header
+        ctx.fillStyle = 'rgba(0,255,255,0.08)';
+        ctx.fillRect(smX, smY, smW, 70);
+        ctx.font = 'bold 26px Arial';
+        ctx.fillStyle = '#ffffff';
+        ctx.textAlign = 'left';
+        ctx.fillText('👤  Virgile Allix', smX + 20, smY + 42);
+
+        let iy = smY + 80;
+        const allItems = [...icons, { id: '__closeAll', name: 'Fermer tout', icon: '✖️' }];
+        for (const icon of allItems) {
+            const hovered = this.desktopState.mouseX >= smX + 20 &&
+                this.desktopState.mouseX <= smX + smW - 20 &&
+                this.desktopState.mouseY >= iy &&
+                this.desktopState.mouseY <= iy + 60;
+            if (hovered) {
+                ctx.fillStyle = 'rgba(0,255,255,0.1)';
+                ctx.beginPath();
+                ctx.roundRect(smX + 8, iy + 2, smW - 16, 56, 8);
+                ctx.fill();
+            }
+            ctx.font = '28px Arial';
+            ctx.textAlign = 'left';
+            ctx.fillText(icon.icon, smX + 22, iy + 36);
+            ctx.fillStyle = icon.id === '__closeAll' ? '#ff6666' : '#e0e0e0';
+            ctx.font = '22px -apple-system, Arial, sans-serif';
+            ctx.fillText(icon.name, smX + 70, iy + 36);
+            iy += 70;
+        }
+    }
+
+    renderEasterEgg(ctx) {
+        const egg = this.desktopState.easterEgg;
+        if (!egg) return;
+        const elapsed = Date.now() - egg.startTime;
+
+        if (egg.type === 'bsod') {
+            ctx.fillStyle = '#0078d4';
+            ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 120px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(':(', this.canvasWidth / 2, this.canvasHeight / 2 - 80);
+            ctx.font = 'bold 38px Arial';
+            ctx.fillText('Votre PC a rencontré un problème.', this.canvasWidth / 2, this.canvasHeight / 2 + 30);
+            ctx.font = '28px Arial';
+            ctx.fillStyle = 'rgba(255,255,255,0.8)';
+            ctx.fillText('FORMAT_C_NOT_REAL  (0x000000ED)', this.canvasWidth / 2, this.canvasHeight / 2 + 90);
+            ctx.fillText('(juste un easter egg, tout va bien 👍)', this.canvasWidth / 2, this.canvasHeight / 2 + 160);
+        } else if (egg.type === 'terminal') {
+            ctx.fillStyle = '#0d0d0d';
+            ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
+            ctx.font = '26px "Courier New", monospace';
+            ctx.textAlign = 'left';
+            const lines = [
+                'root@virgile-pc:~# sudo rm -rf /',
+                'removing /bin... done',
+                'removing /etc... done',
+                'removing /home/virgile/projets... WAIT',
+                'removing /home/virgile/bts_sio... NON',
+                '',
+                '> Erreur: trop de bons souvenirs à supprimer',
+                '> Opération annulée.',
+                '',
+                'root@virgile-pc:~# _',
+            ];
+            const visible = Math.min(lines.length, Math.floor(elapsed / 350));
+            lines.slice(0, visible).forEach((l, i) => {
+                ctx.fillStyle = i === 0 ? '#00ff00' : i >= 6 ? '#ff4444' : '#cccccc';
+                ctx.fillText(l, 60, 120 + i * 48);
+            });
+        } else if (egg.type === 'matrix') {
+            ctx.fillStyle = 'rgba(0,0,0,0.85)';
+            ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
+            ctx.font = '22px "Courier New", monospace';
+            ctx.textAlign = 'left';
+            const cols = Math.floor(this.canvasWidth / 22);
+            for (let c = 0; c < cols; c++) {
+                const chars = Math.floor(Math.random() * 20) + 5;
+                for (let r = 0; r < chars; r++) {
+                    const alpha = 1 - r / chars;
+                    ctx.fillStyle = r === 0 ? `rgba(180,255,180,${alpha})` : `rgba(0,200,0,${alpha * 0.7})`;
+                    ctx.fillText(String.fromCharCode(0x30A0 + Math.floor(Math.random() * 96)), c * 22, r * 30 + (elapsed * 0.3 % this.canvasHeight));
+                }
+            }
+            ctx.fillStyle = 'rgba(0,255,0,0.9)';
+            ctx.font = 'bold 80px "Courier New"';
+            ctx.textAlign = 'center';
+            ctx.fillText('FOLLOW THE WHITE RABBIT', this.canvasWidth / 2, this.canvasHeight / 2);
+        }
     }
 
     openWindow(icon) {
