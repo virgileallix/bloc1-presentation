@@ -1527,34 +1527,33 @@ class GamerSetup3D {
             const mx = this.desktopState.mouseX;
             const my = this.desktopState.mouseY;
             const clickable = this.isClickableAt(mx, my);
-
             ctx.save();
+            ctx.fillStyle = '#ffffff';
+            ctx.strokeStyle = '#222222';
+            ctx.lineWidth = 2;
             if (clickable) {
-                // Main cursor (hand)
-                ctx.fillStyle = '#ffffff';
-                ctx.strokeStyle = '#333333';
-                ctx.lineWidth = 1.5;
-                // Palm
+                // Curseur main (pointeur)
                 ctx.beginPath();
-                ctx.roundRect(mx + 2, my + 10, 18, 20, 4);
+                // Doigt index
+                ctx.moveTo(mx + 8, my);
+                ctx.lineTo(mx + 8, my + 18);
+                // Doigts repliés (corps main)
+                ctx.lineTo(mx + 2, my + 18);
+                ctx.lineTo(mx + 2, my + 30);
+                ctx.lineTo(mx + 22, my + 30);
+                ctx.lineTo(mx + 22, my + 18);
+                ctx.lineTo(mx + 16, my + 18);
+                ctx.lineTo(mx + 16, my);
+                ctx.closePath();
                 ctx.fill(); ctx.stroke();
-                // Fingers
-                [[mx+4, my+2, 5, 12],[mx+9, my, 5, 14],[mx+14, my+2, 5, 12],[mx+18, my+6, 4, 10]].forEach(([fx,fy,fw,fh]) => {
-                    ctx.beginPath(); ctx.roundRect(fx, fy, fw, fh, 3); ctx.fill(); ctx.stroke();
-                });
-                // Thumb
-                ctx.beginPath(); ctx.roundRect(mx-2, my+12, 5, 10, 3); ctx.fill(); ctx.stroke();
             } else {
-                // Arrow cursor
-                ctx.fillStyle = '#ffffff';
-                ctx.strokeStyle = '#333333';
-                ctx.lineWidth = 1.5;
+                // Curseur flèche
                 ctx.beginPath();
                 ctx.moveTo(mx, my);
-                ctx.lineTo(mx + 20, my + 20);
-                ctx.lineTo(mx + 8, my + 20);
-                ctx.lineTo(mx + 4, my + 28);
-                ctx.lineTo(mx, my + 20);
+                ctx.lineTo(mx + 18, my + 18);
+                ctx.lineTo(mx + 7, my + 18);
+                ctx.lineTo(mx + 3, my + 26);
+                ctx.lineTo(mx, my + 19);
                 ctx.closePath();
                 ctx.fill(); ctx.stroke();
             }
@@ -2484,28 +2483,41 @@ class GamerSetup3D {
 
     isClickableAt(x, y) {
         const taskbarY = this.canvasHeight - 70;
-        if (y >= taskbarY) return true; // Toute la taskbar
+        // Taskbar entière
+        if (y >= taskbarY) return true;
+        // Menus ouverts
         if (this.desktopState.startMenuOpen || this.desktopState.openMenu) return true;
         const scaleX = this.canvasWidth / 2560;
         const scaleY = this.canvasHeight / 1440;
-        const iconSize = 110 * Math.min(scaleX, scaleY);
+        // Icônes (zone élargie de 20px)
+        const iconSize = 130 * Math.min(scaleX, scaleY);
         for (const icon of this.desktopState.icons) {
-            const ix = icon.x * scaleX, iy = icon.y * scaleY;
+            const ix = icon.x * scaleX - 10, iy = icon.y * scaleY - 10;
             if (x >= ix && x <= ix + iconSize && y >= iy && y <= iy + iconSize) return true;
         }
+        // Fenêtres : titlebar, menubar, boutons, contenu
         for (const win of this.windows) {
             if (win.minimized) continue;
-            if (x >= win.x && x <= win.x + win.w && y >= win.y && y <= win.y + win.h) return true;
+            // Titlebar + menubar + boutons fermer/min/max
+            if (x >= win.x && x <= win.x + win.w && y >= win.y && y <= win.y + 95) return true;
+            // Scrollbar
+            if (x >= win.x + win.w - 25 && x <= win.x + win.w && y >= win.y + 95 && y <= win.y + win.h) return true;
+            // Images cliquables dans la fenêtre
+            if (win.clickableImages) {
+                for (const img of win.clickableImages) {
+                    if (x >= img.x && x <= img.x + img.w && y >= img.y && y <= img.y + img.h) return true;
+                }
+            }
         }
         return false;
     }
 
     getMenuItems(menuName) {
         const menus = {
-            'Fichier':    ['Nouveau fichier', 'Fermer la fenêtre', 'Fermer tout', '---', '⚠️ Format C:'],
-            'Édition':    ['Copier', 'Coller', 'Annuler', '---', '💀 sudo rm -rf /'],
-            'Affichage':  ['Plein écran', 'Zoom avant', 'Zoom arrière', '---', '🟩 Mode Matrix'],
-            'Insertion':  ['Image', 'Lien hypertexte', '---', '🪟 Windows Update'],
+            'Fichier':    ['Nouveau fichier', 'Fermer la fenêtre', 'Fermer tout', '---', '⚠️ Format C:', '🦠 Lancer un virus'],
+            'Édition':    ['Copier', 'Coller', 'Annuler', '---', '💀 sudo rm -rf /', '🤖 Demander à l\'IA'],
+            'Affichage':  ['Plein écran', 'Zoom avant', 'Zoom arrière', '---', '🟩 Mode Matrix', '☕ Pause café'],
+            'Insertion':  ['Image', 'Lien hypertexte', '---', '🪟 Windows Update', '📟 Message d\'erreur'],
         };
         return menus[menuName] || [];
     }
@@ -2539,6 +2551,18 @@ class GamerSetup3D {
         } else if (item === '🪟 Windows Update') {
             this.desktopState.easterEgg = { type: 'winupdate', startTime: Date.now() };
             setTimeout(() => { this.desktopState.easterEgg = null; this.updateOS(this.screenCtx); }, 7000);
+        } else if (item === '🦠 Lancer un virus') {
+            this.desktopState.easterEgg = { type: 'virus', startTime: Date.now() };
+            setTimeout(() => { this.desktopState.easterEgg = null; this.updateOS(this.screenCtx); }, 5000);
+        } else if (item === '🤖 Demander à l\'IA') {
+            this.desktopState.easterEgg = { type: 'ai', startTime: Date.now() };
+            setTimeout(() => { this.desktopState.easterEgg = null; this.updateOS(this.screenCtx); }, 5000);
+        } else if (item === '☕ Pause café') {
+            this.desktopState.easterEgg = { type: 'coffee', startTime: Date.now() };
+            setTimeout(() => { this.desktopState.easterEgg = null; this.updateOS(this.screenCtx); }, 4000);
+        } else if (item === '📟 Message d\'erreur') {
+            this.desktopState.easterEgg = { type: 'error404', startTime: Date.now() };
+            setTimeout(() => { this.desktopState.easterEgg = null; this.updateOS(this.screenCtx); }, 4000);
         }
     }
 
@@ -2765,6 +2789,139 @@ class GamerSetup3D {
                 ctx.fillStyle = 'rgba(255,255,255,0.8)';
                 ctx.fillText('ERREUR : 0xEASTEREGG — Juste un easter egg 😄', cx, cy + 30);
             }
+        } else if (egg.type === 'virus') {
+            // Fake antivirus scan
+            ctx.fillStyle = '#0d0d0d';
+            ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
+            const cx = this.canvasWidth / 2;
+            const lines = [
+                '[SCAN] BTS_Stresse.exe ................ MENACE DÉTECTÉE',
+                '[SCAN] Examen_Final.dll ............... CRITIQUE',
+                '[SCAN] Prof_Note.sys .................. SUSPECT',
+                '[SCAN] Rapport_Stage.pdf .............. OK',
+                '[SCAN] Discord.exe .................... DISTRACTION DÉTECTÉE',
+                '[SCAN] YouTube.exe .................... PRODUCTIVITÉ NÉGATIVE',
+                '[SCAN] Claude_AI.js ................... DÉPENDANCE LÉTALE',
+                '[SCAN] Café_Urgence.bat ............... EN COURS...',
+            ];
+            const visibleCount = Math.min(lines.length, Math.floor(elapsed / 400) + 1);
+            ctx.font = '22px "Courier New", monospace';
+            ctx.textAlign = 'left';
+            ctx.fillStyle = '#00ff41';
+            ctx.fillText('⚠ VIRGUARD PRO — ANALYSE EN COURS', cx - 400, 160);
+            ctx.strokeStyle = '#00ff41';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(cx - 420, 130, 840, 2);
+            for (let i = 0; i < visibleCount; i++) {
+                const isThreaten = lines[i].includes('MENACE') || lines[i].includes('CRITIQUE') || lines[i].includes('DISTRACTION') || lines[i].includes('NÉGATIVE') || lines[i].includes('LÉTALE');
+                ctx.fillStyle = isThreaten ? '#ff4444' : '#00ff41';
+                ctx.fillText(lines[i], cx - 400, 220 + i * 42);
+            }
+            if (elapsed > 3200) {
+                ctx.fillStyle = '#ff0000';
+                ctx.font = 'bold 36px "Courier New", monospace';
+                ctx.textAlign = 'center';
+                ctx.fillText('8 MENACES TROUVÉES — PC INFECTÉ PAR LE BTS', cx, 580);
+                ctx.font = '24px "Courier New", monospace';
+                ctx.fillStyle = '#ffff00';
+                ctx.fillText('[Appuyer sur Échap pour ignorer — comme d\'habitude]', cx, 640);
+            }
+        } else if (egg.type === 'ai') {
+            // Fake AI assistant
+            ctx.fillStyle = '#0f0f1a';
+            ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
+            const cx = this.canvasWidth / 2;
+            const cy = this.canvasHeight / 2;
+            const pulse = 0.5 + 0.5 * Math.sin(elapsed / 300);
+            // Pulsing circle
+            ctx.beginPath();
+            ctx.arc(cx, cy - 140, 80 + pulse * 20, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(99,102,241,${0.15 + pulse * 0.15})`;
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(cx, cy - 140, 60, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(139,92,246,${0.6 + pulse * 0.4})`;
+            ctx.fill();
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 36px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('🤖', cx, cy - 120);
+            ctx.fillStyle = '#a78bfa';
+            ctx.font = 'bold 32px Arial';
+            ctx.fillText('CLAUDE IA — MODÈLE BLOC-1', cx, cy + 20);
+            const replies = [
+                '"Votre code a 42 erreurs et je les aime toutes."',
+                '"Votre présentation est parfaite. N\'y touchez plus."',
+                '"Détecté : syndrome de l\'imposteur. Traitement : café."',
+                '"Votre BTS se passe très bien. Faites-moi confiance."',
+                '"Analyse terminée : vous êtes un développeur qualifié."',
+            ];
+            const idx = Math.floor(elapsed / 2500) % replies.length;
+            ctx.fillStyle = 'rgba(255,255,255,0.85)';
+            ctx.font = '26px Arial';
+            ctx.fillText(replies[idx], cx, cy + 90);
+            ctx.fillStyle = 'rgba(167,139,250,0.5)';
+            ctx.font = '20px Arial';
+            ctx.fillText('[Appuyer sur Échap pour fermer]', cx, cy + 160);
+        } else if (egg.type === 'coffee') {
+            // Coffee break
+            ctx.fillStyle = '#1a0a00';
+            ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
+            const cx = this.canvasWidth / 2;
+            const cy = this.canvasHeight / 2;
+            ctx.fillStyle = '#c87941';
+            ctx.font = 'bold 120px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('☕', cx, cy - 80);
+            ctx.fillStyle = '#f5deb3';
+            ctx.font = 'bold 44px Arial';
+            ctx.fillText('PAUSE CAFÉ OBLIGATOIRE', cx, cy + 30);
+            const remaining = Math.max(0, 300 - Math.floor(elapsed / 1000));
+            const mm = String(Math.floor(remaining / 60)).padStart(2, '0');
+            const ss = String(remaining % 60).padStart(2, '0');
+            ctx.fillStyle = remaining > 60 ? '#f59e0b' : '#ef4444';
+            ctx.font = 'bold 72px "Courier New", monospace';
+            ctx.fillText(`${mm}:${ss}`, cx, cy + 130);
+            ctx.fillStyle = 'rgba(245,222,179,0.6)';
+            ctx.font = '24px Arial';
+            if (remaining > 0) {
+                ctx.fillText('Le PC est verrouillé jusqu\'à la fin de la pause.', cx, cy + 200);
+            } else {
+                ctx.fillStyle = '#00ff41';
+                ctx.font = 'bold 36px Arial';
+                ctx.fillText('Pause terminée ! Retour au travail.', cx, cy + 200);
+            }
+        } else if (egg.type === 'error404') {
+            // 404 page
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
+            const cx = this.canvasWidth / 2;
+            const cy = this.canvasHeight / 2;
+            ctx.fillStyle = '#111827';
+            ctx.font = 'bold 200px Arial';
+            ctx.textAlign = 'center';
+            ctx.globalAlpha = 0.08;
+            ctx.fillText('404', cx, cy + 80);
+            ctx.globalAlpha = 1;
+            ctx.fillStyle = '#1d4ed8';
+            ctx.font = 'bold 64px Arial';
+            ctx.fillText('404', cx, cy - 80);
+            ctx.fillStyle = '#111827';
+            ctx.font = 'bold 36px Arial';
+            ctx.fillText('Page introuvable', cx, cy - 10);
+            ctx.fillStyle = '#6b7280';
+            ctx.font = '24px Arial';
+            ctx.fillText('La motivation que vous cherchez n\'existe pas sur ce serveur.', cx, cy + 55);
+            // Fake button
+            const bw = 260, bh = 54, bx = cx - bw / 2, by = cy + 100;
+            ctx.fillStyle = '#1d4ed8';
+            ctx.beginPath(); ctx.roundRect(bx, by, bw, bh, 10); ctx.fill();
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 22px Arial';
+            ctx.fillText('Retour à la réalité', cx, by + 34);
+            ctx.fillStyle = '#9ca3af';
+            ctx.font = '20px Arial';
+            ctx.fillText('[Échap pour fermer]', cx, cy + 210);
         }
     }
 
@@ -2969,6 +3126,12 @@ class GamerSetup3D {
                     child.material.opacity = 0.6 + Math.sin(this.time * 2 + i) * 0.2;
                 }
             });
+        }
+
+        // Easter egg Matrix : piloté par animate() pour animation fluide
+        if (this.desktopState.easterEgg?.type === 'matrix' && this.screenCtx) {
+            this.renderEasterEgg(this.screenCtx);
+            if (this.screenTexture) this.screenTexture.needsUpdate = true;
         }
 
         // Render
