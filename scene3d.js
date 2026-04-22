@@ -571,6 +571,12 @@ class GamerSetup3D {
         window.addEventListener('click', (e) => this.onClick(e));
         window.addEventListener('mousemove', (e) => this.onMouseMove(e));
         window.addEventListener('wheel', (e) => this.onWheel(e), { passive: false });
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.desktopState.easterEgg) {
+                this.desktopState.easterEgg = null;
+                this.updateOS(this.screenCtx);
+            }
+        });
 
         // Hide loading screen - géré par updateLoadingProgress() maintenant
 
@@ -2262,6 +2268,13 @@ class GamerSetup3D {
     }
 
     handleOSClick(x, y) {
+        // Close easter egg on click
+        if (this.desktopState.easterEgg) {
+            this.desktopState.easterEgg = null;
+            this.updateOS(this.screenCtx);
+            return;
+        }
+
         // Check if dragging - stop drag
         if (this.desktopState.isDragging) {
             this.desktopState.isDragging = false;
@@ -2539,30 +2552,30 @@ class GamerSetup3D {
             }
         } else if (item === '⚠️ Format C:') {
             this.desktopState.easterEgg = { type: 'bsod', startTime: Date.now() };
-            setTimeout(() => { this.desktopState.easterEgg = null; this.updateOS(this.screenCtx); }, 4000);
+            setTimeout(() => { this.desktopState.easterEgg = null; this.updateOS(this.screenCtx); }, 30000);
         } else if (item === '💀 sudo rm -rf /') {
             this.desktopState.easterEgg = { type: 'terminal', startTime: Date.now() };
-            setTimeout(() => { this.desktopState.easterEgg = null; this.updateOS(this.screenCtx); }, 4000);
+            setTimeout(() => { this.desktopState.easterEgg = null; this.updateOS(this.screenCtx); }, 30000);
         } else if (item === '🟩 Mode Matrix') {
             const cols = Math.floor(this.canvasWidth / 22);
             const drops = Array.from({length: cols}, () => Math.random() * -50);
             this.desktopState.easterEgg = { type: 'matrix', startTime: Date.now(), drops, lastUpdate: 0 };
-            setTimeout(() => { this.desktopState.easterEgg = null; this.updateOS(this.screenCtx); }, 6000);
+            setTimeout(() => { this.desktopState.easterEgg = null; this.updateOS(this.screenCtx); }, 30000);
         } else if (item === '🪟 Windows Update') {
             this.desktopState.easterEgg = { type: 'winupdate', startTime: Date.now() };
-            setTimeout(() => { this.desktopState.easterEgg = null; this.updateOS(this.screenCtx); }, 7000);
+            setTimeout(() => { this.desktopState.easterEgg = null; this.updateOS(this.screenCtx); }, 30000);
         } else if (item === '🦠 Lancer un virus') {
             this.desktopState.easterEgg = { type: 'virus', startTime: Date.now() };
-            setTimeout(() => { this.desktopState.easterEgg = null; this.updateOS(this.screenCtx); }, 5000);
+            setTimeout(() => { this.desktopState.easterEgg = null; this.updateOS(this.screenCtx); }, 30000);
         } else if (item === '🤖 Demander à l\'IA') {
             this.desktopState.easterEgg = { type: 'ai', startTime: Date.now() };
-            setTimeout(() => { this.desktopState.easterEgg = null; this.updateOS(this.screenCtx); }, 5000);
+            setTimeout(() => { this.desktopState.easterEgg = null; this.updateOS(this.screenCtx); }, 30000);
         } else if (item === '☕ Pause café') {
             this.desktopState.easterEgg = { type: 'coffee', startTime: Date.now() };
-            setTimeout(() => { this.desktopState.easterEgg = null; this.updateOS(this.screenCtx); }, 4000);
+            setTimeout(() => { this.desktopState.easterEgg = null; this.updateOS(this.screenCtx); }, 30000);
         } else if (item === '📟 Message d\'erreur') {
             this.desktopState.easterEgg = { type: 'error404', startTime: Date.now() };
-            setTimeout(() => { this.desktopState.easterEgg = null; this.updateOS(this.screenCtx); }, 4000);
+            setTimeout(() => { this.desktopState.easterEgg = null; this.updateOS(this.screenCtx); }, 30000);
         }
     }
 
