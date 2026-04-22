@@ -224,10 +224,18 @@ body {
 .loading-progress {
     height: 100%;
     width: 0%;
-    background: linear-gradient(90deg, #ff00ff, #00ffff);
+    min-width: 6%;
+    background: linear-gradient(90deg, #ff00ff, #00ffff, #ff00ff);
+    background-size: 200% 100%;
     border-radius: 2px;
-    transition: width 0.3s ease;
+    transition: width 0.4s ease;
     position: relative;
+    animation: bar-shimmer 1.8s linear infinite;
+}
+
+@keyframes bar-shimmer {
+    0%   { background-position: 100% 0; }
+    100% { background-position: -100% 0; }
 }
 
 .loading-bar-glow {

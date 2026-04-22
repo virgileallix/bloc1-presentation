@@ -554,6 +554,15 @@ class GamerSetup3D {
         // Charger les modèles 3D (chaise, PC, périphériques)
         this.loadSetupModels();
 
+        // Fallback : masquer le loading screen après 12s max
+        setTimeout(() => {
+            const ls = document.getElementById('loading-screen');
+            if (ls && ls.style.display !== 'none') {
+                ls.style.opacity = '0';
+                setTimeout(() => ls.style.display = 'none', 500);
+            }
+        }, 12000);
+
         // Créer particules RGB
         this.createParticles();
 
@@ -1513,24 +1522,43 @@ class GamerSetup3D {
         ctx.textAlign = 'right';
         ctx.fillText(timeStr, this.canvasWidth - 20, taskbarY + 42);
 
-        // Virtual Cursor (if zoomed) - plus grand
+        // Virtual Cursor (if zoomed)
         if (this.isZoomed) {
-            ctx.fillStyle = '#ff00ff';
-            ctx.beginPath();
-            ctx.moveTo(this.desktopState.mouseX, this.desktopState.mouseY);
-            ctx.lineTo(this.desktopState.mouseX + 26, this.desktopState.mouseY + 26);
-            ctx.lineTo(this.desktopState.mouseX, this.desktopState.mouseY + 32);
-            ctx.fill();
+            const mx = this.desktopState.mouseX;
+            const my = this.desktopState.mouseY;
+            const clickable = this.isClickableAt(mx, my);
 
-            // Bordure blanche pour meilleure visibilité
-            ctx.strokeStyle = '#ffffff';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(this.desktopState.mouseX, this.desktopState.mouseY);
-            ctx.lineTo(this.desktopState.mouseX + 26, this.desktopState.mouseY + 26);
-            ctx.lineTo(this.desktopState.mouseX, this.desktopState.mouseY + 32);
-            ctx.closePath();
-            ctx.stroke();
+            ctx.save();
+            if (clickable) {
+                // Main cursor (hand)
+                ctx.fillStyle = '#ffffff';
+                ctx.strokeStyle = '#333333';
+                ctx.lineWidth = 1.5;
+                // Palm
+                ctx.beginPath();
+                ctx.roundRect(mx + 2, my + 10, 18, 20, 4);
+                ctx.fill(); ctx.stroke();
+                // Fingers
+                [[mx+4, my+2, 5, 12],[mx+9, my, 5, 14],[mx+14, my+2, 5, 12],[mx+18, my+6, 4, 10]].forEach(([fx,fy,fw,fh]) => {
+                    ctx.beginPath(); ctx.roundRect(fx, fy, fw, fh, 3); ctx.fill(); ctx.stroke();
+                });
+                // Thumb
+                ctx.beginPath(); ctx.roundRect(mx-2, my+12, 5, 10, 3); ctx.fill(); ctx.stroke();
+            } else {
+                // Arrow cursor
+                ctx.fillStyle = '#ffffff';
+                ctx.strokeStyle = '#333333';
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.moveTo(mx, my);
+                ctx.lineTo(mx + 20, my + 20);
+                ctx.lineTo(mx + 8, my + 20);
+                ctx.lineTo(mx + 4, my + 28);
+                ctx.lineTo(mx, my + 20);
+                ctx.closePath();
+                ctx.fill(); ctx.stroke();
+            }
+            ctx.restore();
         }
 
         // Render start menu, dropdowns, easter eggs on top
@@ -2454,12 +2482,30 @@ class GamerSetup3D {
         this.updateOS(this.screenCtx);
     }
 
+    isClickableAt(x, y) {
+        const taskbarY = this.canvasHeight - 70;
+        if (y >= taskbarY) return true; // Toute la taskbar
+        if (this.desktopState.startMenuOpen || this.desktopState.openMenu) return true;
+        const scaleX = this.canvasWidth / 2560;
+        const scaleY = this.canvasHeight / 1440;
+        const iconSize = 110 * Math.min(scaleX, scaleY);
+        for (const icon of this.desktopState.icons) {
+            const ix = icon.x * scaleX, iy = icon.y * scaleY;
+            if (x >= ix && x <= ix + iconSize && y >= iy && y <= iy + iconSize) return true;
+        }
+        for (const win of this.windows) {
+            if (win.minimized) continue;
+            if (x >= win.x && x <= win.x + win.w && y >= win.y && y <= win.y + win.h) return true;
+        }
+        return false;
+    }
+
     getMenuItems(menuName) {
         const menus = {
             'Fichier':    ['Nouveau fichier', 'Fermer la fenêtre', 'Fermer tout', '---', '⚠️ Format C:'],
             'Édition':    ['Copier', 'Coller', 'Annuler', '---', '💀 sudo rm -rf /'],
             'Affichage':  ['Plein écran', 'Zoom avant', 'Zoom arrière', '---', '🟩 Mode Matrix'],
-            'Insertion':  ['Image', 'Lien hypertexte', '---', '🎵 Never Gonna...'],
+            'Insertion':  ['Image', 'Lien hypertexte', '---', '🪟 Windows Update'],
         };
         return menus[menuName] || [];
     }
@@ -2486,10 +2532,13 @@ class GamerSetup3D {
             this.desktopState.easterEgg = { type: 'terminal', startTime: Date.now() };
             setTimeout(() => { this.desktopState.easterEgg = null; this.updateOS(this.screenCtx); }, 4000);
         } else if (item === '🟩 Mode Matrix') {
-            this.desktopState.easterEgg = { type: 'matrix', startTime: Date.now() };
-            setTimeout(() => { this.desktopState.easterEgg = null; this.updateOS(this.screenCtx); }, 5000);
-        } else if (item === '🎵 Never Gonna...') {
-            this.openWindow({ id: 'rickroll', name: '🎵 Secret', icon: '🎵' });
+            const cols = Math.floor(this.canvasWidth / 22);
+            const drops = Array.from({length: cols}, () => Math.random() * -50);
+            this.desktopState.easterEgg = { type: 'matrix', startTime: Date.now(), drops, lastUpdate: 0 };
+            setTimeout(() => { this.desktopState.easterEgg = null; this.updateOS(this.screenCtx); }, 6000);
+        } else if (item === '🪟 Windows Update') {
+            this.desktopState.easterEgg = { type: 'winupdate', startTime: Date.now() };
+            setTimeout(() => { this.desktopState.easterEgg = null; this.updateOS(this.screenCtx); }, 7000);
         }
     }
 
@@ -2630,23 +2679,92 @@ class GamerSetup3D {
                 ctx.fillText(l, 60, 120 + i * 48);
             });
         } else if (egg.type === 'matrix') {
-            ctx.fillStyle = 'rgba(0,0,0,0.85)';
+            const now = Date.now();
+            const charSize = 22;
+            const rows = Math.floor(this.canvasHeight / charSize);
+            // Fond semi-transparent pour l'effet traîne
+            ctx.fillStyle = 'rgba(0,0,0,0.15)';
             ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
-            ctx.font = '22px "Courier New", monospace';
-            ctx.textAlign = 'left';
-            const cols = Math.floor(this.canvasWidth / 22);
-            for (let c = 0; c < cols; c++) {
-                const chars = Math.floor(Math.random() * 20) + 5;
-                for (let r = 0; r < chars; r++) {
-                    const alpha = 1 - r / chars;
-                    ctx.fillStyle = r === 0 ? `rgba(180,255,180,${alpha})` : `rgba(0,200,0,${alpha * 0.7})`;
-                    ctx.fillText(String.fromCharCode(0x30A0 + Math.floor(Math.random() * 96)), c * 22, r * 30 + (elapsed * 0.3 % this.canvasHeight));
-                }
+            // Avancer les gouttes seulement toutes les 50ms
+            if (now - egg.lastUpdate > 50) {
+                egg.drops.forEach((d, i) => {
+                    ctx.fillStyle = 'rgba(0,255,70,0.9)';
+                    ctx.font = `bold ${charSize}px "Courier New"`;
+                    ctx.textAlign = 'left';
+                    const char = String.fromCharCode(0x30A0 + Math.floor(Math.random() * 96));
+                    ctx.fillText(char, i * charSize, d * charSize);
+                    // Tête de colonne en blanc vif
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillText(char, i * charSize, d * charSize);
+                    egg.drops[i]++;
+                    if (egg.drops[i] > rows + 10 && Math.random() > 0.97) egg.drops[i] = Math.random() * -20;
+                });
+                egg.lastUpdate = now;
             }
-            ctx.fillStyle = 'rgba(0,255,0,0.9)';
-            ctx.font = 'bold 80px "Courier New"';
+            // Message centré
+            const fade = Math.min(1, elapsed / 1000);
+            ctx.fillStyle = `rgba(0,255,0,${fade * 0.95})`;
+            ctx.font = `bold 70px "Courier New"`;
             ctx.textAlign = 'center';
+            ctx.shadowColor = '#00ff00';
+            ctx.shadowBlur = 30;
             ctx.fillText('FOLLOW THE WHITE RABBIT', this.canvasWidth / 2, this.canvasHeight / 2);
+            ctx.shadowBlur = 0;
+        } else if (egg.type === 'winupdate') {
+            // Fond Windows 11 bleu foncé
+            ctx.fillStyle = '#0a2d6e';
+            ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
+
+            const cx = this.canvasWidth / 2;
+            const cy = this.canvasHeight / 2;
+
+            // Logo Windows (4 carrés)
+            const s = 40, g = 8;
+            [[cx - s - g, cy - 180 - s - g, '#f35325'],
+             [cx + g,     cy - 180 - s - g, '#81bc06'],
+             [cx - s - g, cy - 180 + g,     '#05a6f0'],
+             [cx + g,     cy - 180 + g,     '#ffba08']
+            ].forEach(([x, y, c]) => {
+                ctx.fillStyle = c;
+                ctx.fillRect(x, y, s, s);
+            });
+
+            const pct = Math.min(100, Math.floor(elapsed / 60));
+            const done = elapsed > 6000;
+
+            ctx.textAlign = 'center';
+
+            if (!done) {
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 52px "Segoe UI", Arial';
+                ctx.fillText('Mise à jour en cours…', cx, cy - 60);
+
+                ctx.font = '32px "Segoe UI", Arial';
+                ctx.fillStyle = 'rgba(255,255,255,0.7)';
+                ctx.fillText('Ne pas éteindre votre PC.', cx, cy - 10);
+
+                // Barre de progression
+                const bw = 600, bh = 10, bx = cx - bw / 2, by = cy + 50;
+                ctx.fillStyle = 'rgba(255,255,255,0.2)';
+                ctx.beginPath(); ctx.roundRect(bx, by, bw, bh, 5); ctx.fill();
+                ctx.fillStyle = '#ffffff';
+                ctx.beginPath(); ctx.roundRect(bx, by, bw * (pct / 100), bh, 5); ctx.fill();
+
+                ctx.font = 'bold 44px "Segoe UI", Arial';
+                ctx.fillStyle = '#ffffff';
+                ctx.fillText(`${pct} %`, cx, cy + 120);
+
+                ctx.font = '24px "Segoe UI", Arial';
+                ctx.fillStyle = 'rgba(255,255,255,0.5)';
+                ctx.fillText('Étape 3 sur 3 : Configuration des fonctionnalités…', cx, cy + 175);
+            } else {
+                ctx.fillStyle = '#ff4444';
+                ctx.font = 'bold 52px "Segoe UI", Arial';
+                ctx.fillText('Mise à jour annulée', cx, cy - 40);
+                ctx.font = '30px "Segoe UI", Arial';
+                ctx.fillStyle = 'rgba(255,255,255,0.8)';
+                ctx.fillText('ERREUR : 0xEASTEREGG — Juste un easter egg 😄', cx, cy + 30);
+            }
         }
     }
 
