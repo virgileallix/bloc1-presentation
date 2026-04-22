@@ -14,6 +14,7 @@ function formatTime(seconds) {
 // Update timer display
 function updateTimerDisplay() {
     const timerDisplay = document.getElementById('timer');
+    if (!timerDisplay) return;
     timerDisplay.textContent = formatTime(currentSeconds);
 
     // Change color based on time remaining
