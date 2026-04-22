@@ -97,7 +97,7 @@ class GamerSetup3D {
 
                     { type: 'heading', text: '📧 Contact' },
                     { type: 'text', text: '📧 Email : virgile.allix11@gmail.com' },
-                    { type: 'text', text: '💻 GitHub : github.com/virgile-allix' },
+                    { type: 'text', text: '💻 GitHub : github.com/virgileallix' },
                     { type: 'text', text: '🌐 Portfolio : Ce site web' }
                 ]
             },
@@ -390,36 +390,11 @@ class GamerSetup3D {
                     { type: 'text', text: '✓ Tests des nouvelles technologies dans mes projets' },
                     { type: 'text', text: '✓ Side projects pour expérimenter' },
                     { type: 'text', text: '✓ Veille quotidienne (15-30 min)' },
-                    { type: 'text', text: '✓ Partage avec la communauté dev' }
-                ]
-            },
-            rickroll: {
-                title: '🎵 Easter Egg — Never Gonna Give You Up',
-                sections: [
-                    { type: 'title', text: '🎵 Got You!' },
-                    { type: 'subtitle', text: 'Rick Astley — Never Gonna Give You Up (1987)' },
-                    { type: 'heading', text: '🎶 Paroles' },
-                    { type: 'text', text: "We're no strangers to love" },
-                    { type: 'text', text: "You know the rules and so do I" },
-                    { type: 'text', text: "A full commitment's what I'm thinking of" },
-                    { type: 'text', text: "You wouldn't get this from any other guy" },
+                    { type: 'text', text: '✓ Partage avec la communauté dev' },
                     { type: 'text', text: '' },
-                    { type: 'text', text: "I just wanna tell you how I'm feeling" },
-                    { type: 'text', text: "Gotta make you understand" },
+                    { type: 'heading', text: '📰 Actus récentes — Dev.to' },
                     { type: 'text', text: '' },
-                    { type: 'text', text: "🎵 Never gonna give you up" },
-                    { type: 'text', text: "🎵 Never gonna let you down" },
-                    { type: 'text', text: "🎵 Never gonna run around and desert you" },
-                    { type: 'text', text: "🎵 Never gonna make you cry" },
-                    { type: 'text', text: "🎵 Never gonna say goodbye" },
-                    { type: 'text', text: "🎵 Never gonna tell a lie and hurt you" },
-                    { type: 'text', text: '' },
-                    { type: 'heading', text: '🥚 Félicitations !' },
-                    { type: 'text', text: "Tu as trouvé l'easter egg caché dans" },
-                    { type: 'text', text: "ce portfolio 3D. Tu mérites une médaille." },
-                    { type: 'text', text: '' },
-                    { type: 'text', text: "D'autres easter eggs t'attendent..." },
-                    { type: 'text', text: "Format C: / sudo rm -rf / / Mode Matrix 👀" },
+                    { type: 'live-news' }
                 ]
             }
         };
@@ -1930,6 +1905,72 @@ class GamerSetup3D {
                         ctx.fillText(section.label, leftMargin + section.width / 2, yPos + section.height + 25);
                         yPos += section.height + 45;
                         break;
+
+                    case 'live-news':
+                        win.articleLinks = [];
+                        if (!win.liveArticlesLoaded) {
+                            ctx.fillStyle = '#6b7280';
+                            ctx.font = 'italic 20px Arial';
+                            ctx.textAlign = 'left';
+                            ctx.fillText('⏳ Chargement des articles...', leftMargin, yPos + 20);
+                            yPos += 50;
+                        } else if (win.liveArticles && win.liveArticles.length > 0) {
+                            for (const article of win.liveArticles) {
+                                const cardH = 88;
+                                const cardW = win.w - 55;
+                                const absY = yPos - scrollOffset + contentStartY;
+                                // Card
+                                ctx.fillStyle = '#f8fafc';
+                                ctx.strokeStyle = '#e2e8f0';
+                                ctx.lineWidth = 1;
+                                ctx.beginPath();
+                                ctx.roundRect(leftMargin, yPos, cardW, cardH, 8);
+                                ctx.fill();
+                                ctx.stroke();
+                                // Tag pill
+                                const tag = article.tag_list?.[0] || 'tech';
+                                ctx.fillStyle = '#dbeafe';
+                                ctx.beginPath();
+                                ctx.roundRect(leftMargin + cardW - 100, yPos + 12, 88, 22, 6);
+                                ctx.fill();
+                                ctx.fillStyle = '#1e40af';
+                                ctx.font = 'bold 13px Arial';
+                                ctx.textAlign = 'center';
+                                ctx.fillText(`#${tag}`, leftMargin + cardW - 56, yPos + 27);
+                                // Title
+                                ctx.fillStyle = '#1e3a5f';
+                                ctx.font = 'bold 18px Arial';
+                                ctx.textAlign = 'left';
+                                const maxTitleW = cardW - 120;
+                                let title = article.title || '';
+                                while (title.length > 10 && ctx.measureText(title).width > maxTitleW) {
+                                    title = title.slice(0, -4) + '...';
+                                }
+                                ctx.fillText(title, leftMargin + 12, yPos + 32);
+                                // Meta
+                                ctx.fillStyle = '#6b7280';
+                                ctx.font = '15px Arial';
+                                const date = new Date(article.published_at).toLocaleDateString('fr-FR');
+                                ctx.fillText(`@${article.user?.username || '?'} · ${date} · ❤ ${article.positive_reactions_count || 0}`, leftMargin + 12, yPos + 58);
+                                // Arrow hint
+                                ctx.fillStyle = '#93c5fd';
+                                ctx.font = '18px Arial';
+                                ctx.fillText('→', leftMargin + cardW - 22, yPos + 50);
+                                // Store clickable link zone (absolute coords)
+                                win.articleLinks.push({
+                                    x: leftMargin, y: absY, w: cardW, h: cardH,
+                                    url: article.url
+                                });
+                                yPos += cardH + 10;
+                            }
+                        } else {
+                            ctx.fillStyle = '#ef4444';
+                            ctx.font = '20px Arial';
+                            ctx.textAlign = 'left';
+                            ctx.fillText('❌ Impossible de charger les articles', leftMargin, yPos + 20);
+                            yPos += 50;
+                        }
+                        break;
                 }
             });
 
@@ -2319,6 +2360,19 @@ class GamerSetup3D {
             this.desktopState.draggedWindow = null;
             this.updateOS(this.screenCtx);
             return;
+        }
+
+        // Check for article link clicks
+        for (let i = this.windows.length - 1; i >= 0; i--) {
+            const win = this.windows[i];
+            if (win.minimized || !win.articleLinks?.length) continue;
+            for (const link of win.articleLinks) {
+                if (x >= link.x && x <= link.x + link.w && y >= link.y && y <= link.y + link.h) {
+                    window.open(link.url, '_blank', 'noopener');
+                    win.articleLinks = [];
+                    return;
+                }
+            }
         }
 
         // Check for image clicks first (iterate backwards to check top windows first)
@@ -3015,8 +3069,33 @@ class GamerSetup3D {
 
         this.windows.push(newWindow);
 
+        // Fetch live news for veille window
+        if (icon.id === 'veille') this.fetchLiveNews(newWindow);
+
         // Animate window opening
         this.animateWindowOpen(newWindow);
+    }
+
+    async fetchLiveNews(win) {
+        try {
+            const tags = ['javascript', 'webdev', 'php', 'ai'];
+            const responses = await Promise.all(
+                tags.map(t => fetch(`https://dev.to/api/articles?tag=${t}&per_page=3&state=fresh`).then(r => r.json()))
+            );
+            const seen = new Set();
+            const articles = responses.flat()
+                .filter(a => { if (seen.has(a.id)) return false; seen.add(a.id); return true; })
+                .sort((a, b) => new Date(b.published_at) - new Date(a.published_at))
+                .slice(0, 8);
+            win.liveArticles = articles;
+            win.liveArticlesLoaded = true;
+            win.articleLinks = [];
+            if (this.screenCtx) this.updateOS(this.screenCtx);
+        } catch {
+            win.liveArticles = [];
+            win.liveArticlesLoaded = true;
+            if (this.screenCtx) this.updateOS(this.screenCtx);
+        }
     }
 
     // Animation d'ouverture de fenêtre
