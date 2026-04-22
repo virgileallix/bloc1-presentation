@@ -92,10 +92,10 @@ class GamerSetup3D {
                 ]
             },
             projet1: {
-                title: "MTongés - Application de gestion des congés",
+                title: "ADP - Application de gestion des congés",
                 sections: [
-                    { type: 'title', text: 'MTCcongés' },
-                    { type: 'subtitle', text: 'Application Java • BTS SIO SLAM' },
+                    { type: 'title', text: 'ADP - MT-Congés' },
+                    { type: 'subtitle', text: 'Application Java • Sept. 2024 — Mars 2025' },
                     { type: 'image', width: 450, height: 250, label: 'Écran de connexion', src: 'images/mtconges/mtconges_login-screen.png' },
 
                     { type: 'heading', text: '📋 Présentation' },
@@ -142,7 +142,11 @@ class GamerSetup3D {
                     { type: 'text', text: 'Architecture: MVC avec DAO et POJO' },
                     { type: 'text', text: 'Sécurité: Authentification, RGPD, logging' },
 
-                    { type: 'heading', text: '💡 Compétences développées' },
+                    { type: 'heading', text: '📌 Compétences E4 (Tableau de synthèse)' },
+                    { type: 'text', text: '✅ Répondre aux incidents et demandes d\'assistance' },
+                    { type: 'text', text: '✅ Travailler en mode projet' },
+
+                    { type: 'heading', text: '💡 Compétences techniques' },
                     { type: 'text', text: '✓ Développement Java 17 & Swing' },
                     { type: 'text', text: '✓ Architecture logicielle MVC' },
                     { type: 'text', text: '✓ Conception de base de données MySQL' },
@@ -156,7 +160,7 @@ class GamerSetup3D {
                 title: "RFTG - Application de réservation de DVD",
                 sections: [
                     { type: 'title', text: 'RFTG' },
-                    { type: 'subtitle', text: 'Application Full-Stack • BTS SIO' },
+                    { type: 'subtitle', text: 'Application Full-Stack • Sept. 2025 — Mai 2026' },
                     { type: 'image', width: 500, height: 300, label: 'Application RFTG', src: 'images/projet-rftg.jpg' },
 
                     { type: 'heading', text: '📋 Présentation du projet' },
@@ -211,50 +215,57 @@ class GamerSetup3D {
                     { type: 'text', text: '• Synchronisation des données avec MySQL' },
                     { type: 'text', text: '• Architecture modulaire et scalable' },
 
+                    { type: 'heading', text: '📌 Compétences E4 (Tableau de synthèse)' },
+                    { type: 'text', text: '✅ Travailler en mode projet' },
+                    { type: 'text', text: '✅ Mettre à disposition des utilisateurs un service' },
+                    { type: 'text', text: '✅ Organiser son développement professionnel' },
+
                     { type: 'heading', text: '💡 Statut' },
-                    { type: 'text', text: 'Projet en cours de développement' }
+                    { type: 'text', text: 'Projet en cours - Sept. 2025 à Mai 2026' }
                 ]
             },
             projet3: {
-                title: "Mission Assureur - Application interne",
+                title: "Mission en entreprise - Client Assureur",
                 sections: [
                     { type: 'title', text: 'Mission Assureur' },
-                    { type: 'subtitle', text: 'Expérience professionnelle' },
-                    { type: 'image', width: 350, height: 200, label: 'Logo Assureur', src: 'images/assureur_logo.png' },
+                    { type: 'subtitle', text: 'Réalisations en milieu professionnel - 1ère & 2ème année' },
+                    { type: 'image', width: 350, height: 200, label: 'Client Assureur', src: 'images/assureur_logo.png' },
 
-                    { type: 'heading', text: '📋 Présentation' },
-                    { type: 'text', text: 'Mission réalisée au sein de mon entreprise pour le' },
-                    { type: 'text', text: 'compte dun client assureur. Jai contribué au' },
-                    { type: 'text', text: 'développement complet dune application interne en' },
-                    { type: 'text', text: 'intervenant sur les phases de codage, de tests et' },
-                    { type: 'text', text: 'de documentation.' },
+                    { type: 'heading', text: '📋 Contexte' },
+                    { type: 'text', text: 'Missions réalisées en entreprise pour un client du' },
+                    { type: 'text', text: "secteur de l'assurance. Intervention sur une application" },
+                    { type: 'text', text: 'interne Laravel tout au long des deux années de BTS.' },
 
-                    { type: 'heading', text: '🎯 Détails de la mission' },
-                    { type: 'text', text: 'Contexte : Mission en entreprise pour un client' },
-                    { type: 'text', text: '           du secteur de lassurance' },
+                    { type: 'heading', text: '⚙️ Réalisations 1ère année' },
+                    { type: 'text', text: '• Extraction et comparaison de données CSV' },
+                    { type: 'text', text: '  Développement d\'un programme d\'analyse de fichiers' },
                     { type: 'text', text: '' },
-                    { type: 'text', text: 'Rôle : Développeur - Participation au développement' },
-                    { type: 'text', text: '       dune application interne' },
+                    { type: 'text', text: '• Mini-jeu Mastermind' },
+                    { type: 'text', text: '  Développement d\'un mastermind en PHP' },
                     { type: 'text', text: '' },
-                    { type: 'text', text: 'Missions principales :' },
-                    { type: 'text', text: '• Développement et codage de fonctionnalités' },
-                    { type: 'text', text: '• Tests et validation de lapplication' },
-                    { type: 'text', text: '• Rédaction de la documentation technique' },
+                    { type: 'text', text: '• Correctif d\'incidents client' },
+                    { type: 'text', text: '  Résolution de bugs rapportés sur l\'application' },
+                    { type: 'text', text: '' },
+                    { type: 'text', text: '• Migration Laravel & PHP' },
+                    { type: 'text', text: '  Mise à jour vers versions récentes + documentation' },
+                    { type: 'text', text: '' },
+                    { type: 'text', text: '• Évolution application Laravel' },
+                    { type: 'text', text: '  Développement de nouvelles fonctionnalités' },
 
-                    { type: 'heading', text: '🛠️ Technologies utilisées' },
-                    { type: 'text', text: 'Framework : Laravel' },
-                    { type: 'text', text: 'Base de données : SQL' },
-                    { type: 'text', text: 'Back-end : PHP' },
-                    { type: 'text', text: 'Front-end : JavaScript' },
+                    { type: 'heading', text: '🔧 Réalisations 2ème année' },
+                    { type: 'text', text: '• Application Laravel (en cours)' },
+                    { type: 'text', text: '  Développement continu depuis janvier 2025' },
+                    { type: 'text', text: '  Ajout de fonctionnalités, corrections, maintenance' },
 
-                    { type: 'heading', text: '💡 Compétences développées' },
-                    { type: 'text', text: '✓ Travail en équipe dans un contexte client' },
-                    { type: 'text', text: '✓ Respect des normes et procédures du secteur' },
-                    { type: 'text', text: '   de lassurance' },
-                    { type: 'text', text: '✓ Rigueur dans les tests et la documentation' },
-                    { type: 'text', text: '✓ Compréhension des enjeux métier dun assureur' },
-                    { type: 'text', text: '✓ Développement avec le framework Laravel' },
-                    { type: 'text', text: '✓ Gestion de projet en environnement professionnel' }
+                    { type: 'heading', text: '📌 Compétences E4 (Tableau de synthèse)' },
+                    { type: 'text', text: '✅ Répondre aux incidents et demandes d\'assistance' },
+                    { type: 'text', text: '✅ Travailler en mode projet' },
+
+                    { type: 'heading', text: '🛠️ Technologies' },
+                    { type: 'text', text: 'Framework : Laravel / PHP' },
+                    { type: 'text', text: 'Base de données : MySQL / SQL' },
+                    { type: 'text', text: 'Front-end : JavaScript, HTML, CSS' },
+                    { type: 'text', text: 'Outils : Git, Ticketing Mantis' }
                 ]
             },
             projet4: {
@@ -1150,10 +1161,9 @@ class GamerSetup3D {
 
         const screenMaterial = new THREE.MeshStandardMaterial({
             map: screenTexture,
-            emissive: 0xffffff, // White emissive for brightness
-            emissiveMap: screenTexture, // Use same texture for emission
-            emissiveIntensity: 0.1,
-            roughness: 0.2,
+            emissive: 0x111111,
+            emissiveIntensity: 0.05,
+            roughness: 0.3,
             metalness: 0.1
         });
 
@@ -1529,8 +1539,7 @@ class GamerSetup3D {
         ctx.arcTo(win.x, win.y, win.x + radius, win.y, radius);
         ctx.closePath();
 
-        // Fond blanc avec légère transparence
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.98)';
+        ctx.fillStyle = 'rgba(242, 243, 248, 0.99)';
         ctx.fill();
 
         // Bordure subtile
