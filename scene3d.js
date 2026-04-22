@@ -1,3 +1,13 @@
+import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
+import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
+import gsap from 'gsap';
+
 // Scene 3D - Setup PC Gaming Réaliste avec Bureau Interactif
 class GamerSetup3D {
     constructor() {
@@ -13,7 +23,7 @@ class GamerSetup3D {
         this.mouse = new THREE.Vector2();
         this.raycaster = new THREE.Raycaster();
         this.time = 0;
-        this.loader = new THREE.GLTFLoader();
+        this.loader = new GLTFLoader();
         this.loadingManager = new THREE.LoadingManager();
         this.modelsLoaded = 0;
         this.totalModels = 0;
@@ -265,7 +275,7 @@ class GamerSetup3D {
                     { type: 'text', text: 'Framework : Laravel / PHP' },
                     { type: 'text', text: 'Base de données : MySQL / SQL' },
                     { type: 'text', text: 'Front-end : JavaScript, HTML, CSS' },
-                    { type: 'text', text: 'Outils : Git, Ticketing Mantis' }
+                    { type: 'text', text: 'Outils : Git' }
                 ]
             },
             projet4: {
@@ -517,18 +527,46 @@ class GamerSetup3D {
         const pixelRatio = this.performanceMode === 'low' ? 1 : Math.min(window.devicePixelRatio, 2);
         this.renderer.setPixelRatio(pixelRatio);
 
+        // Rendu couleur correct + tone mapping cinématique
+        this.renderer.outputColorSpace = THREE.SRGBColorSpace;
+        this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        this.renderer.toneMappingExposure = this.performanceMode === 'low' ? 1.0 : 1.2;
+
         // Shadows: désactiver ou réduire qualité selon performance
         if (this.performanceMode === 'low') {
-            this.renderer.shadowMap.enabled = false; // Pas d'ombres en mode low
+            this.renderer.shadowMap.enabled = false;
         } else {
             this.renderer.shadowMap.enabled = true;
             this.renderer.shadowMap.type = this.performanceMode === 'medium'
-                ? THREE.BasicShadowMap
+                ? THREE.PCFShadowMap
                 : THREE.PCFSoftShadowMap;
         }
 
+        // Environment map (RoomEnvironment) pour reflets PBR sur les modèles
+        if (this.performanceMode !== 'low') {
+            const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
+            pmremGenerator.compileEquirectangularShader();
+            this.scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
+            this.scene.environmentIntensity = 0.6;
+            pmremGenerator.dispose();
+        }
+
+        // Post-processing : Bloom + Output
+        this.composer = new EffectComposer(this.renderer);
+        this.composer.addPass(new RenderPass(this.scene, this.camera));
+        if (this.performanceMode !== 'low') {
+            const bloom = new UnrealBloomPass(
+                new THREE.Vector2(window.innerWidth, window.innerHeight),
+                0.25,  // strength (léger, pas overdone)
+                0.4,   // radius
+                0.88   // threshold (seuls les éléments très lumineux)
+            );
+            this.composer.addPass(bloom);
+        }
+        this.composer.addPass(new OutputPass());
+
         // OrbitControls
-        this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+        this.controls = new OrbitControls(this.camera, this.renderer.domElement);
         this.controls.enableDamping = true;
         this.controls.dampingFactor = 0.05;
         this.controls.minDistance = 4;
@@ -3071,6 +3109,7 @@ class GamerSetup3D {
         this.camera.aspect = window.innerWidth / window.innerHeight;
         this.camera.updateProjectionMatrix();
         this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.composer.setSize(window.innerWidth, window.innerHeight);
     }
 
     animate() {
@@ -3147,8 +3186,8 @@ class GamerSetup3D {
             if (this.screenTexture) this.screenTexture.needsUpdate = true;
         }
 
-        // Render
-        this.renderer.render(this.scene, this.camera);
+        // Render via post-processing composer
+        this.composer.render();
     }
 }
 
