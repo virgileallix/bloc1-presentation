@@ -490,11 +490,8 @@ class GamerSetup3D {
         this.controls.dampingFactor = 0.05;
         this.controls.minDistance = 4;
         this.controls.maxDistance = 20;
-        this.controls.maxPolarAngle = Math.PI / 2.2;
+        this.controls.maxPolarAngle = Math.PI / 2;
         this.controls.target.set(0, 2, 0);
-        this.controls.target.set(0, 2, 0);
-        this.controls.enableDamping = true;
-        this.controls.maxPolarAngle = Math.PI / 2; // Limit angle to not go below floor
         this.controls.update();
 
         // Save original camera position for un-zoom
@@ -571,13 +568,6 @@ class GamerSetup3D {
                 scale: { x: 2, y: 2, z: 2 },  // Encore plus grande
                 rotation: { x: 0, y: Math.PI, z: 0 },  // Face au bureau
                 name: 'chair'
-            },
-            {
-                path: 'models/pc.glb',
-                position: { x: 3, y: 2.05, z: -0.3 },  // Sur le bureau côté droit
-                scale: { x: 1.2, y: 1.2, z: 1.2 },  // Plus gros
-                rotation: { x: 0, y: -Math.PI / 4, z: 0 },  // Légère rotation
-                name: 'pcCase'
             },
             {
                 path: 'models/Gaming_peripherals.glb',
@@ -1697,12 +1687,13 @@ class GamerSetup3D {
         if (project && project.sections) {
             // Apply scroll offset
             const scrollOffset = win.scrollOffset || 0;
-            let yPos = win.y + 140 - scrollOffset;
+            const contentStartY = win.y + 140;
+            let yPos = contentStartY - scrollOffset;
             const leftMargin = win.x + 50;
             const contentWidth = win.w - 100;
 
-            // Store clickable image zones for this window
-            if (!win.clickableImages) win.clickableImages = [];
+            // Reset clickable image zones every render
+            win.clickableImages = [];
 
             project.sections.forEach(section => {
                 ctx.textAlign = 'left';
@@ -1825,28 +1816,32 @@ class GamerSetup3D {
                 }
             });
 
-            // Store content height for potential scrolling
-            // Add extra padding at the bottom so last items are fully visible
-            win.contentHeight = yPos - (win.y + 140) + 150; // +150 for bottom padding (increased)
+            // Store total content height (excluding scrollOffset so it stays stable)
+            win.contentHeight = (yPos + scrollOffset) - contentStartY + 80;
         }
 
         ctx.restore();
 
         // Scrollbar if needed
-        if (win.contentHeight && win.contentHeight > win.h - 115) {
-            const scrollbarHeight = win.h - 95;
+        const visibleHeight = win.h - 150; // content area: from y+140 to y+win.h-10
+        if (win.contentHeight && win.contentHeight > visibleHeight) {
+            const trackTop = win.y + 105;
+            const trackHeight = win.h - 115;
 
-            // Scrollbar track
-            ctx.fillStyle = '#cccccc';
-            ctx.fillRect(win.x + win.w - 20, win.y + 95, 14, scrollbarHeight);
+            // Track
+            ctx.fillStyle = 'rgba(0,0,0,0.08)';
+            ctx.fillRect(win.x + win.w - 18, trackTop, 12, trackHeight);
 
-            // Scroll thumb
-            ctx.fillStyle = '#888888';
-            const thumbHeight = Math.max(40, scrollbarHeight * scrollbarHeight / win.contentHeight);
-            const scrollProgress = (win.scrollOffset || 0) / (win.contentHeight - scrollbarHeight);
-            const thumbY = win.y + 95 + scrollProgress * (scrollbarHeight - thumbHeight);
+            // Thumb
+            const maxScroll = win.contentHeight - visibleHeight;
+            const thumbHeight = Math.max(40, trackHeight * visibleHeight / win.contentHeight);
+            const scrollProgress = Math.min(1, (win.scrollOffset || 0) / maxScroll);
+            const thumbY = trackTop + scrollProgress * (trackHeight - thumbHeight);
 
-            ctx.fillRect(win.x + win.w - 20, thumbY, 14, thumbHeight);
+            ctx.fillStyle = '#aaaaaa';
+            ctx.beginPath();
+            ctx.roundRect(win.x + win.w - 18, thumbY, 12, thumbHeight, 6);
+            ctx.fill();
         }
 
         // Restore context si animation
@@ -2079,18 +2074,14 @@ class GamerSetup3D {
             // Check if mouse is over this window
             if (x >= win.x && x <= win.x + win.w && y >= win.y && y <= win.y + win.h) {
                 // Check if window has scrollable content
-                if (win.contentHeight && win.contentHeight > win.h - 115) {
-                    // Initialize scrollOffset if not exists
+                const visibleH = win.h - 150;
+                if (win.contentHeight && win.contentHeight > visibleH) {
                     if (!win.scrollOffset) win.scrollOffset = 0;
 
-                    // Calculate scroll amount (deltaY is usually in pixels)
-                    const scrollAmount = event.deltaY * 0.5; // Adjust sensitivity
-
-                    // Update scroll position
+                    const scrollAmount = event.deltaY * 0.8;
                     win.scrollOffset += scrollAmount;
 
-                    // Constrain scroll within bounds
-                    const maxScroll = win.contentHeight - (win.h - 115);
+                    const maxScroll = win.contentHeight - visibleH;
                     win.scrollOffset = Math.max(0, Math.min(win.scrollOffset, maxScroll));
 
                     // Update the OS display
@@ -2364,9 +2355,8 @@ class GamerSetup3D {
         // Scale window size based on resolution
         const scaleX = this.canvasWidth / 2560;
         const scaleY = this.canvasHeight / 1440;
-        const windowWidth = 1200 * scaleX;
-        // Larger window for presentation, standard for others
-        const windowHeight = (icon.id === 'presentation' ? 1000 : 850) * scaleY;
+        const windowWidth = 2000 * scaleX;
+        const windowHeight = (icon.id === 'presentation' ? 1300 : 1100) * scaleY;
 
         // Create window with animation properties
         const newWindow = {
