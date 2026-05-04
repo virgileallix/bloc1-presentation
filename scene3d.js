@@ -51,8 +51,11 @@ class GamerSetup3D {
 
                     { type: 'heading', text: '🎓 Formation' },
                     { type: 'text', text: 'BTS Services Informatiques aux Organisations' },
-                    { type: 'text', text: 'Option SLAM - 2ème année' },
+                    { type: 'text', text: 'Option SLAM — 2ème année · Session 2026' },
                     { type: 'text', text: '(Solutions Logicielles et Applications Métiers)' },
+                    { type: 'text', text: '' },
+                    { type: 'text', text: 'Bac STI2D — Sciences et Technologies de' },
+                    { type: 'text', text: "l'Industrie et du Développement Durable · 2024" },
                     { type: 'text', text: '' },
 
                     { type: 'heading', text: '🛠️ Compétences Techniques' },
@@ -77,9 +80,11 @@ class GamerSetup3D {
                     { type: 'text', text: '' },
 
                     { type: 'heading', text: '💼 Expérience Professionnelle' },
-                    { type: 'text', text: '• Mission en entreprise pour un client assureur' },
-                    { type: 'text', text: "• Développement d'application interne" },
-                    { type: 'text', text: '• Travail en équipe et respect des normes secteur' },
+                    { type: 'text', text: 'LMG — Alternance 2 ans (2024 → 2026)' },
+                    { type: 'text', text: '• Mission chez CNP Assurances (Offre Collective)' },
+                    { type: 'text', text: '• Rôle : Technico-Commercial & Paramètreur Laravel' },
+                    { type: 'text', text: "• Évolutions IHM, BDD, XML sur application existante" },
+                    { type: 'text', text: '• Migration Laravel, correctifs incidents clients' },
                     { type: 'text', text: '' },
 
                     { type: 'heading', text: '🌟 Soft Skills' },
