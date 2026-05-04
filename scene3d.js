@@ -2948,6 +2948,7 @@ class GamerSetup3D {
 
 
     onMouseMove(event) {
+        if (window.a11yModeActive) return;
         // Standard raycasting for interaction
         this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
         this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
@@ -3006,6 +3007,7 @@ class GamerSetup3D {
     }
 
     onClick(event) {
+        if (window.a11yModeActive) return;
         this.raycaster.setFromCamera(this.mouse, this.camera);
 
         if (!this.isZoomed) {
@@ -3027,6 +3029,7 @@ class GamerSetup3D {
     }
 
     onWheel(event) {
+        if (window.a11yModeActive) return;
         // Only handle scroll when zoomed in (OS mode)
         if (!this.isZoomed) return;
 

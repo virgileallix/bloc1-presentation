@@ -440,9 +440,9 @@
 
         function showA11y() {
             a11yDiv.hidden = false;
-            // Cacher entièrement le canvas pour stopper OrbitControls
             canvas.style.display = 'none';
             socialLinks.style.display = 'none';
+            window.a11yModeActive = true;
             toggle.setAttribute('aria-pressed', 'true');
             document.querySelector('#page-accueil h1').focus();
         }
@@ -451,6 +451,7 @@
             a11yDiv.hidden = true;
             canvas.style.display = '';
             socialLinks.style.display = '';
+            window.a11yModeActive = false;
             toggle.setAttribute('aria-pressed', 'false');
         }
 
