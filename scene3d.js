@@ -3617,6 +3617,13 @@ class GamerSetup3D {
     }
 
     openWindow(icon) {
+        if (icon.id === 'e5') {
+            const excelUrl = `${import.meta.env.BASE_URL}tableau-e5.xlsx`;
+            const excelWindow = window.open(excelUrl, '_blank', 'noopener');
+            if (!excelWindow) window.location.href = excelUrl;
+            return;
+        }
+
         // Check if already open
         const existing = this.windows.find(w => w.id === icon.id);
         if (existing) {
