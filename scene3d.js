@@ -397,6 +397,22 @@ class GamerSetup3D {
                     { type: 'live-news' }
                 ]
             },
+            browser: {
+                title: '🌐 Navigateur Web',
+                sections: [{ type: 'browser-ui' }]
+            },
+            terminal: {
+                title: '⌨️ Terminal',
+                sections: [{ type: 'terminal-ui' }]
+            },
+            explorer: {
+                title: '📁 Explorateur de fichiers',
+                sections: [{ type: 'explorer-ui' }]
+            },
+            taskmanager: {
+                title: '📊 Gestionnaire des tâches',
+                sections: [{ type: 'taskmanager-ui' }]
+            },
             e5: {
                 title: '📋 Tableau de Synthèse — Épreuve E5',
                 sections: [
@@ -456,6 +472,7 @@ class GamerSetup3D {
             startMenuOpen: false,
             openMenu: null, // { winId, menuName, x, y }
             easterEgg: null, // { type, startTime }
+            activeInput: null,
             icons: [
                 { id: 'presentation', name: 'Présentation', icon: '📝', x: 30, y: 30, tooltip: 'Ouvrir ma présentation' },
                 { id: 'projet1', name: 'MT-Congés', icon: '📅', x: 30, y: 160, tooltip: 'Voir le projet MT-Congés' },
@@ -463,7 +480,11 @@ class GamerSetup3D {
                 { id: 'projet3', name: 'Mission Assureur', icon: '🏢', x: 30, y: 420, tooltip: 'Voir la mission assureur' },
                 { id: 'projet4', name: 'E-commerce 3D', icon: '🛒', x: 30, y: 550, tooltip: 'E-commerce de figurines IA' },
                 { id: 'veille', name: 'Veille Tech', icon: '🛡️', x: 30, y: 680, tooltip: 'Ma veille technologique' },
-                { id: 'e5', name: 'Tableau E5', icon: '📋', x: 30, y: 810, tooltip: 'Tableau de synthèse E5' }
+                { id: 'e5', name: 'Tableau E5', icon: '📋', x: 30, y: 810, tooltip: 'Tableau de synthèse E5' },
+                { id: 'browser', name: 'Navigateur', icon: '🌐', x: 180, y: 30, tooltip: 'Navigateur web' },
+                { id: 'explorer', name: 'Explorateur', icon: '📁', x: 180, y: 160, tooltip: 'Explorateur de fichiers' },
+                { id: 'terminal', name: 'Terminal', icon: '⌨️', x: 180, y: 290, tooltip: 'Terminal interactif' },
+                { id: 'taskmanager', name: 'Tâches', icon: '📊', x: 180, y: 420, tooltip: 'Gestionnaire des tâches' }
             ]
         };
 
@@ -623,6 +644,11 @@ class GamerSetup3D {
             if (e.key === 'Escape' && this.desktopState.easterEgg) {
                 this.desktopState.easterEgg = null;
                 this.updateOS(this.screenCtx);
+                return;
+            }
+            if (this.desktopState.activeInput) {
+                this.handleActiveInput(e);
+                return;
             }
         });
 
@@ -2059,6 +2085,393 @@ class GamerSetup3D {
                             yPos += 50;
                         }
                         break;
+
+                    case 'browser-ui': {
+                        // URL bar
+                        const urlBarX = win.x + 15;
+                        const urlBarY = win.y + 105 + 8;
+                        const urlBarW = win.w - 30;
+                        const urlBarH = 40;
+                        const isUrlActive = this.desktopState.activeInput?.windowId === win.id && this.desktopState.activeInput?.field === 'browserUrl';
+                        ctx.fillStyle = '#ffffff';
+                        ctx.strokeStyle = isUrlActive ? '#0078d4' : '#cccccc';
+                        ctx.lineWidth = isUrlActive ? 2 : 1;
+                        ctx.beginPath(); ctx.roundRect(urlBarX, urlBarY, urlBarW, urlBarH, 6); ctx.fill(); ctx.stroke();
+                        // Padlock icon
+                        ctx.font = '16px Arial';
+                        ctx.fillStyle = '#22c55e';
+                        ctx.textAlign = 'left';
+                        ctx.fillText('🔒', urlBarX + 8, urlBarY + 26);
+                        // URL text
+                        const displayUrl = isUrlActive ? (this.desktopState.activeInput.value + '|') : (win.browserUrl || '');
+                        ctx.fillStyle = isUrlActive ? '#111827' : '#1d4ed8';
+                        ctx.font = '16px monospace';
+                        ctx.fillText(displayUrl, urlBarX + 30, urlBarY + 26);
+                        // Reload button
+                        ctx.fillStyle = '#6b7280';
+                        ctx.font = '18px Arial';
+                        ctx.textAlign = 'right';
+                        ctx.fillText('↺', urlBarX + urlBarW - 10, urlBarY + 26);
+                        ctx.textAlign = 'left';
+                        // Store URL bar click zone
+                        win.browserInputZone = { x: urlBarX, y: urlBarY, w: urlBarW - 40, h: urlBarH };
+
+                        // Content starts below URL bar
+                        const contentY = win.y + 105 + 58;
+                        const contentH = win.h - 115 - 58;
+                        // Re-clip for content below URL bar
+                        ctx.restore();
+                        ctx.save();
+                        ctx.beginPath();
+                        ctx.rect(win.x + 15, contentY, win.w - 30, contentH);
+                        ctx.clip();
+
+                        if (win.browserLoading) {
+                            ctx.fillStyle = '#f9fafb';
+                            ctx.fillRect(win.x + 15, contentY, win.w - 30, contentH);
+                            ctx.fillStyle = '#6b7280';
+                            ctx.font = '24px Arial';
+                            ctx.textAlign = 'center';
+                            ctx.fillText('⏳ Chargement...', win.x + win.w / 2, contentY + contentH / 2);
+                            ctx.textAlign = 'left';
+                        } else if (!win.browserContent) {
+                            ctx.fillStyle = '#f9fafb';
+                            ctx.fillRect(win.x + 15, contentY, win.w - 30, contentH);
+                        } else if (win.browserContent.type === 'github') {
+                            const gh = win.browserContent;
+                            ctx.fillStyle = '#0d1117';
+                            ctx.fillRect(win.x + 15, contentY, win.w - 30, contentH);
+                            // Avatar circle
+                            const avatarX = win.x + 60;
+                            const avatarY = contentY + 30;
+                            const avatarR = 50;
+                            ctx.fillStyle = '#21262d';
+                            ctx.beginPath(); ctx.arc(avatarX + avatarR, avatarY + avatarR, avatarR, 0, Math.PI * 2); ctx.fill();
+                            ctx.fillStyle = '#58a6ff';
+                            ctx.font = 'bold 40px Arial';
+                            ctx.textAlign = 'center';
+                            ctx.fillText('V', avatarX + avatarR, avatarY + avatarR + 14);
+                            ctx.textAlign = 'left';
+                            // Profile info
+                            const px = win.x + 60 + avatarR * 2 + 30;
+                            const profile = gh.profile || {};
+                            ctx.fillStyle = '#e6edf3';
+                            ctx.font = 'bold 26px Arial';
+                            ctx.fillText(profile.name || 'Virgile Allix', px, contentY + 55);
+                            ctx.fillStyle = '#8b949e';
+                            ctx.font = '18px Arial';
+                            ctx.fillText('@' + (profile.login || 'virgileallix'), px, contentY + 80);
+                            ctx.fillStyle = '#c9d1d9';
+                            ctx.font = '16px Arial';
+                            const bio = profile.bio || 'Développeur Full Stack • BTS SIO SLAM';
+                            ctx.fillText(bio, px, contentY + 106);
+                            ctx.fillStyle = '#8b949e';
+                            ctx.font = '15px Arial';
+                            ctx.fillText(`⭐ ${profile.public_repos || 0} repos  ·  👥 ${profile.followers || 0} followers`, px, contentY + 130);
+                            // Repos grid
+                            const repos = Array.isArray(gh.repos) ? gh.repos : [];
+                            const gridY = contentY + 170;
+                            const colW = (win.w - 60) / 2;
+                            repos.forEach((repo, idx) => {
+                                const col = idx % 2;
+                                const row = Math.floor(idx / 2);
+                                const rx = win.x + 30 + col * (colW + 10);
+                                const ry = gridY + row * 110;
+                                ctx.fillStyle = '#161b22';
+                                ctx.strokeStyle = '#30363d';
+                                ctx.lineWidth = 1;
+                                ctx.beginPath(); ctx.roundRect(rx, ry, colW, 95, 8); ctx.fill(); ctx.stroke();
+                                ctx.fillStyle = '#58a6ff';
+                                ctx.font = 'bold 16px Arial';
+                                let rName = repo.name || '';
+                                while (rName.length > 4 && ctx.measureText(rName).width > colW - 30) rName = rName.slice(0, -3) + '…';
+                                ctx.fillText(rName, rx + 12, ry + 24);
+                                ctx.fillStyle = '#8b949e';
+                                ctx.font = '13px Arial';
+                                let rDesc = repo.description || 'Pas de description';
+                                while (rDesc.length > 4 && ctx.measureText(rDesc).width > colW - 24) rDesc = rDesc.slice(0, -4) + '…';
+                                ctx.fillText(rDesc, rx + 12, ry + 46);
+                                ctx.fillStyle = '#e3b341';
+                                ctx.font = '13px Arial';
+                                ctx.fillText(`⭐ ${repo.stargazers_count || 0}  ${repo.language || ''}`, rx + 12, ry + 72);
+                            });
+                        } else if (win.browserContent.type === 'google') {
+                            ctx.fillStyle = '#ffffff';
+                            ctx.fillRect(win.x + 15, contentY, win.w - 30, contentH);
+                            ctx.font = 'bold 72px Arial';
+                            ctx.textAlign = 'center';
+                            const cx = win.x + win.w / 2;
+                            const cy = contentY + contentH * 0.35;
+                            ctx.fillStyle = '#4285F4'; ctx.fillText('G', cx - 120, cy);
+                            ctx.fillStyle = '#EA4335'; ctx.fillText('o', cx - 60, cy);
+                            ctx.fillStyle = '#FBBC05'; ctx.fillText('o', cx, cy);
+                            ctx.fillStyle = '#4285F4'; ctx.fillText('g', cx + 60, cy);
+                            ctx.fillStyle = '#34A853'; ctx.fillText('l', cx + 108, cy);
+                            ctx.fillStyle = '#EA4335'; ctx.fillText('e', cx + 138, cy);
+                            // Fake search bar
+                            ctx.strokeStyle = '#e0e0e0';
+                            ctx.fillStyle = '#ffffff';
+                            ctx.lineWidth = 2;
+                            const sbX = cx - 200, sbY = cy + 30, sbW = 400, sbH = 44;
+                            ctx.shadowColor = 'rgba(0,0,0,0.1)'; ctx.shadowBlur = 8;
+                            ctx.beginPath(); ctx.roundRect(sbX, sbY, sbW, sbH, 22); ctx.fill(); ctx.stroke();
+                            ctx.shadowBlur = 0;
+                            ctx.fillStyle = '#9aa0a6';
+                            ctx.font = '18px Arial';
+                            ctx.fillText('🔍  Rechercher...', sbX + 20, sbY + 28);
+                            ctx.textAlign = 'left';
+                        } else if (win.browserContent.type === 'devto') {
+                            ctx.fillStyle = '#ffffff';
+                            ctx.fillRect(win.x + 15, contentY, win.w - 30, contentH);
+                            ctx.fillStyle = '#0a0a0a';
+                            ctx.font = 'bold 28px Arial';
+                            ctx.textAlign = 'left';
+                            ctx.fillText('DEV Community', win.x + 30, contentY + 40);
+                            const articles = Array.isArray(win.browserContent.articles) ? win.browserContent.articles : [];
+                            let ay = contentY + 65;
+                            for (const art of articles) {
+                                if (ay > contentY + contentH - 80) break;
+                                ctx.fillStyle = '#f9fafb';
+                                ctx.strokeStyle = '#e5e7eb';
+                                ctx.lineWidth = 1;
+                                ctx.beginPath(); ctx.roundRect(win.x + 20, ay, win.w - 40, 75, 6); ctx.fill(); ctx.stroke();
+                                ctx.fillStyle = '#111827';
+                                ctx.font = 'bold 16px Arial';
+                                let t = art.title || '';
+                                while (t.length > 4 && ctx.measureText(t).width > win.w - 100) t = t.slice(0, -4) + '…';
+                                ctx.fillText(t, win.x + 32, ay + 26);
+                                ctx.fillStyle = '#6b7280';
+                                ctx.font = '13px Arial';
+                                ctx.fillText(`@${art.user?.username || '?'} · ❤ ${art.positive_reactions_count || 0}`, win.x + 32, ay + 52);
+                                ay += 84;
+                            }
+                        } else if (win.browserContent.type === 'portfolio') {
+                            ctx.fillStyle = '#0f172a';
+                            ctx.fillRect(win.x + 15, contentY, win.w - 30, contentH);
+                            ctx.fillStyle = '#38bdf8';
+                            ctx.font = 'bold 36px Arial';
+                            ctx.textAlign = 'center';
+                            ctx.fillText('Virgile Allix', win.x + win.w / 2, contentY + 80);
+                            ctx.fillStyle = '#94a3b8';
+                            ctx.font = '20px Arial';
+                            ctx.fillText('Portfolio — Développeur Full Stack', win.x + win.w / 2, contentY + 120);
+                            ctx.fillStyle = '#64748b';
+                            ctx.font = '16px Arial';
+                            ctx.fillText('virgileallix.github.io', win.x + win.w / 2, contentY + 155);
+                            ctx.textAlign = 'left';
+                        } else if (win.browserContent.type === '404') {
+                            ctx.fillStyle = '#ffffff';
+                            ctx.fillRect(win.x + 15, contentY, win.w - 30, contentH);
+                            ctx.fillStyle = '#1f2937';
+                            ctx.font = 'bold 64px Arial';
+                            ctx.textAlign = 'center';
+                            ctx.fillText('404', win.x + win.w / 2, contentY + contentH * 0.38);
+                            ctx.fillStyle = '#6b7280';
+                            ctx.font = '22px Arial';
+                            ctx.fillText('Page introuvable', win.x + win.w / 2, contentY + contentH * 0.38 + 50);
+                            ctx.fillStyle = '#9ca3af';
+                            ctx.font = '16px Arial';
+                            ctx.fillText(win.browserContent.url || '', win.x + win.w / 2, contentY + contentH * 0.38 + 82);
+                            ctx.textAlign = 'left';
+                        }
+                        yPos += contentH + 10;
+                        break;
+                    }
+
+                    case 'terminal-ui': {
+                        const termBg = '#0d0d0d';
+                        const termX = win.x + 15;
+                        const termY = win.y + 115;
+                        const termW = win.w - 30;
+                        const termH = win.h - 125;
+                        ctx.fillStyle = termBg;
+                        ctx.fillRect(termX, termY, termW, termH);
+
+                        const lineH = 22;
+                        const maxLines = Math.floor((termH - 36) / lineH);
+                        const lines = win.termOutput || [];
+                        const visibleLines = lines.slice(Math.max(0, lines.length - maxLines));
+
+                        let ty = termY + 18;
+                        ctx.font = '15px "Courier New", monospace';
+                        for (const line of visibleLines) {
+                            ctx.fillStyle = '#33ff33';
+                            ctx.textAlign = 'left';
+                            ctx.fillText(line, termX + 10, ty);
+                            ty += lineH;
+                        }
+
+                        // Input line
+                        const isTermActive = this.desktopState.activeInput?.windowId === win.id && this.desktopState.activeInput?.field === 'termInput';
+                        const prompt = 'Virgile-PC ~ % ';
+                        const inputLine = prompt + (win.termInput || '') + (isTermActive ? (Math.floor(Date.now() / 500) % 2 === 0 ? '█' : ' ') : '');
+                        const inputY = termY + termH - 16;
+                        ctx.fillStyle = '#33ff33';
+                        ctx.font = '15px "Courier New", monospace';
+                        ctx.textAlign = 'left';
+                        ctx.fillText(inputLine, termX + 10, inputY);
+
+                        // Click zone
+                        win.termInputZone = { x: termX, y: termY, w: termW, h: termH };
+                        yPos += termH + 10;
+                        break;
+                    }
+
+                    case 'explorer-ui': {
+                        const exX = win.x + 15;
+                        const exY = win.y + 115;
+                        const exW = win.w - 30;
+                        const exH = win.h - 125;
+                        ctx.fillStyle = '#fafafa';
+                        ctx.fillRect(exX, exY, exW, exH);
+
+                        win.explorerClickZones = [];
+                        const virtualFS = [
+                            { name: 'Bureau', icon: '🖥️', children: [
+                                { name: 'Présentation.pdf', icon: '📄', color: '#ef4444' },
+                                { name: 'Tableau-E5.xlsx', icon: '📊', color: '#22c55e' },
+                                { name: 'Portfolio', icon: '📁', color: '#f59e0b' }
+                            ]},
+                            { name: 'Projets', icon: '📁', children: [
+                                { name: 'MT-Congés', icon: '📁', color: '#f59e0b' },
+                                { name: 'RFTG', icon: '📁', color: '#f59e0b' },
+                                { name: 'Mission-Assureur', icon: '📁', color: '#f59e0b' },
+                                { name: 'Portfolio-3D', icon: '📁', color: '#f59e0b' }
+                            ]},
+                            { name: 'Documents', icon: '📁', children: [
+                                { name: 'BTS-SIO', icon: '📁', color: '#f59e0b' },
+                                { name: 'Veille-Tech', icon: '📁', color: '#f59e0b' }
+                            ]},
+                            { name: 'Téléchargements', icon: '📁', children: [] }
+                        ];
+
+                        let ey = exY + 14;
+                        const lineH2 = 28;
+                        for (const folder of virtualFS) {
+                            if (ey > exY + exH - lineH2) break;
+                            const isExpanded = win.explorerExpanded?.has(folder.name);
+                            // Folder row
+                            ctx.fillStyle = '#f3f4f6';
+                            ctx.fillRect(exX + 4, ey - 2, exW - 8, lineH2);
+                            ctx.font = '16px Arial';
+                            ctx.fillStyle = '#374151';
+                            ctx.textAlign = 'left';
+                            ctx.fillText((isExpanded ? '▼' : '▶') + ' ' + folder.icon + ' ' + folder.name, exX + 12, ey + 18);
+                            win.explorerClickZones.push({ x: exX + 4, y: ey - 2, w: exW - 8, h: lineH2, name: folder.name });
+                            ey += lineH2 + 2;
+                            if (isExpanded && folder.children) {
+                                for (const child of folder.children) {
+                                    if (ey > exY + exH - lineH2) break;
+                                    ctx.fillStyle = child.color || '#6b7280';
+                                    ctx.font = '15px Arial';
+                                    ctx.fillText('    ' + child.icon + ' ' + child.name, exX + 24, ey + 16);
+                                    ey += lineH2;
+                                }
+                            }
+                        }
+                        yPos += exH + 10;
+                        break;
+                    }
+
+                    case 'taskmanager-ui': {
+                        const tmX = win.x + 15;
+                        const tmY = win.y + 115;
+                        const tmW = win.w - 30;
+                        const tmH = win.h - 125;
+                        ctx.fillStyle = '#1e1e2e';
+                        ctx.fillRect(tmX, tmY, tmW, tmH);
+
+                        const t2 = (Date.now() - (win.taskStartTime || Date.now())) / 1000;
+
+                        // CPU bar
+                        const cpuVal = 0.15 + 0.1 * Math.abs(Math.sin(t2 * 0.7));
+                        ctx.fillStyle = '#2d2d3f';
+                        ctx.fillRect(tmX + 10, tmY + 12, tmW - 20, 18);
+                        ctx.fillStyle = '#22d3ee';
+                        ctx.fillRect(tmX + 10, tmY + 12, (tmW - 20) * cpuVal, 18);
+                        ctx.fillStyle = '#e2e8f0';
+                        ctx.font = '13px Arial';
+                        ctx.textAlign = 'left';
+                        ctx.fillText(`CPU: ${(cpuVal * 100).toFixed(1)}%`, tmX + 16, tmY + 25);
+
+                        // RAM bar
+                        const ramVal = 0.45 + 0.05 * Math.abs(Math.sin(t2 * 0.4));
+                        ctx.fillStyle = '#2d2d3f';
+                        ctx.fillRect(tmX + 10, tmY + 38, tmW - 20, 18);
+                        ctx.fillStyle = '#a78bfa';
+                        ctx.fillRect(tmX + 10, tmY + 38, (tmW - 20) * ramVal, 18);
+                        ctx.fillStyle = '#e2e8f0';
+                        ctx.fillText(`RAM: ${(ramVal * 16).toFixed(1)} GB / 16 GB`, tmX + 16, tmY + 51);
+
+                        // Processes header
+                        ctx.fillStyle = '#3b3b4f';
+                        ctx.fillRect(tmX + 4, tmY + 66, tmW - 8, 24);
+                        ctx.fillStyle = '#94a3b8';
+                        ctx.font = 'bold 13px Arial';
+                        ctx.fillText('Processus', tmX + 12, tmY + 82);
+                        ctx.textAlign = 'right';
+                        ctx.fillText('CPU%', tmX + tmW - 120, tmY + 82);
+                        ctx.fillText('RAM', tmX + tmW - 60, tmY + 82);
+                        ctx.fillText('✕', tmX + tmW - 20, tmY + 82);
+                        ctx.textAlign = 'left';
+
+                        win.taskKillZones = [];
+                        const systemProcs = [
+                            { name: 'System', cpu: 0.4 + 0.2 * Math.abs(Math.sin(t2)), ram: '2.1 MB' },
+                            { name: 'svchost.exe', cpu: 0.8 + 0.5 * Math.abs(Math.sin(t2 * 1.3)), ram: '12.4 MB' },
+                            { name: 'node.exe', cpu: 2.1 + 1.2 * Math.abs(Math.sin(t2 * 0.6)), ram: '48.2 MB' },
+                            { name: 'vite.exe', cpu: 1.5 + 0.8 * Math.abs(Math.sin(t2 * 0.9)), ram: '32.6 MB' }
+                        ];
+
+                        let procY = tmY + 98;
+                        const rowH3 = 28;
+
+                        // User windows as processes
+                        for (const w of this.windows) {
+                            if (procY > tmY + tmH - rowH3) break;
+                            if (w.id === win.id) continue;
+                            const wcpu = (1 + Math.abs(Math.sin(t2 + w.id.length))).toFixed(1);
+                            ctx.fillStyle = procY % (rowH3 * 2) < rowH3 ? '#252535' : '#1e1e2e';
+                            ctx.fillRect(tmX + 4, procY, tmW - 8, rowH3);
+                            ctx.fillStyle = '#e2e8f0';
+                            ctx.font = '14px Arial';
+                            ctx.textAlign = 'left';
+                            let pname = w.title || w.id;
+                            while (pname.length > 4 && ctx.measureText(pname).width > tmW - 180) pname = pname.slice(0, -4) + '…';
+                            ctx.fillText(pname, tmX + 12, procY + 20);
+                            ctx.textAlign = 'right';
+                            ctx.fillStyle = '#22d3ee';
+                            ctx.fillText(wcpu + '%', tmX + tmW - 120, procY + 20);
+                            ctx.fillStyle = '#a78bfa';
+                            ctx.fillText('24 MB', tmX + tmW - 60, procY + 20);
+                            // Kill button
+                            ctx.fillStyle = '#ef4444';
+                            ctx.font = 'bold 14px Arial';
+                            ctx.fillText('✕', tmX + tmW - 20, procY + 20);
+                            win.taskKillZones.push({ x: tmX + tmW - 36, y: procY, w: 32, h: rowH3, winId: w.id });
+                            ctx.textAlign = 'left';
+                            procY += rowH3;
+                        }
+
+                        // System processes
+                        for (const sp of systemProcs) {
+                            if (procY > tmY + tmH - rowH3) break;
+                            ctx.fillStyle = procY % (rowH3 * 2) < rowH3 ? '#252535' : '#1e1e2e';
+                            ctx.fillRect(tmX + 4, procY, tmW - 8, rowH3);
+                            ctx.fillStyle = '#94a3b8';
+                            ctx.font = '14px Arial';
+                            ctx.textAlign = 'left';
+                            ctx.fillText(sp.name, tmX + 12, procY + 20);
+                            ctx.textAlign = 'right';
+                            ctx.fillStyle = '#64748b';
+                            ctx.fillText(sp.cpu.toFixed(1) + '%', tmX + tmW - 120, procY + 20);
+                            ctx.fillText(sp.ram, tmX + tmW - 60, procY + 20);
+                            ctx.textAlign = 'left';
+                            procY += rowH3;
+                        }
+                        yPos += tmH + 10;
+                        break;
+                    }
                 }
             });
 
@@ -2440,6 +2853,37 @@ class GamerSetup3D {
             this.desktopState.easterEgg = null;
             this.updateOS(this.screenCtx);
             return;
+        }
+
+        // Browser URL bar, terminal input, explorer, taskmanager click zones
+        for (const win of this.windows) {
+            if (win.minimized) continue;
+            if (win.browserInputZone && x >= win.browserInputZone.x && x <= win.browserInputZone.x + win.browserInputZone.w && y >= win.browserInputZone.y && y <= win.browserInputZone.y + win.browserInputZone.h) {
+                this.desktopState.activeInput = { windowId: win.id, field: 'browserUrl', value: win.browserUrl || '' };
+                this.updateOS(this.screenCtx); return;
+            }
+            if (win.termInputZone && x >= win.termInputZone.x && x <= win.termInputZone.x + win.termInputZone.w && y >= win.termInputZone.y && y <= win.termInputZone.y + win.termInputZone.h) {
+                this.desktopState.activeInput = { windowId: win.id, field: 'termInput' };
+                this.updateOS(this.screenCtx); return;
+            }
+            if (win.explorerClickZones) {
+                for (const zone of win.explorerClickZones) {
+                    if (x >= zone.x && x <= zone.x + zone.w && y >= zone.y && y <= zone.y + zone.h) {
+                        if (win.explorerExpanded.has(zone.name)) win.explorerExpanded.delete(zone.name);
+                        else win.explorerExpanded.add(zone.name);
+                        this.updateOS(this.screenCtx); return;
+                    }
+                }
+            }
+            if (win.taskKillZones) {
+                for (const zone of win.taskKillZones) {
+                    if (x >= zone.x && x <= zone.x + zone.w && y >= zone.y && y <= zone.y + zone.h) {
+                        const idx = this.windows.findIndex(w => w.id === zone.winId);
+                        if (idx !== -1) this.windows.splice(idx, 1);
+                        this.updateOS(this.screenCtx); return;
+                    }
+                }
+            }
         }
 
         // Check if dragging - stop drag
@@ -3157,6 +3601,24 @@ class GamerSetup3D {
 
         this.windows.push(newWindow);
 
+        // Initialize state for new app windows
+        if (icon.id === 'browser') {
+            newWindow.browserUrl = 'github.com/virgileallix';
+            newWindow.browserContent = null;
+            newWindow.browserLoading = false;
+            this.fetchBrowserPage(newWindow);
+        } else if (icon.id === 'terminal') {
+            newWindow.termOutput = ['Virgile-PC ~ % Type "help" pour voir les commandes', ''];
+            newWindow.termInput = '';
+            newWindow.termHistory = [];
+            newWindow.termHistIdx = -1;
+            this.desktopState.activeInput = { windowId: newWindow.id, field: 'termInput' };
+        } else if (icon.id === 'explorer') {
+            newWindow.explorerExpanded = new Set(['Bureau', 'Projets']);
+        } else if (icon.id === 'taskmanager') {
+            newWindow.taskStartTime = Date.now();
+        }
+
         // Fetch live news for veille window
         if (icon.id === 'veille') this.fetchLiveNews(newWindow);
 
@@ -3184,6 +3646,170 @@ class GamerSetup3D {
             win.liveArticlesLoaded = true;
             if (this.screenCtx) this.updateOS(this.screenCtx);
         }
+    }
+
+    handleActiveInput(e) {
+        const inp = this.desktopState.activeInput;
+        const win = this.windows.find(w => w.id === inp.windowId);
+        if (!win) { this.desktopState.activeInput = null; return; }
+
+        if (e.key === 'Escape') {
+            this.desktopState.activeInput = null;
+            this.updateOS(this.screenCtx); return;
+        }
+        if (inp.field === 'browserUrl') {
+            if (e.key === 'Backspace') { inp.value = inp.value.slice(0, -1); }
+            else if (e.key === 'Enter') {
+                win.browserUrl = inp.value;
+                win.browserContent = null;
+                this.desktopState.activeInput = null;
+                this.fetchBrowserPage(win);
+                return;
+            } else if (e.key.length === 1 && !e.ctrlKey && !e.metaKey) { inp.value += e.key; }
+        } else if (inp.field === 'termInput') {
+            e.preventDefault();
+            if (e.key === 'Backspace') { win.termInput = win.termInput.slice(0, -1); }
+            else if (e.key === 'Enter') {
+                const cmd = win.termInput.trim();
+                win.termHistory.unshift(cmd);
+                win.termHistIdx = -1;
+                win.termOutput.push('Virgile-PC ~ % ' + cmd);
+                this.executeTerminalCommand(win, cmd);
+                win.termInput = '';
+            } else if (e.key === 'ArrowUp') {
+                if (win.termHistIdx < win.termHistory.length - 1) {
+                    win.termHistIdx++;
+                    win.termInput = win.termHistory[win.termHistIdx] || '';
+                }
+            } else if (e.key === 'ArrowDown') {
+                if (win.termHistIdx > 0) { win.termHistIdx--; win.termInput = win.termHistory[win.termHistIdx] || ''; }
+                else { win.termHistIdx = -1; win.termInput = ''; }
+            } else if (e.ctrlKey && e.key === 'c') {
+                win.termOutput.push('^C'); win.termInput = '';
+            } else if (e.ctrlKey && e.key === 'l') {
+                win.termOutput = []; win.termInput = '';
+            } else if (e.key.length === 1 && !e.ctrlKey && !e.metaKey) { win.termInput += e.key; }
+        }
+        this.updateOS(this.screenCtx);
+    }
+
+    executeTerminalCommand(win, cmd) {
+        if (!cmd) { win.termOutput.push(''); return; }
+        const lower = cmd.toLowerCase().trim();
+        if (lower === 'help') {
+            win.termOutput.push('Commandes disponibles :');
+            win.termOutput.push('  whoami        - Afficher l\'utilisateur');
+            win.termOutput.push('  pwd           - Répertoire courant');
+            win.termOutput.push('  ls            - Lister les fichiers');
+            win.termOutput.push('  ls projects   - Lister les projets');
+            win.termOutput.push('  git log --oneline - Historique git');
+            win.termOutput.push('  neofetch      - Infos système');
+            win.termOutput.push('  date          - Date et heure');
+            win.termOutput.push('  node -v       - Version Node.js');
+            win.termOutput.push('  npm -v        - Version npm');
+            win.termOutput.push('  cat README.md - Afficher README');
+            win.termOutput.push('  open <projet> - Ouvrir un projet');
+            win.termOutput.push('  clear         - Vider le terminal');
+        } else if (lower === 'whoami') {
+            win.termOutput.push('virgile');
+        } else if (lower === 'pwd') {
+            win.termOutput.push('/home/virgile/bureau');
+        } else if (lower === 'ls') {
+            win.termOutput.push('Bureau/  Projets/  Documents/  Images/  Téléchargements/');
+        } else if (lower === 'ls projects' || lower === 'ls projets') {
+            win.termOutput.push('MT-Congés/  RFTG/  Mission-Assureur/  Anglais-Appli/  Portfolio-3D/');
+        } else if (lower === 'git log --oneline') {
+            win.termOutput.push('a3f2d1c feat: add Three.js virtual OS desktop');
+            win.termOutput.push('8b4e9f2 fix: GitHub Actions deploy workflow');
+            win.termOutput.push('c7a1b3d chore: migrate Vite + assets to public/');
+            win.termOutput.push('2d9f4e1 feat: easter eggs BSOD, matrix, virus, AI');
+            win.termOutput.push('f5c8a0b init: setup gaming PC 3D scene with Three.js');
+        } else if (lower === 'neofetch') {
+            win.termOutput.push('       ___           virgile@Virgile-PC');
+            win.termOutput.push('      /   \\          ------------------');
+            win.termOutput.push('     /  ■  \\         OS: Windows 11 Pro x64');
+            win.termOutput.push('    /  ■ ■  \\        CPU: AMD Ryzen 5 5600 (12) @ 3.5GHz');
+            win.termOutput.push('   /  ■ ■ ■  \\       RAM: 16384MiB');
+            win.termOutput.push('  /___________\\      Theme: Dark');
+            win.termOutput.push('                     Node: v20.11.0');
+            win.termOutput.push('                     npm: v10.2.4');
+        } else if (lower === 'clear') {
+            win.termOutput = [];
+        } else if (lower === 'date') {
+            win.termOutput.push(new Date().toLocaleString('fr-FR'));
+        } else if (lower === 'node -v') {
+            win.termOutput.push('v20.11.0');
+        } else if (lower === 'npm -v') {
+            win.termOutput.push('10.2.4');
+        } else if (lower === 'cat readme.md') {
+            win.termOutput.push('# Portfolio - Virgile Allix');
+            win.termOutput.push('');
+            win.termOutput.push('Bureau virtuel 3D interactif présentant mes projets BTS SIO SLAM.');
+            win.termOutput.push('Développé avec Three.js, Vite et des easter eggs cachés.');
+            win.termOutput.push('');
+            win.termOutput.push('## Projets');
+            win.termOutput.push('- MT-Congés : App Java de gestion des congés');
+            win.termOutput.push('- RFTG : Système DVD full-stack (PHP + Android)');
+            win.termOutput.push('- Mission Assureur : Laravel en milieu professionnel');
+            win.termOutput.push('- Anglais-Appli : E-commerce IA Next.js + TypeScript');
+        } else if (lower.startsWith('open ')) {
+            const projectName = lower.slice(5).trim();
+            const mapping = {
+                'mt-conges': 'projet1', 'mtconges': 'projet1', 'mt-congés': 'projet1',
+                'rftg': 'projet2',
+                'mission-assureur': 'projet3', 'assureur': 'projet3',
+                'anglais-appli': 'projet4', 'anglais': 'projet4',
+                'portfolio-3d': 'presentation', 'portfolio': 'presentation',
+                'veille': 'veille', 'e5': 'e5'
+            };
+            const iconId = mapping[projectName];
+            if (iconId) {
+                const icon = this.desktopState.icons.find(i => i.id === iconId);
+                if (icon) {
+                    win.termOutput.push('Ouverture de ' + icon.name + '...');
+                    this.openWindow(icon);
+                } else {
+                    win.termOutput.push('open: projet introuvable: ' + projectName);
+                }
+            } else {
+                win.termOutput.push('open: projet inconnu: ' + projectName);
+                win.termOutput.push('Projets disponibles: mt-conges, rftg, mission-assureur, anglais-appli, portfolio-3d, veille, e5');
+            }
+        } else {
+            win.termOutput.push('command not found: ' + cmd + '. Type "help" for commands.');
+        }
+        win.termOutput.push('');
+    }
+
+    async fetchBrowserPage(win) {
+        win.browserLoading = true;
+        this.updateOS(this.screenCtx);
+        try {
+            const url = (win.browserUrl || '').toLowerCase();
+            if (url.includes('github.com/virgileallix') || url.includes('github.com/virgile')) {
+                const [profileRes, reposRes] = await Promise.all([
+                    fetch('https://api.github.com/users/virgileallix'),
+                    fetch('https://api.github.com/users/virgileallix/repos?sort=updated&per_page=6')
+                ]);
+                const profile = await profileRes.json();
+                const repos = await reposRes.json();
+                win.browserContent = { type: 'github', profile, repos };
+            } else if (url.includes('dev.to')) {
+                const res = await fetch('https://dev.to/api/articles?tag=javascript&per_page=6');
+                const articles = await res.json();
+                win.browserContent = { type: 'devto', articles };
+            } else if (url.includes('google.com')) {
+                win.browserContent = { type: 'google' };
+            } else if (url.includes('localhost') || url.includes('virgileallix.github.io')) {
+                win.browserContent = { type: 'portfolio' };
+            } else {
+                win.browserContent = { type: '404', url: win.browserUrl };
+            }
+        } catch (err) {
+            win.browserContent = { type: '404', url: win.browserUrl };
+        }
+        win.browserLoading = false;
+        if (this.screenCtx) this.updateOS(this.screenCtx);
     }
 
     // Animation d'ouverture de fenêtre
