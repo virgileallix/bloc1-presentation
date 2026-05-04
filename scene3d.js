@@ -340,47 +340,39 @@ class GamerSetup3D {
                 title: "Veille Technologique",
                 sections: [
                     { type: 'title', text: 'Ma Veille Tech' },
-                    { type: 'subtitle', text: 'Technologies Web & IA' },
-                    { type: 'text', text: '💡 Passionné par les nouvelles technologies' },
+                    { type: 'subtitle', text: "L'IA dans la cybersécurité" },
+                    { type: 'text', text: '🔐 Sujet : évolution de l\'IA appliquée à la cyber' },
                     { type: 'text', text: '' },
 
-                    { type: 'heading', text: '🔍 Domaines suivis' },
-                    { type: 'text', text: '' },
-                    { type: 'text', text: '🤖 Intelligence Artificielle' },
-                    { type: 'text', text: '• APIs IA générative (Meshy.ia, OpenAI)' },
-                    { type: 'text', text: '• Intégration IA dans les applications web' },
-                    { type: 'text', text: '• Génération de contenu 3D par IA' },
-                    { type: 'text', text: '' },
-                    { type: 'text', text: '⚛️ Frameworks JavaScript modernes' },
-                    { type: 'text', text: '• Next.js et React 19' },
-                    { type: 'text', text: '• TypeScript et nouveautés ES' },
-                    { type: 'text', text: '• Tailwind CSS et design systems' },
-                    { type: 'text', text: '' },
-                    { type: 'text', text: '☁️ Cloud et Services Backend' },
-                    { type: 'text', text: '• Firebase / Firestore' },
-                    { type: 'text', text: '• APIs REST et GraphQL' },
-                    { type: 'text', text: '• Serverless et Edge Computing' },
-                    { type: 'text', text: '' },
-                    { type: 'text', text: '🎮 3D et WebGL' },
-                    { type: 'text', text: '• Three.js et visualisation 3D' },
-                    { type: 'text', text: '• WebGL et shaders' },
-                    { type: 'text', text: '• Optimisation des performances 3D' },
+                    { type: 'heading', text: '🛡️ IA défensive' },
+                    { type: 'text', text: '• Détection d\'intrusions par apprentissage automatique' },
+                    { type: 'text', text: '• SIEM augmentés par IA (Splunk, Microsoft Sentinel)' },
+                    { type: 'text', text: '• Analyse comportementale (UEBA) pour détecter les' },
+                    { type: 'text', text: '  anomalies en temps réel' },
+                    { type: 'text', text: '• Threat intelligence automatisée (CrowdStrike, Darktrace)' },
                     { type: 'text', text: '' },
 
-                    { type: 'heading', text: '📚 Sources principales' },
-                    { type: 'text', text: '• Documentation officielle (Next.js, React)' },
-                    { type: 'text', text: '• GitHub - Exploration de projets open source' },
-                    { type: 'text', text: '• Dev.to et Medium - Articles techniques' },
-                    { type: 'text', text: '• YouTube - Tutoriels et conférences tech' },
-                    { type: 'text', text: '• Discord - Communautés de développeurs' },
+                    { type: 'heading', text: '⚔️ IA offensive' },
+                    { type: 'text', text: '• Génération automatique de phishing ciblé (spear)' },
+                    { type: 'text', text: '• Deepfakes pour l\'ingénierie sociale' },
+                    { type: 'text', text: '• Fuzzing et découverte de vulnérabilités par IA' },
+                    { type: 'text', text: '• Automatisation des attaques par LLM (WormGPT, etc.)' },
                     { type: 'text', text: '' },
 
-                    { type: 'heading', text: '🚀 Application concrète' },
-                    { type: 'text', text: '✓ Tests des nouvelles technologies dans mes projets' },
-                    { type: 'text', text: '✓ Side projects pour expérimenter' },
-                    { type: 'text', text: '✓ Veille quotidienne (15-30 min)' },
-                    { type: 'text', text: '✓ Partage avec la communauté dev' },
+                    { type: 'heading', text: '⚖️ Enjeux' },
+                    { type: 'text', text: '• Course aux armements IA entre attaquants et défenseurs' },
+                    { type: 'text', text: '• Réglementation : AI Act européen et cybersécurité' },
+                    { type: 'text', text: '• Faux positifs et confiance dans les systèmes IA' },
+                    { type: 'text', text: '• Responsabilité en cas d\'incident causé par une IA' },
                     { type: 'text', text: '' },
+
+                    { type: 'heading', text: '📚 Sources' },
+                    { type: 'text', text: '• ANSSI — anssi.fr (actualités et guides officiels)' },
+                    { type: 'text', text: '• The Hacker News — thehackernews.com' },
+                    { type: 'text', text: '• CERT-FR — cert.ssi.gouv.fr' },
+                    { type: 'text', text: '• Dev.to #security #ai — flux en temps réel ci-dessous' },
+                    { type: 'text', text: '' },
+
                     { type: 'heading', text: '📰 Actus récentes — Dev.to' },
                     { type: 'text', text: '' },
                     { type: 'live-news' }
@@ -4010,7 +4002,7 @@ class GamerSetup3D {
 
     async fetchLiveNews(win) {
         try {
-            const tags = ['javascript', 'webdev', 'php', 'ai'];
+            const tags = ['security', 'cybersecurity', 'ai', 'hacking'];
             const responses = await Promise.all(
                 tags.map(t => fetch(`https://dev.to/api/articles?tag=${t}&per_page=3&state=fresh`).then(r => r.json()))
             );
