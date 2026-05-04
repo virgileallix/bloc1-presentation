@@ -325,6 +325,7 @@ class GamerSetup3D {
                     { type: 'text', text: '' },
 
                     { type: 'heading', text: '🔗 Ressources' },
+                    { type: 'text', text: '🌐 Site : virgile-allix.github.io/anglais-appli/' },
                     { type: 'text', text: '💻 GitHub : github.com/virgile-allix/anglais-appli' },
                     { type: 'text', text: '🤖 API IA : Meshy.ia' }
                 ]
@@ -2255,6 +2256,53 @@ class GamerSetup3D {
                             ctx.font = '16px Arial';
                             ctx.fillText(win.browserContent.url || '', win.x + win.w / 2, contentY + contentH * 0.38 + 82);
                             ctx.textAlign = 'left';
+                        } else if (win.browserContent.type === 'anglais') {
+                            ctx.fillStyle = '#ffffff';
+                            ctx.fillRect(win.x + 15, contentY, win.w - 30, contentH);
+                            // Header banner
+                            ctx.fillStyle = '#1e40af';
+                            ctx.fillRect(win.x + 15, contentY, win.w - 30, 60);
+                            ctx.fillStyle = '#ffffff';
+                            ctx.font = 'bold 22px Arial';
+                            ctx.textAlign = 'center';
+                            ctx.fillText('Anglais-Appli', win.x + win.w / 2, contentY + 38);
+                            // Live badge
+                            ctx.fillStyle = '#22c55e';
+                            ctx.beginPath();
+                            ctx.arc(win.x + win.w - 55, contentY + 30, 6, 0, Math.PI * 2);
+                            ctx.fill();
+                            ctx.fillStyle = '#ffffff';
+                            ctx.font = '12px Arial';
+                            ctx.fillText('LIVE', win.x + win.w - 44, contentY + 34);
+                            // Content area
+                            const ay = contentY + 75;
+                            ctx.fillStyle = '#1e293b';
+                            ctx.font = 'bold 17px Arial';
+                            ctx.fillText('Application de révision d\'anglais', win.x + win.w / 2, ay);
+                            ctx.fillStyle = '#475569';
+                            ctx.font = '14px Arial';
+                            ctx.fillText('React · Vite · Quiz interactif · Vocabulaire', win.x + win.w / 2, ay + 28);
+                            // Feature boxes
+                            const features = ['📚 Vocabulaire thématique', '✅ Quiz interactif', '📊 Suivi de progression', '🎯 Exercices ciblés'];
+                            const bw = (win.w - 70) / 2;
+                            features.forEach((f, i) => {
+                                const bx = win.x + 20 + (i % 2) * (bw + 10);
+                                const by = ay + 50 + Math.floor(i / 2) * 52;
+                                ctx.fillStyle = i % 2 === 0 ? '#eff6ff' : '#f0fdf4';
+                                ctx.beginPath();
+                                ctx.roundRect(bx, by, bw, 42, 6);
+                                ctx.fill();
+                                ctx.fillStyle = '#1e293b';
+                                ctx.font = '13px Arial';
+                                ctx.textAlign = 'left';
+                                ctx.fillText(f, bx + 12, by + 26);
+                            });
+                            // URL link
+                            ctx.fillStyle = '#3b82f6';
+                            ctx.font = '13px Arial';
+                            ctx.textAlign = 'center';
+                            ctx.fillText('virgile-allix.github.io/anglais-appli/', win.x + win.w / 2, ay + 168);
+                            ctx.textAlign = 'left';
                         }
                         yPos += contentH + 10;
                         break;
@@ -3780,6 +3828,8 @@ class GamerSetup3D {
                 const res = await fetch('https://dev.to/api/articles?tag=javascript&per_page=6');
                 const articles = await res.json();
                 win.browserContent = { type: 'devto', articles };
+            } else if (url.includes('virgile-allix.github.io/anglais-appli') || url.includes('anglais-appli')) {
+                win.browserContent = { type: 'anglais' };
             } else if (url.includes('google.com')) {
                 win.browserContent = { type: 'google' };
             } else if (url.includes('localhost') || url.includes('virgileallix.github.io')) {
