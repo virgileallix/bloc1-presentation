@@ -1028,6 +1028,7 @@ html {
 .skip-link:focus { top: 0; outline: 3px solid #facc15; }
 
 /* Conteneur principal */
+#a11y-version[hidden] { display: none !important; }
 #a11y-version {
     position: fixed;
     inset: 0;
