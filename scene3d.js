@@ -396,6 +396,40 @@ class GamerSetup3D {
                     { type: 'text', text: '' },
                     { type: 'live-news' }
                 ]
+            },
+            e5: {
+                title: '📋 Tableau de Synthèse — Épreuve E5',
+                sections: [
+                    { type: 'title', text: 'Tableau de Synthèse E5' },
+                    { type: 'subtitle', text: 'ALLIX Virgile · BTS SIO SLAM · Session 2026 · 3IFA' },
+                    { type: 'text', text: '' },
+                    { type: 'heading', text: '📚 Réalisations en formation' },
+                    { type: 'e5-row', label: 'ADP — Application Java (gestion des congés)', period: '09/2024 → 03/2025', tags: ['Patrimoine', 'Incidents'] },
+                    { type: 'e5-row', label: 'RFTG — Webservice + Appli Android + API + BDD', period: '09/2025 → 05/2026', tags: ['Présence ligne', 'Mode projet', 'Service dispo'] },
+                    { type: 'e5-row', label: 'Bloc 1 — Réseaux (Cisco Packet Tracer)', period: '2024', tags: ['Patrimoine'] },
+                    { type: 'e5-row', label: 'Bloc 1 — Wordpress', period: '2024', tags: ['Présence ligne'] },
+                    { type: 'e5-row', label: 'Création et mise à jour du portfolio', period: '2024 → 2026', tags: ['Présence ligne', 'Mode projet', 'Dév. pro'] },
+                    { type: 'e5-row', label: 'Bloc 2 — Environnement PHP Laravel', period: '2024-2025', tags: ['Présence ligne', 'Mode projet', 'Service dispo'] },
+                    { type: 'e5-row', label: 'Bloc 1 — Ticketing (Mantis)', period: '2024', tags: ['Incidents'] },
+                    { type: 'text', text: '' },
+                    { type: 'heading', text: '🏢 Réalisations en entreprise — 1ère année' },
+                    { type: 'e5-row', label: 'Extraction et comparaison de données CSV', period: '2024', tags: ['Patrimoine'] },
+                    { type: 'e5-row', label: 'Programmation d\'un Mastermind', period: '2024', tags: ['Service dispo'] },
+                    { type: 'e5-row', label: 'Correctif d\'incidents rapportés par le client', period: '2024', tags: ['Incidents'] },
+                    { type: 'e5-row', label: 'Migration Laravel + PHP vers version récente', period: '2024-2025', tags: ['Incidents', 'Service dispo'] },
+                    { type: 'e5-row', label: 'Évolution sur application Laravel existante', period: '01/2025 →', tags: ['Incidents', 'Mode projet'] },
+                    { type: 'text', text: '' },
+                    { type: 'heading', text: '🏢 Réalisations en entreprise — 2ème année' },
+                    { type: 'e5-row', label: 'Développement application Laravel (en cours)', period: '01/2025 →', tags: ['Mode projet', 'Service dispo'] },
+                    { type: 'text', text: '' },
+                    { type: 'heading', text: '🎯 Compétences couvertes' },
+                    { type: 'text', text: '✅ Gérer le patrimoine informatique' },
+                    { type: 'text', text: '✅ Répondre aux incidents et demandes d\'évolution' },
+                    { type: 'text', text: '✅ Développer la présence en ligne de l\'organisation' },
+                    { type: 'text', text: '✅ Travailler en mode projet' },
+                    { type: 'text', text: '✅ Mettre à disposition un service informatique' },
+                    { type: 'text', text: '✅ Organiser son développement professionnel' }
+                ]
             }
         };
 
@@ -428,7 +462,8 @@ class GamerSetup3D {
                 { id: 'projet2', name: 'RFTG', icon: '💿', x: 30, y: 290, tooltip: 'Voir le projet RFTG' },
                 { id: 'projet3', name: 'Mission Assureur', icon: '🏢', x: 30, y: 420, tooltip: 'Voir la mission assureur' },
                 { id: 'projet4', name: 'E-commerce 3D', icon: '🛒', x: 30, y: 550, tooltip: 'E-commerce de figurines IA' },
-                { id: 'veille', name: 'Veille Tech', icon: '🛡️', x: 30, y: 680, tooltip: 'Ma veille technologique' }
+                { id: 'veille', name: 'Veille Tech', icon: '🛡️', x: 30, y: 680, tooltip: 'Ma veille technologique' },
+                { id: 'e5', name: 'Tableau E5', icon: '📋', x: 30, y: 810, tooltip: 'Tableau de synthèse E5' }
             ]
         };
 
@@ -1792,35 +1827,88 @@ class GamerSetup3D {
 
                 switch (section.type) {
                     case 'title':
-                        ctx.fillStyle = '#000000';
-                        ctx.font = 'bold 42px -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif';
+                        ctx.fillStyle = '#111827';
+                        ctx.font = 'bold 48px -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif';
                         ctx.fillText(section.text, leftMargin, yPos);
-                        yPos += 65;
+                        yPos += 72;
                         break;
 
                     case 'subtitle':
-                        ctx.fillStyle = '#666666';
-                        ctx.font = 'italic 26px -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif';
+                        ctx.fillStyle = '#4b5563';
+                        ctx.font = 'italic 28px -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif';
                         ctx.fillText(section.text, leftMargin, yPos);
-                        yPos += 50;
+                        yPos += 52;
                         break;
 
-                    case 'heading':
-                        ctx.fillStyle = '#0078d4';
-                        ctx.font = 'bold 28px -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif';
+                    case 'heading': {
+                        // Background pill for heading
+                        const hMetrics = ctx.measureText(section.text);
+                        ctx.font = 'bold 30px -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif';
+                        const hW = ctx.measureText(section.text).width + 32;
+                        ctx.fillStyle = '#eff6ff';
+                        ctx.beginPath(); ctx.roundRect(leftMargin - 8, yPos - 26, hW, 42, 8); ctx.fill();
+                        ctx.fillStyle = '#1d4ed8';
                         ctx.fillText(section.text, leftMargin, yPos);
-                        yPos += 40;
-                        // Underline
-                        ctx.fillRect(leftMargin, yPos - 5, 280, 3);
-                        yPos += 15;
+                        yPos += 60;
                         break;
+                    }
 
                     case 'text':
-                        ctx.fillStyle = '#333333';
-                        ctx.font = '21px -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif';
-                        ctx.fillText(section.text, leftMargin, yPos);
-                        yPos += 32;
+                        if (section.text === '') { yPos += 18; break; }
+                        ctx.fillStyle = '#374151';
+                        ctx.font = '24px -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif';
+                        // Simple word-wrap
+                        const maxW = win.w - 80;
+                        const words = section.text.split(' ');
+                        let line = '';
+                        for (const word of words) {
+                            const test = line ? line + ' ' + word : word;
+                            if (ctx.measureText(test).width > maxW && line) {
+                                ctx.fillText(line, leftMargin, yPos);
+                                yPos += 34;
+                                line = word;
+                            } else { line = test; }
+                        }
+                        if (line) { ctx.fillText(line, leftMargin, yPos); yPos += 34; }
                         break;
+
+                    case 'e5-row': {
+                        const rowH = 70;
+                        const rowW = win.w - 55;
+                        // Background alterné
+                        ctx.fillStyle = yPos % 2 === 0 ? '#f9fafb' : '#ffffff';
+                        ctx.fillRect(leftMargin, yPos - 4, rowW, rowH);
+                        ctx.strokeStyle = '#e5e7eb';
+                        ctx.lineWidth = 1;
+                        ctx.strokeRect(leftMargin, yPos - 4, rowW, rowH);
+                        // Label
+                        ctx.fillStyle = '#111827';
+                        ctx.font = 'bold 22px Arial';
+                        ctx.textAlign = 'left';
+                        let lbl = section.label || '';
+                        while (ctx.measureText(lbl).width > rowW * 0.6 && lbl.length > 10)
+                            lbl = lbl.slice(0, -4) + '…';
+                        ctx.fillText(lbl, leftMargin + 12, yPos + 22);
+                        // Period
+                        ctx.fillStyle = '#6b7280';
+                        ctx.font = '18px Arial';
+                        ctx.fillText(section.period || '', leftMargin + 12, yPos + 48);
+                        // Tags
+                        let tx = leftMargin + rowW * 0.62;
+                        for (const tag of (section.tags || [])) {
+                            const tw = ctx.measureText(tag).width + 20;
+                            ctx.fillStyle = '#dbeafe';
+                            ctx.beginPath(); ctx.roundRect(tx, yPos + 8, tw, 26, 6); ctx.fill();
+                            ctx.fillStyle = '#1e40af';
+                            ctx.font = 'bold 15px Arial';
+                            ctx.textAlign = 'center';
+                            ctx.fillText(tag, tx + tw / 2, yPos + 26);
+                            ctx.textAlign = 'left';
+                            tx += tw + 8;
+                        }
+                        yPos += rowH + 4;
+                        break;
+                    }
 
                     case 'image':
                         // Try to load and display real image if src is provided
