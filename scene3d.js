@@ -54,8 +54,8 @@ class GamerSetup3D {
                     { type: 'text', text: 'Option SLAM — 2ème année · Session 2026' },
                     { type: 'text', text: '(Solutions Logicielles et Applications Métiers)' },
                     { type: 'text', text: '' },
-                    { type: 'text', text: 'Bac STI2D — Sciences et Technologies de' },
-                    { type: 'text', text: "l'Industrie et du Développement Durable · 2024" },
+                    { type: 'text', text: 'Bac STI2D option SIN — Systèmes d\'Information' },
+                    { type: 'text', text: 'et Numérique · 2024' },
                     { type: 'text', text: '' },
 
                     { type: 'heading', text: '🛠️ Compétences Techniques' },
