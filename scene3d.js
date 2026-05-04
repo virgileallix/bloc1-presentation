@@ -78,7 +78,7 @@ class GamerSetup3D {
 
                     { type: 'heading', text: '💼 Expérience Professionnelle' },
                     { type: 'text', text: '• Mission en entreprise pour un client assureur' },
-                    { type: 'text', text: '• Développement dapplication interne' },
+                    { type: 'text', text: "• Développement d'application interne" },
                     { type: 'text', text: '• Travail en équipe et respect des normes secteur' },
                     { type: 'text', text: '' },
 
@@ -89,7 +89,7 @@ class GamerSetup3D {
                     { type: 'text', text: '✓ Curiosité technique - Veille et apprentissage continu' },
                     { type: 'text', text: '' },
 
-                    { type: 'heading', text: '🎮 Centres dintérêt' },
+                    { type: 'heading', text: "🎮 Centres d'intérêt" },
                     { type: 'text', text: '• Gaming & Jeux vidéo - Passion et culture gaming' },
                     { type: 'text', text: '• Développement personnel - Projets side projects' },
                     { type: 'text', text: '• Nouvelles technologies - Veille technologique' },
@@ -110,7 +110,7 @@ class GamerSetup3D {
 
                     { type: 'heading', text: '📋 Présentation' },
                     { type: 'text', text: 'Application de gestion des congés développée dans le cadre' },
-                    { type: 'text', text: 'dun projet BTS SIO SLAM. Conçue en Java 17 avec une' },
+                    { type: 'text', text: "d'un projet BTS SIO SLAM. Conçue en Java 17 avec une" },
                     { type: 'text', text: 'interface Swing et une base MySQL, elle suit une' },
                     { type: 'text', text: 'architecture MVC structurée.' },
 
@@ -167,71 +167,55 @@ class GamerSetup3D {
                 ]
             },
             projet2: {
-                title: "RFTG - Application de réservation de DVD",
+                title: "RFTG — Système de location de films (univers Mario)",
                 sections: [
                     { type: 'title', text: 'RFTG' },
-                    { type: 'subtitle', text: 'Application Full-Stack • Sept. 2025 — Mai 2026' },
-                    { type: 'image', width: 500, height: 300, label: 'Application RFTG', src: 'images/projet-rftg.jpg' },
+                    { type: 'subtitle', text: 'Full-Stack Java · Laravel · Android • Sept. 2025 — Mai 2026' },
 
-                    { type: 'heading', text: '📋 Présentation du projet' },
-                    { type: 'text', text: 'Système complet de gestion de DVD pour un parc à thème,' },
-                    { type: 'text', text: 'incluant une interface web administrative et une' },
-                    { type: 'text', text: 'application mobile pour les utilisateurs.' },
+                    { type: 'heading', text: '📋 Présentation' },
+                    { type: 'text', text: "RFTG est un système complet de location de films inspiré" },
+                    { type: 'text', text: "de la base Sakila (MySQL). Chaque composant est nommé" },
+                    { type: 'text', text: "d'après un personnage de l'univers Mario." },
 
-                    { type: 'heading', text: '🏗️ Architecture - Univers Mario' },
-                    { type: 'text', text: 'Le projet RFTG est structuré en quatre composantes' },
-                    { type: 'text', text: 'principales, chacune inspirée de lunivers Mario :' },
+                    { type: 'heading', text: '🏗️ Architecture 3 tiers — Univers Mario' },
+                    { type: 'text', text: '📱 Luigi — Application Android (Java)' },
+                    { type: 'text', text: "   • App mobile de consultation et location de films" },
+                    { type: 'text', text: "   • Connexion sécurisée + catalogue films + panier" },
+                    { type: 'text', text: "   • Appels REST asynchrones vers l'API Toad" },
                     { type: 'text', text: '' },
-                    { type: 'text', text: '📱 Luigi - Application Mobile' },
-                    { type: 'text', text: '   • Application Android développée en Java' },
-                    { type: 'text', text: '   • Consultation et réservation de DVD' },
-                    { type: 'text', text: '   • Interface utilisateur intuitive' },
+                    { type: 'text', text: '🖥️ Mario — Interface Web (Laravel / PHP)' },
+                    { type: 'text', text: "   • Frontend web d'administration du catalogue" },
+                    { type: 'text', text: "   • Authentification via ToadUserProvider (JWT)" },
+                    { type: 'text', text: "   • Services : ToadFilmService, ToadInventoryService" },
                     { type: 'text', text: '' },
-                    { type: 'text', text: '🖥️ Mario - Application Web' },
-                    { type: 'text', text: '   • Interface web dadministration en PHP' },
-                    { type: 'text', text: '   • Gestion du catalogue de DVD' },
-                    { type: 'text', text: '   • Gestion des réservations et utilisateurs' },
+                    { type: 'text', text: '🔌 Toad — API REST (Spring Boot / Java 17)' },
+                    { type: 'text', text: "   • Backend Spring Boot + Spring Security + JWT" },
+                    { type: 'text', text: "   • Controllers : Film, Actor, Rental, Cart, Customer..." },
+                    { type: 'text', text: "   • JPA / Hibernate pour la persistance" },
                     { type: 'text', text: '' },
-                    { type: 'text', text: '🔌 Toad - API Webservice' },
-                    { type: 'text', text: '   • API REST sécurisée' },
-                    { type: 'text', text: '   • Pont entre applications et base de données' },
-                    { type: 'text', text: '   • Communication fluide et sécurisée' },
-                    { type: 'text', text: '' },
-                    { type: 'text', text: '🗄️ Peach - Base de données' },
-                    { type: 'text', text: '   • Base MySQL inspirée du modèle Sakila' },
-                    { type: 'text', text: '   • Stockage DVD, clients et réservations' },
+                    { type: 'text', text: '🗄️ Peach — Base de données (MySQL / Sakila)' },
+                    { type: 'text', text: "   • Modèle Sakila : films, acteurs, inventaire, locations" },
+                    { type: 'text', text: "   • Tables : film, actor, rental, customer, store..." },
 
-                    { type: 'heading', text: '🛠️ Technologies utilisées' },
-                    { type: 'text', text: 'Back-end : PHP, MySQL' },
-                    { type: 'text', text: 'Front-end : HTML, CSS, JavaScript' },
-                    { type: 'text', text: 'Mobile : Java, Android Studio, XML' },
-                    { type: 'text', text: 'API : REST API sécurisée' },
-                    { type: 'text', text: 'Base de données : MySQL (modèle Sakila)' },
+                    { type: 'heading', text: '🛠️ Stack technique' },
+                    { type: 'text', text: 'API Backend : Java 17, Spring Boot, Spring Security, JWT, JPA' },
+                    { type: 'text', text: 'Web Frontend : PHP, Laravel, Blade, CSS' },
+                    { type: 'text', text: 'Mobile : Java, Android Studio, API REST asynchrone' },
+                    { type: 'text', text: 'BDD : MySQL (schéma Sakila — films/acteurs/locations)' },
 
-                    { type: 'heading', text: '📦 Modules principaux' },
-                    { type: 'text', text: '• Gestion des réservations' },
-                    { type: 'text', text: '• Système dauthentification' },
-                    { type: 'text', text: '• Interface mobile et web' },
-                    { type: 'text', text: '• Synchronisation des données' },
+                    { type: 'heading', text: '⚡ Points techniques clés' },
+                    { type: 'text', text: "• Authentification JWT partagée entre les 3 apps" },
+                    { type: 'text', text: "• Architecture orientée services (SOA)" },
+                    { type: 'text', text: "• Séparation stricte des couches (Controller/Service/Repo)" },
+                    { type: 'text', text: "• APK disponible : RFTG_Virgile_ALLIX.apk" },
 
-                    { type: 'heading', text: '🎯 Objectif' },
-                    { type: 'text', text: 'Créer un système complet de gestion de DVD pour un' },
-                    { type: 'text', text: 'parc à thème avec une expérience utilisateur optimale' },
-                    { type: 'text', text: 'sur mobile et web.' },
-
-                    { type: 'heading', text: '⚡ Défis techniques' },
-                    { type: 'text', text: '• Communication mobile-serveur via API REST' },
-                    { type: 'text', text: '• Gestion multi-interface (web + mobile)' },
-                    { type: 'text', text: '• Synchronisation des données avec MySQL' },
-                    { type: 'text', text: '• Architecture modulaire et scalable' },
-
-                    { type: 'heading', text: '📌 Compétences E4 (Tableau de synthèse)' },
+                    { type: 'heading', text: '📌 Compétences E5' },
+                    { type: 'text', text: '✅ Développer la présence en ligne de l\'organisation' },
                     { type: 'text', text: '✅ Travailler en mode projet' },
-                    { type: 'text', text: '✅ Mettre à disposition des utilisateurs un service' },
-                    { type: 'text', text: '✅ Organiser son développement professionnel' },
+                    { type: 'text', text: "✅ Mettre à disposition un service informatique" },
 
-                    { type: 'heading', text: '💡 Statut' },
-                    { type: 'text', text: 'Projet en cours - Sept. 2025 à Mai 2026' }
+                    { type: 'heading', text: '📅 Statut' },
+                    { type: 'text', text: 'En cours — Sept. 2025 à Mai 2026' }
                 ]
             },
             projet3: {
@@ -329,7 +313,7 @@ class GamerSetup3D {
                     { type: 'text', text: '' },
 
                     { type: 'heading', text: '💡 Points forts' },
-                    { type: 'text', text: '✓ Intégration dune API IA avancée' },
+                    { type: 'text', text: "✓ Intégration d'une API IA avancée" },
                     { type: 'text', text: '✓ E-commerce complet et fonctionnel' },
                     { type: 'text', text: '✓ Stack moderne et performante' },
                     { type: 'text', text: '✓ Code type-safe avec TypeScript' },
@@ -3749,7 +3733,7 @@ class GamerSetup3D {
             win.termOutput.push('');
             win.termOutput.push('## Projets');
             win.termOutput.push('- MT-Congés : App Java de gestion des congés');
-            win.termOutput.push('- RFTG : Système DVD full-stack (PHP + Android)');
+            win.termOutput.push('- RFTG : Location de films full-stack (Spring Boot + Laravel + Android)');
             win.termOutput.push('- Mission Assureur : Laravel en milieu professionnel');
             win.termOutput.push('- Anglais-Appli : E-commerce IA Next.js + TypeScript');
         } else if (lower.startsWith('open ')) {
