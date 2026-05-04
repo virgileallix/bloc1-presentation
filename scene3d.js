@@ -448,7 +448,6 @@ class GamerSetup3D {
             animTime: 0,
             startMenuOpen: false,
             openMenu: null, // { winId, menuName, x, y }
-            easterEgg: null, // { type, startTime }
             activeInput: null,
             icons: [
                 { id: 'presentation', name: 'Présentation', icon: '📝', x: 30, y: 30, tooltip: 'Ouvrir ma présentation' },
@@ -618,11 +617,6 @@ class GamerSetup3D {
         window.addEventListener('mousemove', (e) => this.onMouseMove(e));
         window.addEventListener('wheel', (e) => this.onWheel(e), { passive: false });
         window.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && this.desktopState.easterEgg) {
-                this.desktopState.easterEgg = null;
-                this.updateOS(this.screenCtx);
-                return;
-            }
             if (this.desktopState.activeInput) {
                 this.handleActiveInput(e);
                 return;
@@ -1617,10 +1611,9 @@ class GamerSetup3D {
             ctx.restore();
         }
 
-        // Render start menu, dropdowns, easter eggs on top
+        // Render start menu and dropdowns on top
         if (this.desktopState.startMenuOpen) this.renderStartMenu(ctx);
         if (this.desktopState.openMenu) this.renderDropdownMenu(ctx);
-        if (this.desktopState.easterEgg) this.renderEasterEgg(ctx);
 
         if (this.screenTexture) this.screenTexture.needsUpdate = true;
     }
@@ -3164,13 +3157,6 @@ class GamerSetup3D {
     }
 
     handleOSClick(x, y) {
-        // Close easter egg on click
-        if (this.desktopState.easterEgg) {
-            this.desktopState.easterEgg = null;
-            this.updateOS(this.screenCtx);
-            return;
-        }
-
         // MT-Congés demo button (opens simulation window)
         for (const win of this.windows) {
             if (win.minimized || !win.mtcDemoBtn) continue;
@@ -3509,10 +3495,10 @@ class GamerSetup3D {
 
     getMenuItems(menuName) {
         const menus = {
-            'Fichier':    ['Nouveau fichier', 'Fermer la fenêtre', 'Fermer tout', '---', '⚠️ Format C:', '🦠 Lancer un virus'],
-            'Édition':    ['Copier', 'Coller', 'Annuler', '---', '💀 sudo rm -rf /', '🤖 Demander à l\'IA'],
-            'Affichage':  ['Plein écran', 'Zoom avant', 'Zoom arrière', '---', '🟩 Mode Matrix', '☕ Pause café'],
-            'Insertion':  ['Image', 'Lien hypertexte', '---', '🪟 Windows Update', '📟 Message d\'erreur'],
+            'Fichier':    ['Nouveau fichier', 'Fermer la fenêtre', 'Fermer tout'],
+            'Édition':    ['Copier', 'Coller', 'Annuler'],
+            'Affichage':  ['Plein écran', 'Zoom avant', 'Zoom arrière'],
+            'Insertion':  ['Image', 'Lien hypertexte'],
         };
         return menus[menuName] || [];
     }
@@ -3532,32 +3518,6 @@ class GamerSetup3D {
                 win.h = this.canvasHeight - 90;
                 win.maximized = true;
             }
-        } else if (item === '⚠️ Format C:') {
-            this.desktopState.easterEgg = { type: 'bsod', startTime: Date.now() };
-            setTimeout(() => { this.desktopState.easterEgg = null; this.updateOS(this.screenCtx); }, 30000);
-        } else if (item === '💀 sudo rm -rf /') {
-            this.desktopState.easterEgg = { type: 'terminal', startTime: Date.now() };
-            setTimeout(() => { this.desktopState.easterEgg = null; this.updateOS(this.screenCtx); }, 30000);
-        } else if (item === '🟩 Mode Matrix') {
-            const cols = Math.floor(this.canvasWidth / 22);
-            const drops = Array.from({length: cols}, () => Math.random() * -50);
-            this.desktopState.easterEgg = { type: 'matrix', startTime: Date.now(), drops, lastUpdate: 0 };
-            setTimeout(() => { this.desktopState.easterEgg = null; this.updateOS(this.screenCtx); }, 30000);
-        } else if (item === '🪟 Windows Update') {
-            this.desktopState.easterEgg = { type: 'winupdate', startTime: Date.now() };
-            setTimeout(() => { this.desktopState.easterEgg = null; this.updateOS(this.screenCtx); }, 30000);
-        } else if (item === '🦠 Lancer un virus') {
-            this.desktopState.easterEgg = { type: 'virus', startTime: Date.now() };
-            setTimeout(() => { this.desktopState.easterEgg = null; this.updateOS(this.screenCtx); }, 30000);
-        } else if (item === '🤖 Demander à l\'IA') {
-            this.desktopState.easterEgg = { type: 'ai', startTime: Date.now() };
-            setTimeout(() => { this.desktopState.easterEgg = null; this.updateOS(this.screenCtx); }, 30000);
-        } else if (item === '☕ Pause café') {
-            this.desktopState.easterEgg = { type: 'coffee', startTime: Date.now() };
-            setTimeout(() => { this.desktopState.easterEgg = null; this.updateOS(this.screenCtx); }, 30000);
-        } else if (item === '📟 Message d\'erreur') {
-            this.desktopState.easterEgg = { type: 'error404', startTime: Date.now() };
-            setTimeout(() => { this.desktopState.easterEgg = null; this.updateOS(this.screenCtx); }, 30000);
         }
     }
 
@@ -3597,9 +3557,8 @@ class GamerSetup3D {
                 ctx.roundRect(padX + 4, iy - 4, menuW - 8, 34, 5);
                 ctx.fill();
             }
-            const isEgg = item.startsWith('⚠️') || item.startsWith('💀') || item.startsWith('🟩') || item.startsWith('🎵');
-            ctx.fillStyle = isEgg ? '#cc0000' : '#222222';
-            ctx.font = `${isEgg ? 'bold ' : ''}22px -apple-system, Arial, sans-serif`;
+            ctx.fillStyle = '#222222';
+            ctx.font = '22px -apple-system, Arial, sans-serif';
             ctx.textAlign = 'left';
             ctx.fillText(item, padX + 16, iy + 20);
             iy += 38;
@@ -3654,269 +3613,6 @@ class GamerSetup3D {
             ctx.font = '22px -apple-system, Arial, sans-serif';
             ctx.fillText(icon.name, smX + 70, iy + 36);
             iy += 70;
-        }
-    }
-
-    renderEasterEgg(ctx) {
-        const egg = this.desktopState.easterEgg;
-        if (!egg) return;
-        const elapsed = Date.now() - egg.startTime;
-
-        if (egg.type === 'bsod') {
-            ctx.fillStyle = '#0078d4';
-            ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
-            ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 120px Arial';
-            ctx.textAlign = 'center';
-            ctx.fillText(':(', this.canvasWidth / 2, this.canvasHeight / 2 - 80);
-            ctx.font = 'bold 38px Arial';
-            ctx.fillText('Votre PC a rencontré un problème.', this.canvasWidth / 2, this.canvasHeight / 2 + 30);
-            ctx.font = '28px Arial';
-            ctx.fillStyle = 'rgba(255,255,255,0.8)';
-            ctx.fillText('FORMAT_C_NOT_REAL  (0x000000ED)', this.canvasWidth / 2, this.canvasHeight / 2 + 90);
-            ctx.fillText('(juste un easter egg, tout va bien 👍)', this.canvasWidth / 2, this.canvasHeight / 2 + 160);
-        } else if (egg.type === 'terminal') {
-            ctx.fillStyle = '#0d0d0d';
-            ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
-            ctx.font = '26px "Courier New", monospace';
-            ctx.textAlign = 'left';
-            const lines = [
-                'root@virgile-pc:~# sudo rm -rf /',
-                'removing /bin... done',
-                'removing /etc... done',
-                'removing /home/virgile/projets... WAIT',
-                'removing /home/virgile/bts_sio... NON',
-                '',
-                '> Erreur: trop de bons souvenirs à supprimer',
-                '> Opération annulée.',
-                '',
-                'root@virgile-pc:~# _',
-            ];
-            const visible = Math.min(lines.length, Math.floor(elapsed / 350));
-            lines.slice(0, visible).forEach((l, i) => {
-                ctx.fillStyle = i === 0 ? '#00ff00' : i >= 6 ? '#ff4444' : '#cccccc';
-                ctx.fillText(l, 60, 120 + i * 48);
-            });
-        } else if (egg.type === 'matrix') {
-            const now = Date.now();
-            const charSize = 22;
-            const rows = Math.floor(this.canvasHeight / charSize);
-            // Fond semi-transparent pour l'effet traîne
-            ctx.fillStyle = 'rgba(0,0,0,0.15)';
-            ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
-            // Avancer les gouttes seulement toutes les 50ms
-            if (now - egg.lastUpdate > 50) {
-                egg.drops.forEach((d, i) => {
-                    ctx.fillStyle = 'rgba(0,255,70,0.9)';
-                    ctx.font = `bold ${charSize}px "Courier New"`;
-                    ctx.textAlign = 'left';
-                    const char = String.fromCharCode(0x30A0 + Math.floor(Math.random() * 96));
-                    ctx.fillText(char, i * charSize, d * charSize);
-                    // Tête de colonne en blanc vif
-                    ctx.fillStyle = '#ffffff';
-                    ctx.fillText(char, i * charSize, d * charSize);
-                    egg.drops[i]++;
-                    if (egg.drops[i] > rows + 10 && Math.random() > 0.97) egg.drops[i] = Math.random() * -20;
-                });
-                egg.lastUpdate = now;
-            }
-            // Message centré
-            const fade = Math.min(1, elapsed / 1000);
-            ctx.fillStyle = `rgba(0,255,0,${fade * 0.95})`;
-            ctx.font = `bold 70px "Courier New"`;
-            ctx.textAlign = 'center';
-            ctx.shadowColor = '#00ff00';
-            ctx.shadowBlur = 30;
-            ctx.fillText('FOLLOW THE WHITE RABBIT', this.canvasWidth / 2, this.canvasHeight / 2);
-            ctx.shadowBlur = 0;
-        } else if (egg.type === 'winupdate') {
-            // Fond Windows 11 bleu foncé
-            ctx.fillStyle = '#0a2d6e';
-            ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
-
-            const cx = this.canvasWidth / 2;
-            const cy = this.canvasHeight / 2;
-
-            // Logo Windows (4 carrés)
-            const s = 40, g = 8;
-            [[cx - s - g, cy - 180 - s - g, '#f35325'],
-             [cx + g,     cy - 180 - s - g, '#81bc06'],
-             [cx - s - g, cy - 180 + g,     '#05a6f0'],
-             [cx + g,     cy - 180 + g,     '#ffba08']
-            ].forEach(([x, y, c]) => {
-                ctx.fillStyle = c;
-                ctx.fillRect(x, y, s, s);
-            });
-
-            const pct = Math.min(100, Math.floor(elapsed / 60));
-            const done = elapsed > 6000;
-
-            ctx.textAlign = 'center';
-
-            if (!done) {
-                ctx.fillStyle = '#ffffff';
-                ctx.font = 'bold 52px "Segoe UI", Arial';
-                ctx.fillText('Mise à jour en cours…', cx, cy - 60);
-
-                ctx.font = '32px "Segoe UI", Arial';
-                ctx.fillStyle = 'rgba(255,255,255,0.7)';
-                ctx.fillText('Ne pas éteindre votre PC.', cx, cy - 10);
-
-                // Barre de progression
-                const bw = 600, bh = 10, bx = cx - bw / 2, by = cy + 50;
-                ctx.fillStyle = 'rgba(255,255,255,0.2)';
-                ctx.beginPath(); ctx.roundRect(bx, by, bw, bh, 5); ctx.fill();
-                ctx.fillStyle = '#ffffff';
-                ctx.beginPath(); ctx.roundRect(bx, by, bw * (pct / 100), bh, 5); ctx.fill();
-
-                ctx.font = 'bold 44px "Segoe UI", Arial';
-                ctx.fillStyle = '#ffffff';
-                ctx.fillText(`${pct} %`, cx, cy + 120);
-
-                ctx.font = '24px "Segoe UI", Arial';
-                ctx.fillStyle = 'rgba(255,255,255,0.5)';
-                ctx.fillText('Étape 3 sur 3 : Configuration des fonctionnalités…', cx, cy + 175);
-            } else {
-                ctx.fillStyle = '#ff4444';
-                ctx.font = 'bold 52px "Segoe UI", Arial';
-                ctx.fillText('Mise à jour annulée', cx, cy - 40);
-                ctx.font = '30px "Segoe UI", Arial';
-                ctx.fillStyle = 'rgba(255,255,255,0.8)';
-                ctx.fillText('ERREUR : 0xEASTEREGG — Juste un easter egg 😄', cx, cy + 30);
-            }
-        } else if (egg.type === 'virus') {
-            // Fake antivirus scan
-            ctx.fillStyle = '#0d0d0d';
-            ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
-            const cx = this.canvasWidth / 2;
-            const lines = [
-                '[SCAN] BTS_Stresse.exe ................ MENACE DÉTECTÉE',
-                '[SCAN] Examen_Final.dll ............... CRITIQUE',
-                '[SCAN] Prof_Note.sys .................. SUSPECT',
-                '[SCAN] Rapport_Stage.pdf .............. OK',
-                '[SCAN] Discord.exe .................... DISTRACTION DÉTECTÉE',
-                '[SCAN] YouTube.exe .................... PRODUCTIVITÉ NÉGATIVE',
-                '[SCAN] Claude_AI.js ................... DÉPENDANCE LÉTALE',
-                '[SCAN] Café_Urgence.bat ............... EN COURS...',
-            ];
-            const visibleCount = Math.min(lines.length, Math.floor(elapsed / 400) + 1);
-            ctx.font = '22px "Courier New", monospace';
-            ctx.textAlign = 'left';
-            ctx.fillStyle = '#00ff41';
-            ctx.fillText('⚠ VIRGUARD PRO — ANALYSE EN COURS', cx - 400, 160);
-            ctx.strokeStyle = '#00ff41';
-            ctx.lineWidth = 1;
-            ctx.strokeRect(cx - 420, 130, 840, 2);
-            for (let i = 0; i < visibleCount; i++) {
-                const isThreaten = lines[i].includes('MENACE') || lines[i].includes('CRITIQUE') || lines[i].includes('DISTRACTION') || lines[i].includes('NÉGATIVE') || lines[i].includes('LÉTALE');
-                ctx.fillStyle = isThreaten ? '#ff4444' : '#00ff41';
-                ctx.fillText(lines[i], cx - 400, 220 + i * 42);
-            }
-            if (elapsed > 3200) {
-                ctx.fillStyle = '#ff0000';
-                ctx.font = 'bold 36px "Courier New", monospace';
-                ctx.textAlign = 'center';
-                ctx.fillText('8 MENACES TROUVÉES — PC INFECTÉ PAR LE BTS', cx, 580);
-                ctx.font = '24px "Courier New", monospace';
-                ctx.fillStyle = '#ffff00';
-                ctx.fillText('[Appuyer sur Échap pour ignorer — comme d\'habitude]', cx, 640);
-            }
-        } else if (egg.type === 'ai') {
-            // Fake AI assistant
-            ctx.fillStyle = '#0f0f1a';
-            ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
-            const cx = this.canvasWidth / 2;
-            const cy = this.canvasHeight / 2;
-            const pulse = 0.5 + 0.5 * Math.sin(elapsed / 300);
-            // Pulsing circle
-            ctx.beginPath();
-            ctx.arc(cx, cy - 140, 80 + pulse * 20, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(99,102,241,${0.15 + pulse * 0.15})`;
-            ctx.fill();
-            ctx.beginPath();
-            ctx.arc(cx, cy - 140, 60, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(139,92,246,${0.6 + pulse * 0.4})`;
-            ctx.fill();
-            ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 36px Arial';
-            ctx.textAlign = 'center';
-            ctx.fillText('🤖', cx, cy - 120);
-            ctx.fillStyle = '#a78bfa';
-            ctx.font = 'bold 32px Arial';
-            ctx.fillText('CLAUDE IA — MODÈLE BLOC-1', cx, cy + 20);
-            const replies = [
-                '"Votre code a 42 erreurs et je les aime toutes."',
-                '"Votre présentation est parfaite. N\'y touchez plus."',
-                '"Détecté : syndrome de l\'imposteur. Traitement : café."',
-                '"Votre BTS se passe très bien. Faites-moi confiance."',
-                '"Analyse terminée : vous êtes un développeur qualifié."',
-            ];
-            const idx = Math.floor(elapsed / 2500) % replies.length;
-            ctx.fillStyle = 'rgba(255,255,255,0.85)';
-            ctx.font = '26px Arial';
-            ctx.fillText(replies[idx], cx, cy + 90);
-            ctx.fillStyle = 'rgba(167,139,250,0.5)';
-            ctx.font = '20px Arial';
-            ctx.fillText('[Appuyer sur Échap pour fermer]', cx, cy + 160);
-        } else if (egg.type === 'coffee') {
-            // Coffee break
-            ctx.fillStyle = '#1a0a00';
-            ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
-            const cx = this.canvasWidth / 2;
-            const cy = this.canvasHeight / 2;
-            ctx.fillStyle = '#c87941';
-            ctx.font = 'bold 120px Arial';
-            ctx.textAlign = 'center';
-            ctx.fillText('☕', cx, cy - 80);
-            ctx.fillStyle = '#f5deb3';
-            ctx.font = 'bold 44px Arial';
-            ctx.fillText('PAUSE CAFÉ OBLIGATOIRE', cx, cy + 30);
-            const remaining = Math.max(0, 300 - Math.floor(elapsed / 1000));
-            const mm = String(Math.floor(remaining / 60)).padStart(2, '0');
-            const ss = String(remaining % 60).padStart(2, '0');
-            ctx.fillStyle = remaining > 60 ? '#f59e0b' : '#ef4444';
-            ctx.font = 'bold 72px "Courier New", monospace';
-            ctx.fillText(`${mm}:${ss}`, cx, cy + 130);
-            ctx.fillStyle = 'rgba(245,222,179,0.6)';
-            ctx.font = '24px Arial';
-            if (remaining > 0) {
-                ctx.fillText('Le PC est verrouillé jusqu\'à la fin de la pause.', cx, cy + 200);
-            } else {
-                ctx.fillStyle = '#00ff41';
-                ctx.font = 'bold 36px Arial';
-                ctx.fillText('Pause terminée ! Retour au travail.', cx, cy + 200);
-            }
-        } else if (egg.type === 'error404') {
-            // 404 page
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
-            const cx = this.canvasWidth / 2;
-            const cy = this.canvasHeight / 2;
-            ctx.fillStyle = '#111827';
-            ctx.font = 'bold 200px Arial';
-            ctx.textAlign = 'center';
-            ctx.globalAlpha = 0.08;
-            ctx.fillText('404', cx, cy + 80);
-            ctx.globalAlpha = 1;
-            ctx.fillStyle = '#1d4ed8';
-            ctx.font = 'bold 64px Arial';
-            ctx.fillText('404', cx, cy - 80);
-            ctx.fillStyle = '#111827';
-            ctx.font = 'bold 36px Arial';
-            ctx.fillText('Page introuvable', cx, cy - 10);
-            ctx.fillStyle = '#6b7280';
-            ctx.font = '24px Arial';
-            ctx.fillText('La motivation que vous cherchez n\'existe pas sur ce serveur.', cx, cy + 55);
-            // Fake button
-            const bw = 260, bh = 54, bx = cx - bw / 2, by = cy + 100;
-            ctx.fillStyle = '#1d4ed8';
-            ctx.beginPath(); ctx.roundRect(bx, by, bw, bh, 10); ctx.fill();
-            ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 22px Arial';
-            ctx.fillText('Retour à la réalité', cx, by + 34);
-            ctx.fillStyle = '#9ca3af';
-            ctx.font = '20px Arial';
-            ctx.fillText('[Échap pour fermer]', cx, cy + 210);
         }
     }
 
@@ -4091,7 +3787,7 @@ class GamerSetup3D {
             win.termOutput.push('a3f2d1c feat: add Three.js virtual OS desktop');
             win.termOutput.push('8b4e9f2 fix: GitHub Actions deploy workflow');
             win.termOutput.push('c7a1b3d chore: migrate Vite + assets to public/');
-            win.termOutput.push('2d9f4e1 feat: easter eggs BSOD, matrix, virus, AI');
+            win.termOutput.push('2d9f4e1 feat: add desktop menus and UI polish');
             win.termOutput.push('f5c8a0b init: setup gaming PC 3D scene with Three.js');
         } else if (lower === 'neofetch') {
             win.termOutput.push('       ___           virgile@Virgile-PC');
@@ -4114,7 +3810,7 @@ class GamerSetup3D {
             win.termOutput.push('# Portfolio - Virgile Allix');
             win.termOutput.push('');
             win.termOutput.push('Bureau virtuel 3D interactif présentant mes projets BTS SIO SLAM.');
-            win.termOutput.push('Développé avec Three.js, Vite et des easter eggs cachés.');
+            win.termOutput.push('Développé avec Three.js et Vite.');
             win.termOutput.push('');
             win.termOutput.push('## Projets');
             win.termOutput.push('- MT-Congés : App Java de gestion des congés');
@@ -4349,12 +4045,6 @@ class GamerSetup3D {
                     child.material.opacity = 0.6 + Math.sin(this.time * 2 + i) * 0.2;
                 }
             });
-        }
-
-        // Easter egg Matrix : piloté par animate() pour animation fluide
-        if (this.desktopState.easterEgg?.type === 'matrix' && this.screenCtx) {
-            this.renderEasterEgg(this.screenCtx);
-            if (this.screenTexture) this.screenTexture.needsUpdate = true;
         }
 
         // Render via post-processing composer
