@@ -106,6 +106,7 @@ class GamerSetup3D {
                 sections: [
                     { type: 'title', text: 'ADP - MT-Congés' },
                     { type: 'subtitle', text: 'Application Java • Sept. 2024 — Mars 2025' },
+                    { type: 'mtconges-demo' },
                     { type: 'image', width: 450, height: 250, label: 'Écran de connexion', src: 'images/mtconges/mtconges_login-screen.png' },
 
                     { type: 'heading', text: '📋 Présentation' },
@@ -395,6 +396,10 @@ class GamerSetup3D {
             taskmanager: {
                 title: '📊 Gestionnaire des tâches',
                 sections: [{ type: 'taskmanager-ui' }]
+            },
+            mtconges: {
+                title: '🗓  Simulation — MT-Congés',
+                sections: [{ type: 'mtconges-ui' }]
             },
             e5: {
                 title: '📋 Tableau de Synthèse — Épreuve E5',
@@ -2003,6 +2008,295 @@ class GamerSetup3D {
                         yPos += section.height + 45;
                         break;
 
+                    case 'mtconges-demo': {
+                        const dBtnW = Math.min(360, win.w - 100);
+                        const dBtnH = 54;
+                        ctx.fillStyle = '#7c3aed';
+                        ctx.beginPath(); ctx.roundRect(leftMargin, yPos, dBtnW, dBtnH, 10); ctx.fill();
+                        ctx.fillStyle = '#ffffff'; ctx.font = 'bold 17px Arial'; ctx.textAlign = 'center';
+                        ctx.fillText('🖥️  Lancer la simulation interactive', leftMargin + dBtnW / 2, yPos + 34);
+                        ctx.textAlign = 'left';
+                        win.mtcDemoBtn = { x: leftMargin, y: yPos, w: dBtnW, h: dBtnH };
+                        yPos += dBtnH + 24;
+                        break;
+                    }
+
+                    case 'mtconges-ui': {
+                        if (!win.mtc) win.mtc = {
+                            screen: 'login', currentUser: null, activeTab: 0,
+                            conges: [
+                                { id: 1, employe: 'Mathis Quelen', login: 'mqu', duree: 3, debut: '01/05/2025', etat: 'En attente', motif: 'Congés personnels' },
+                                { id: 2, employe: 'Paul Blanc',    login: 'bpa', duree: 5, debut: '15/04/2025', etat: 'Approuvé',   motif: 'Vacances printemps' },
+                                { id: 3, employe: 'Paul Blanc',    login: 'bpa', duree: 2, debut: '30/03/2025', etat: 'Refusé',     motif: 'Formation externe' },
+                                { id: 4, employe: 'Mathis Quelen', login: 'mqu', duree: 7, debut: '20/06/2025', etat: 'En attente', motif: 'Vacances été' },
+                            ],
+                        };
+                        win.mtcClickZones = [];
+                        const mtc = win.mtc;
+                        const mx = win.x + 15; const mw = win.w - 30;
+                        const my = win.y + 115; const mh = win.h - 125;
+                        ctx.save();
+                        ctx.beginPath(); ctx.rect(mx, my, mw, mh); ctx.clip();
+
+                        if (mtc.screen === 'login') {
+                            ctx.fillStyle = '#ffe6f0';
+                            ctx.fillRect(mx, my, mw, mh);
+                            const cardW = Math.min(480, mw * 0.7);
+                            const cardH = 390;
+                            const cardX = mx + (mw - cardW) / 2;
+                            const cardY = my + (mh - cardH) / 2;
+                            ctx.fillStyle = '#ffffff';
+                            ctx.shadowColor = 'rgba(124,58,237,0.15)'; ctx.shadowBlur = 24;
+                            ctx.beginPath(); ctx.roundRect(cardX, cardY, cardW, cardH, 14); ctx.fill();
+                            ctx.shadowBlur = 0;
+                            ctx.fillStyle = '#7c3aed'; ctx.font = 'bold 18px Arial'; ctx.textAlign = 'center';
+                            ctx.fillText('Système de Gestion des Congés', cardX + cardW / 2, cardY + 44);
+                            ctx.fillStyle = '#9ca3af'; ctx.font = '12px Arial';
+                            ctx.fillText('Choisir un compte pour continuer', cardX + cardW / 2, cardY + 66);
+                            ctx.strokeStyle = '#f3e8ff'; ctx.lineWidth = 1;
+                            ctx.beginPath(); ctx.moveTo(cardX + 20, cardY + 82); ctx.lineTo(cardX + cardW - 20, cardY + 82); ctx.stroke();
+                            const USERS = [
+                                { nom: 'ALLIX Virgile',   login: 'VAL', role: 'Super-Administrateur', color: '#ef4444', screen: 'admin',       conges: 30 },
+                                { nom: 'Marsac Camille',  login: 'cma', role: 'Responsable',           color: '#f59e0b', screen: 'responsable', conges: 30 },
+                                { nom: 'Quelen Mathis',   login: 'mqu', role: 'Employé',               color: '#3b82f6', screen: 'employe',     conges: 29 },
+                                { nom: 'Blanc Paul',      login: 'bpa', role: 'Employé',               color: '#22c55e', screen: 'employe2',    conges: 28 },
+                            ];
+                            const ucH = 58; const gap = 6; let uy = cardY + 98;
+                            for (const u of USERS) {
+                                ctx.fillStyle = '#f9fafb'; ctx.strokeStyle = '#ede9fe'; ctx.lineWidth = 1;
+                                ctx.beginPath(); ctx.roundRect(cardX + 16, uy, cardW - 32, ucH, 8); ctx.fill(); ctx.stroke();
+                                ctx.fillStyle = u.color;
+                                ctx.beginPath(); ctx.arc(cardX + 16 + 27, uy + ucH / 2, 17, 0, Math.PI * 2); ctx.fill();
+                                ctx.fillStyle = '#fff'; ctx.font = 'bold 11px Arial'; ctx.textAlign = 'center';
+                                ctx.fillText(u.login.toUpperCase(), cardX + 16 + 27, uy + ucH / 2 + 4);
+                                ctx.fillStyle = '#111827'; ctx.font = 'bold 13px Arial'; ctx.textAlign = 'left';
+                                ctx.fillText(u.nom, cardX + 56, uy + ucH / 2 - 4);
+                                ctx.fillStyle = '#6b7280'; ctx.font = '12px Arial';
+                                ctx.fillText(u.role, cardX + 56, uy + ucH / 2 + 13);
+                                ctx.fillStyle = '#c4b5fd'; ctx.font = 'bold 20px Arial'; ctx.textAlign = 'right';
+                                ctx.fillText('›', cardX + cardW - 22, uy + ucH / 2 + 7);
+                                win.mtcClickZones.push({ x: cardX + 16, y: uy, w: cardW - 32, h: ucH, action: 'login', user: u });
+                                uy += ucH + gap;
+                            }
+                        } else {
+                            const cu = mtc.currentUser;
+                            ctx.fillStyle = '#7c3aed'; ctx.fillRect(mx, my, mw, 52);
+                            ctx.fillStyle = '#fff'; ctx.font = 'bold 15px Arial'; ctx.textAlign = 'left';
+                            ctx.fillText('🗓  MT-Congés', mx + 16, my + 32);
+                            ctx.fillStyle = '#ede9fe';
+                            ctx.beginPath(); ctx.roundRect(mx + mw - 200, my + 12, 188, 28, 14); ctx.fill();
+                            ctx.fillStyle = '#5b21b6'; ctx.font = 'bold 11px Arial'; ctx.textAlign = 'center';
+                            ctx.fillText(`${cu.login.toUpperCase()} · ${cu.role}`, mx + mw - 106, my + 31);
+                            ctx.fillStyle = '#e9d5ff'; ctx.font = '11px Arial'; ctx.textAlign = 'right';
+                            ctx.fillText('[ Déconnexion ]', mx + mw - 8, my + 50);
+                            win.mtcClickZones.push({ x: mx + mw - 130, y: my + 38, w: 125, h: 16, action: 'logout' });
+
+                            const contentY = my + 52; const contentH = mh - 52;
+                            ctx.fillStyle = '#f5f3ff'; ctx.fillRect(mx, contentY, mw, contentH);
+                            let tabs = [];
+                            if (mtc.screen === 'admin') tabs = ['👥 Utilisateurs', '📁 Projets', '📊 Stats'];
+                            else if (mtc.screen === 'responsable') tabs = ['⏳ En attente', '📋 Toutes', '👤 Profil'];
+                            else tabs = ['📅 Mes Congés', '➕ Nouvelle Demande', '🔔 Notifs'];
+                            const tabH = 40; const tabW = mw / tabs.length;
+                            ctx.fillStyle = '#ede9fe'; ctx.fillRect(mx, contentY, mw, tabH);
+                            tabs.forEach((tab, i) => {
+                                const tx = mx + i * tabW;
+                                if (i === mtc.activeTab) { ctx.fillStyle = '#7c3aed'; ctx.fillRect(tx, contentY, tabW, tabH); }
+                                ctx.fillStyle = i === mtc.activeTab ? '#fff' : '#5b21b6';
+                                ctx.font = i === mtc.activeTab ? 'bold 12px Arial' : '12px Arial';
+                                ctx.textAlign = 'center';
+                                ctx.fillText(tab, tx + tabW / 2, contentY + 26);
+                                if (i > 0) {
+                                    ctx.strokeStyle = '#c4b5fd'; ctx.lineWidth = 1;
+                                    ctx.beginPath(); ctx.moveTo(tx, contentY + 6); ctx.lineTo(tx, contentY + tabH - 6); ctx.stroke();
+                                }
+                                win.mtcClickZones.push({ x: tx, y: contentY, w: tabW, h: tabH, action: 'tab', tab: i });
+                            });
+
+                            const bodyY = contentY + tabH; const bodyH = contentH - tabH;
+                            ctx.fillStyle = '#ffffff'; ctx.fillRect(mx, bodyY, mw, bodyH);
+
+                            if (mtc.screen === 'admin') {
+                                if (mtc.activeTab === 0) {
+                                    const admUsers = [
+                                        { login: 'VAL', nom: 'ALLIX Virgile',  role: 'Super-Admin', conges: '30/30', email: 'virgile@test.test' },
+                                        { login: 'cma', nom: 'Marsac Camille', role: 'Responsable',  conges: '30/30', email: 'camille@test.test' },
+                                        { login: 'mqu', nom: 'Quelen Mathis',  role: 'Employé',      conges: '29/30', email: 'mathis@test.test' },
+                                        { login: 'bpa', nom: 'Blanc Paul',     role: 'Employé',      conges: '28/30', email: 'paul.blanc@test.test' },
+                                    ];
+                                    const cols5 = ['Login', 'Nom', 'Rôle', 'Congés', 'Email'];
+                                    const cW5 = mw / cols5.length;
+                                    ctx.fillStyle = '#f5f3ff'; ctx.fillRect(mx, bodyY, mw, 34);
+                                    cols5.forEach((col, ci) => {
+                                        ctx.fillStyle = '#5b21b6'; ctx.font = 'bold 12px Arial'; ctx.textAlign = 'center';
+                                        ctx.fillText(col, mx + ci * cW5 + cW5 / 2, bodyY + 22);
+                                    });
+                                    admUsers.forEach((u, ri) => {
+                                        const ry = bodyY + 34 + ri * 36;
+                                        ctx.fillStyle = ri % 2 === 0 ? '#faf5ff' : '#fff'; ctx.fillRect(mx, ry, mw, 36);
+                                        ctx.strokeStyle = '#ede9fe'; ctx.lineWidth = 0.5; ctx.strokeRect(mx, ry, mw, 36);
+                                        [u.login, u.nom, u.role, u.conges, u.email].forEach((v, ci) => {
+                                            ctx.fillStyle = '#374151'; ctx.font = '12px Arial'; ctx.textAlign = 'center';
+                                            ctx.fillText(v, mx + ci * cW5 + cW5 / 2, ry + 23);
+                                        });
+                                    });
+                                } else if (mtc.activeTab === 1) {
+                                    const projs = [{ id: '1', nom: 'CNP', membres: '2', resp: 'Marsac Camille' }, { id: '2', nom: 'Cyber', membres: '0', resp: 'N/A' }];
+                                    const cols4 = ['ID', 'Projet', 'Membres', 'Responsable'];
+                                    const cW4 = mw / cols4.length;
+                                    ctx.fillStyle = '#f5f3ff'; ctx.fillRect(mx, bodyY, mw, 34);
+                                    cols4.forEach((col, ci) => {
+                                        ctx.fillStyle = '#5b21b6'; ctx.font = 'bold 12px Arial'; ctx.textAlign = 'center';
+                                        ctx.fillText(col, mx + ci * cW4 + cW4 / 2, bodyY + 22);
+                                    });
+                                    projs.forEach((p, ri) => {
+                                        const ry = bodyY + 34 + ri * 36;
+                                        ctx.fillStyle = ri % 2 === 0 ? '#faf5ff' : '#fff'; ctx.fillRect(mx, ry, mw, 36);
+                                        ctx.strokeStyle = '#ede9fe'; ctx.lineWidth = 0.5; ctx.strokeRect(mx, ry, mw, 36);
+                                        [p.id, p.nom, p.membres, p.resp].forEach((v, ci) => {
+                                            ctx.fillStyle = '#374151'; ctx.font = '12px Arial'; ctx.textAlign = 'center';
+                                            ctx.fillText(v, mx + ci * cW4 + cW4 / 2, ry + 23);
+                                        });
+                                    });
+                                } else {
+                                    const stats = [['Total utilisateurs','4'],['Demandes en cours','2'],['Demandes approuvées','1'],['Demandes refusées','1'],['Congés moyens restants','29.3 j']];
+                                    ctx.fillStyle = '#374151'; ctx.font = 'bold 15px Arial'; ctx.textAlign = 'center';
+                                    ctx.fillText('Statistiques du système', mx + mw / 2, bodyY + 35);
+                                    stats.forEach(([label, val], si) => {
+                                        const sy = bodyY + 55 + si * 42;
+                                        ctx.fillStyle = si % 2 === 0 ? '#faf5ff' : '#fff'; ctx.fillRect(mx + 20, sy, mw - 40, 38);
+                                        ctx.strokeStyle = '#ede9fe'; ctx.lineWidth = 0.5; ctx.strokeRect(mx + 20, sy, mw - 40, 38);
+                                        ctx.fillStyle = '#374151'; ctx.font = '13px Arial'; ctx.textAlign = 'left';
+                                        ctx.fillText(label, mx + 36, sy + 25);
+                                        ctx.fillStyle = '#7c3aed'; ctx.font = 'bold 15px Arial'; ctx.textAlign = 'right';
+                                        ctx.fillText(val, mx + mw - 36, sy + 25);
+                                    });
+                                }
+                            } else if (mtc.screen === 'responsable') {
+                                const pending = mtc.conges.filter(c => c.etat === 'En attente');
+                                const list = mtc.activeTab === 1 ? mtc.conges : mtc.activeTab === 0 ? pending : [];
+                                if (mtc.activeTab === 2) {
+                                    ctx.fillStyle = '#374151'; ctx.font = 'bold 15px Arial'; ctx.textAlign = 'center';
+                                    ctx.fillText('Profil — Marsac Camille', mx + mw / 2, bodyY + 35);
+                                    [['Login','cma'],['Nom','Marsac Camille'],['Rôle','Responsable'],['Email','camille@test.test'],['Congés restants','30 / 30']].forEach(([lbl, val], ii) => {
+                                        const iy = bodyY + 60 + ii * 36;
+                                        ctx.fillStyle = '#6b7280'; ctx.font = '12px Arial'; ctx.textAlign = 'left'; ctx.fillText(lbl, mx + 40, iy + 14);
+                                        ctx.fillStyle = '#111827'; ctx.font = 'bold 13px Arial'; ctx.fillText(val, mx + mw * 0.38, iy + 14);
+                                    });
+                                } else {
+                                    const cW4r = mw / 4;
+                                    ctx.fillStyle = '#f5f3ff'; ctx.fillRect(mx, bodyY, mw, 34);
+                                    ['Employé', 'Dates', 'Durée', mtc.activeTab === 0 ? 'Action' : 'État'].forEach((col, ci) => {
+                                        ctx.fillStyle = '#5b21b6'; ctx.font = 'bold 12px Arial'; ctx.textAlign = 'center';
+                                        ctx.fillText(col, mx + ci * cW4r + cW4r / 2, bodyY + 22);
+                                    });
+                                    list.forEach((c, ri) => {
+                                        const ry = bodyY + 34 + ri * 46;
+                                        ctx.fillStyle = ri % 2 === 0 ? '#faf5ff' : '#fff'; ctx.fillRect(mx, ry, mw, 46);
+                                        ctx.strokeStyle = '#ede9fe'; ctx.lineWidth = 0.5; ctx.strokeRect(mx, ry, mw, 46);
+                                        ctx.fillStyle = '#374151'; ctx.font = '12px Arial'; ctx.textAlign = 'center';
+                                        ctx.fillText(c.employe, mx + cW4r / 2, ry + 16);
+                                        ctx.fillText(`du ${c.debut}`, mx + cW4r + cW4r / 2, ry + 16);
+                                        ctx.fillText(`${c.duree}j`, mx + cW4r * 2 + cW4r / 2, ry + 16);
+                                        ctx.fillStyle = '#6b7280'; ctx.font = '11px Arial';
+                                        ctx.fillText(c.motif, mx + cW4r / 2, ry + 33);
+                                        if (mtc.activeTab === 0) {
+                                            ctx.fillStyle = '#22c55e';
+                                            ctx.beginPath(); ctx.roundRect(mx + cW4r * 3 + 8, ry + 8, 56, 26, 6); ctx.fill();
+                                            ctx.fillStyle = '#fff'; ctx.font = 'bold 11px Arial'; ctx.textAlign = 'center';
+                                            ctx.fillText('✓ OK', mx + cW4r * 3 + 36, ry + 26);
+                                            win.mtcClickZones.push({ x: mx + cW4r * 3 + 8, y: ry + 8, w: 56, h: 26, action: 'approve', congeId: c.id });
+                                            ctx.fillStyle = '#ef4444';
+                                            ctx.beginPath(); ctx.roundRect(mx + cW4r * 3 + 70, ry + 8, 56, 26, 6); ctx.fill();
+                                            ctx.fillStyle = '#fff';
+                                            ctx.fillText('✗ Non', mx + cW4r * 3 + 98, ry + 26);
+                                            win.mtcClickZones.push({ x: mx + cW4r * 3 + 70, y: ry + 8, w: 56, h: 26, action: 'reject', congeId: c.id });
+                                        } else {
+                                            const ec = c.etat === 'Approuvé' ? '#22c55e' : c.etat === 'Refusé' ? '#ef4444' : '#f59e0b';
+                                            ctx.fillStyle = ec;
+                                            ctx.beginPath(); ctx.roundRect(mx + cW4r * 3 + 16, ry + 12, cW4r - 32, 22, 6); ctx.fill();
+                                            ctx.fillStyle = '#fff'; ctx.font = 'bold 11px Arial'; ctx.textAlign = 'center';
+                                            ctx.fillText(c.etat, mx + cW4r * 3 + 16 + (cW4r - 32) / 2, ry + 28);
+                                        }
+                                    });
+                                    if (list.length === 0) {
+                                        ctx.fillStyle = '#9ca3af'; ctx.font = 'italic 14px Arial'; ctx.textAlign = 'center';
+                                        ctx.fillText('Aucune demande en attente', mx + mw / 2, bodyY + 70);
+                                    }
+                                }
+                            } else {
+                                const myLogin = mtc.screen === 'employe' ? 'mqu' : 'bpa';
+                                const myName = myLogin === 'mqu' ? 'Quelen Mathis' : 'Blanc Paul';
+                                const myConges = mtc.conges.filter(c => c.login === myLogin);
+                                if (mtc.activeTab === 0) {
+                                    const cW3 = mw / 3;
+                                    ctx.fillStyle = '#f5f3ff'; ctx.fillRect(mx, bodyY, mw, 34);
+                                    ['Dates', 'Durée — Motif', 'État'].forEach((col, ci) => {
+                                        ctx.fillStyle = '#5b21b6'; ctx.font = 'bold 12px Arial'; ctx.textAlign = 'center';
+                                        ctx.fillText(col, mx + ci * cW3 + cW3 / 2, bodyY + 22);
+                                    });
+                                    myConges.forEach((c, ri) => {
+                                        const ry = bodyY + 34 + ri * 46;
+                                        ctx.fillStyle = ri % 2 === 0 ? '#faf5ff' : '#fff'; ctx.fillRect(mx, ry, mw, 46);
+                                        ctx.strokeStyle = '#ede9fe'; ctx.lineWidth = 0.5; ctx.strokeRect(mx, ry, mw, 46);
+                                        ctx.fillStyle = '#374151'; ctx.font = '12px Arial'; ctx.textAlign = 'center';
+                                        ctx.fillText(`Du ${c.debut}`, mx + cW3 / 2, ry + 16);
+                                        ctx.fillText(`${c.duree} jour(s)`, mx + cW3 + cW3 / 2, ry + 16);
+                                        ctx.fillStyle = '#6b7280'; ctx.font = '11px Arial';
+                                        ctx.fillText(c.motif, mx + cW3 + cW3 / 2, ry + 32);
+                                        const ec = c.etat === 'Approuvé' ? '#22c55e' : c.etat === 'Refusé' ? '#ef4444' : '#f59e0b';
+                                        ctx.fillStyle = ec;
+                                        ctx.beginPath(); ctx.roundRect(mx + cW3 * 2 + 16, ry + 12, cW3 - 32, 22, 6); ctx.fill();
+                                        ctx.fillStyle = '#fff'; ctx.font = 'bold 11px Arial'; ctx.textAlign = 'center';
+                                        ctx.fillText(c.etat, mx + cW3 * 2 + 16 + (cW3 - 32) / 2, ry + 28);
+                                    });
+                                    if (myConges.length === 0) {
+                                        ctx.fillStyle = '#9ca3af'; ctx.font = 'italic 14px Arial'; ctx.textAlign = 'center';
+                                        ctx.fillText('Aucune demande', mx + mw / 2, bodyY + 70);
+                                    }
+                                } else if (mtc.activeTab === 1) {
+                                    ctx.fillStyle = '#374151'; ctx.font = 'bold 15px Arial'; ctx.textAlign = 'center';
+                                    ctx.fillText('Nouvelle demande de congé', mx + mw / 2, bodyY + 35);
+                                    [{ label: 'Date de début', val: '01/06/2025' }, { label: 'Durée (jours)', val: '5' }, { label: 'Motif', val: 'Congés personnels' }].forEach((f, fi) => {
+                                        const fy = bodyY + 58 + fi * 60;
+                                        ctx.fillStyle = '#374151'; ctx.font = 'bold 13px Arial'; ctx.textAlign = 'left';
+                                        ctx.fillText(f.label, mx + 40, fy + 14);
+                                        ctx.fillStyle = '#f9fafb'; ctx.strokeStyle = '#c4b5fd'; ctx.lineWidth = 1.5;
+                                        ctx.beginPath(); ctx.roundRect(mx + 40, fy + 22, mw - 80, 28, 6); ctx.fill(); ctx.stroke();
+                                        ctx.fillStyle = '#6b7280'; ctx.font = '13px Arial';
+                                        ctx.fillText(f.val, mx + 52, fy + 41);
+                                    });
+                                    const sbtnY = bodyY + 58 + 3 * 60 + 10;
+                                    ctx.fillStyle = '#7c3aed';
+                                    ctx.beginPath(); ctx.roundRect(mx + mw / 2 - 100, sbtnY, 200, 38, 10); ctx.fill();
+                                    ctx.fillStyle = '#fff'; ctx.font = 'bold 14px Arial'; ctx.textAlign = 'center';
+                                    ctx.fillText('📤 Soumettre la demande', mx + mw / 2, sbtnY + 25);
+                                    win.mtcClickZones.push({ x: mx + mw / 2 - 100, y: sbtnY, w: 200, h: 38, action: 'submit_conge', myLogin });
+                                } else {
+                                    ctx.fillStyle = '#374151'; ctx.font = 'bold 15px Arial'; ctx.textAlign = 'center';
+                                    ctx.fillText('Notifications', mx + mw / 2, bodyY + 35);
+                                    const notifs = myLogin === 'mqu'
+                                        ? [{ titre: 'Demande soumise', contenu: 'Votre demande du 01/05 est en cours d\'examen', date: 'Il y a 2j' }]
+                                        : [{ titre: 'Congé approuvé', contenu: 'Votre demande du 15/04 a été approuvée', date: 'Il y a 5j' }, { titre: 'Congé refusé', contenu: 'Votre demande du 30/03 a été refusée', date: 'Il y a 12j' }];
+                                    notifs.forEach((n, ni) => {
+                                        const ny = bodyY + 52 + ni * 64;
+                                        ctx.fillStyle = '#faf5ff'; ctx.strokeStyle = '#ede9fe'; ctx.lineWidth = 1;
+                                        ctx.beginPath(); ctx.roundRect(mx + 20, ny, mw - 40, 56, 8); ctx.fill(); ctx.stroke();
+                                        ctx.fillStyle = '#7c3aed'; ctx.font = 'bold 13px Arial'; ctx.textAlign = 'left';
+                                        ctx.fillText(n.titre, mx + 36, ny + 20);
+                                        ctx.fillStyle = '#6b7280'; ctx.font = '12px Arial';
+                                        ctx.fillText(n.contenu, mx + 36, ny + 38);
+                                        ctx.fillStyle = '#9ca3af'; ctx.font = '11px Arial'; ctx.textAlign = 'right';
+                                        ctx.fillText(n.date, mx + mw - 28, ny + 20);
+                                    });
+                                }
+                            }
+                        }
+                        ctx.restore();
+                        yPos += mh + 10;
+                        break;
+                    }
+
                     case 'live-news':
                         win.articleLinks = [];
                         if (!win.liveArticlesLoaded) {
@@ -2885,6 +3179,48 @@ class GamerSetup3D {
             return;
         }
 
+        // MT-Congés demo button (opens simulation window)
+        for (const win of this.windows) {
+            if (win.minimized || !win.mtcDemoBtn) continue;
+            const btn = win.mtcDemoBtn;
+            if (x >= btn.x && x <= btn.x + btn.w && y >= btn.y && y <= btn.y + btn.h) {
+                this.openWindow({ id: 'mtconges' });
+                this.updateOS(this.screenCtx); return;
+            }
+        }
+
+        // MT-Congés simulation click zones
+        for (const win of this.windows) {
+            if (win.minimized || !win.mtcClickZones?.length) continue;
+            for (const zone of win.mtcClickZones) {
+                if (x >= zone.x && x <= zone.x + zone.w && y >= zone.y && y <= zone.y + zone.h) {
+                    const mtc = win.mtc;
+                    if (zone.action === 'login') {
+                        mtc.currentUser = zone.user;
+                        mtc.screen = zone.user.screen;
+                        mtc.activeTab = 0;
+                    } else if (zone.action === 'logout') {
+                        mtc.screen = 'login';
+                        mtc.currentUser = null;
+                        mtc.activeTab = 0;
+                    } else if (zone.action === 'tab') {
+                        mtc.activeTab = zone.tab;
+                    } else if (zone.action === 'approve') {
+                        const c = mtc.conges.find(c => c.id === zone.congeId);
+                        if (c) c.etat = 'Approuvé';
+                    } else if (zone.action === 'reject') {
+                        const c = mtc.conges.find(c => c.id === zone.congeId);
+                        if (c) c.etat = 'Refusé';
+                    } else if (zone.action === 'submit_conge') {
+                        const nextId = Math.max(...mtc.conges.map(c => c.id)) + 1;
+                        mtc.conges.push({ id: nextId, employe: zone.myLogin === 'mqu' ? 'Mathis Quelen' : 'Blanc Paul', login: zone.myLogin, duree: 5, debut: '01/06/2025', etat: 'En attente', motif: 'Congés personnels' });
+                        mtc.activeTab = 0;
+                    }
+                    this.updateOS(this.screenCtx); return;
+                }
+            }
+        }
+
         // Browser URL bar, terminal input, explorer, taskmanager click zones
         for (const win of this.windows) {
             if (win.minimized) continue;
@@ -3609,8 +3945,8 @@ class GamerSetup3D {
         // Scale window size based on resolution
         const scaleX = this.canvasWidth / 2560;
         const scaleY = this.canvasHeight / 1440;
-        const windowWidth = 2000 * scaleX;
-        const windowHeight = (icon.id === 'presentation' ? 1300 : 1100) * scaleY;
+        const windowWidth = (icon.id === 'mtconges' ? 1600 : 2000) * scaleX;
+        const windowHeight = (icon.id === 'presentation' ? 1300 : icon.id === 'mtconges' ? 900 : 1100) * scaleY;
 
         // Create window with animation properties
         const newWindow = {
@@ -3647,6 +3983,17 @@ class GamerSetup3D {
             newWindow.explorerExpanded = new Set(['Bureau', 'Projets']);
         } else if (icon.id === 'taskmanager') {
             newWindow.taskStartTime = Date.now();
+        } else if (icon.id === 'mtconges') {
+            newWindow.mtc = {
+                screen: 'login', currentUser: null, activeTab: 0,
+                conges: [
+                    { id: 1, employe: 'Mathis Quelen', login: 'mqu', duree: 3, debut: '01/05/2025', etat: 'En attente', motif: 'Congés personnels' },
+                    { id: 2, employe: 'Paul Blanc',    login: 'bpa', duree: 5, debut: '15/04/2025', etat: 'Approuvé',   motif: 'Vacances printemps' },
+                    { id: 3, employe: 'Paul Blanc',    login: 'bpa', duree: 2, debut: '30/03/2025', etat: 'Refusé',     motif: 'Formation externe' },
+                    { id: 4, employe: 'Mathis Quelen', login: 'mqu', duree: 7, debut: '20/06/2025', etat: 'En attente', motif: 'Vacances été' },
+                ],
+            };
+            newWindow.mtcClickZones = [];
         }
 
         // Fetch live news for veille window
