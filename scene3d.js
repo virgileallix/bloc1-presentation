@@ -35,6 +35,8 @@ class GamerSetup3D {
         this.performanceMode = this.detectPerformanceMode();
         this.lastScreenUpdate = 0;
         this.screenUpdateThrottle = this.performanceMode === 'low' ? 50 : 16; // ms between updates
+        this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        this.osDirty = true; // only redraw OS canvas when state changes
 
         // Image cache for project images
         this.imageCache = {};
@@ -4273,6 +4275,13 @@ class GamerSetup3D {
 
     animate() {
         requestAnimationFrame(() => this.animate());
+
+        // Stop all animations if user prefers reduced motion
+        if (this.reducedMotion) {
+            this.controls.update();
+            this.composer.render();
+            return;
+        }
 
         // Limit FPS for low-end devices (skip frames)
         if (this.performanceMode === 'low') {

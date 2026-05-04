@@ -1007,3 +1007,129 @@ html {
     transition: width 0.3s ease;
     width: 0%;
 }
+
+/* =====================
+   ACCESSIBILITÉ
+   ===================== */
+
+/* Lien d'évitement */
+.skip-link {
+    position: absolute;
+    top: -100%;
+    left: 1rem;
+    z-index: 10000;
+    padding: 0.75rem 1.5rem;
+    background: #1e40af;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 0 0 8px 8px;
+    text-decoration: none;
+    transition: top 0.2s;
+}
+.skip-link:focus {
+    top: 0;
+    outline: 3px solid #facc15;
+}
+
+/* Version accessible */
+#a11y-version {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: #fff;
+    color: #111;
+    overflow-y: auto;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+.a11y-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+}
+
+.a11y-container header {
+    border-bottom: 3px solid #1e40af;
+    padding-bottom: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.a11y-container h1 {
+    font-size: 2rem;
+    color: #1e40af;
+    margin-bottom: 0.25rem;
+}
+
+.a11y-container h2 {
+    font-size: 1.5rem;
+    color: #1e40af;
+    border-left: 4px solid #1e40af;
+    padding-left: 0.75rem;
+    margin: 2rem 0 1rem;
+}
+
+.a11y-container h3 {
+    font-size: 1.1rem;
+    color: #374151;
+    margin: 1.25rem 0 0.5rem;
+}
+
+.a11y-container p, .a11y-container li {
+    color: #374151;
+}
+
+.a11y-container ul {
+    padding-left: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.a11y-container article {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.25rem;
+}
+
+.a11y-container a {
+    color: #1e40af;
+    text-underline-offset: 3px;
+}
+.a11y-container a:focus {
+    outline: 3px solid #facc15;
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+.a11y-container nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 0.75rem;
+}
+
+#a11y-close {
+    display: block;
+    margin-bottom: 2rem;
+    padding: 0.6rem 1.2rem;
+    background: #1e40af;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+#a11y-close:focus {
+    outline: 3px solid #facc15;
+    outline-offset: 2px;
+}
+
+/* Réduction des animations pour accessibilité / perf */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
