@@ -10,7 +10,7 @@ export default function Hero() {
                 <span className="gradient-text">Allix</span>
             </h1>
             <p className="hero-sub">
-                Développeur Full Stack en alternance chez <strong>LMG</strong>,<br />
+                Développeur Full Stack en alternance chez <strong>MTB by Créative</strong>,<br />
                 mission <strong>CNP Assurances</strong>. Java, Laravel, React.
             </p>
             <div className="hero-cta">

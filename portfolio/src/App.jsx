@@ -22,7 +22,7 @@ export default function App() {
                 <Contact />
             </main>
             <footer className="footer">
-                <p>© 2026 Virgile Allix — BTS SIO SLAM · LMG</p>
+                <p>© 2026 Virgile Allix — BTS SIO SLAM · MTB by Créative</p>
             </footer>
         </div>
     )
