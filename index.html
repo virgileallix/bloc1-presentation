@@ -63,6 +63,10 @@
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 7V3.5L18.5 9H13zm-2 8l-4-4h2.5v-4h3v4H14l-3 4z"/></svg>
             <span>Tableau E5</span>
         </a>
+        <a href="./portfolio/" class="social-btn" aria-label="Ouvrir le portfolio React">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+            <span>Portfolio</span>
+        </a>
         <button id="a11y-toggle" class="social-btn" aria-pressed="false" aria-label="Ouvrir la version accessible">
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm8 7h-5v13h-2v-6h-2v6H9V9H4V7h16v2z"/></svg>
             <span>Accessibilité</span>
@@ -72,12 +76,12 @@
     <!-- ===================== VERSION ACCESSIBLE ===================== -->
     <div id="a11y-version" role="main" hidden>
 
-        <!-- Header fixe -->
+        <!-- Header glassmorphism -->
         <header class="a11y-header">
             <div class="a11y-header-inner">
                 <div class="a11y-logo">
-                    <span class="a11y-logo-initials">VA</span>
-                    <div>
+                    <div class="a11y-logo-avatar">VA</div>
+                    <div class="a11y-logo-text">
                         <strong>Virgile Allix</strong>
                         <span>Développeur Full Stack · BTS SIO SLAM</span>
                     </div>
@@ -91,7 +95,7 @@
                     <button class="a11y-nav-btn" data-page="veille">Veille</button>
                     <button class="a11y-nav-btn" data-page="contact">Contact</button>
                 </nav>
-                <button id="a11y-close" aria-label="Revenir au portfolio 3D">✕ Quitter</button>
+                <button id="a11y-close" aria-label="Revenir au portfolio 3D">← Portfolio 3D</button>
             </div>
         </header>
 
@@ -100,21 +104,31 @@
 
             <!-- PAGE : ACCUEIL -->
             <section class="a11y-page active" id="page-accueil" aria-labelledby="page-accueil-title">
-                <h1 id="page-accueil-title">Virgile Allix</h1>
-                <p class="a11y-lead">Étudiant en 2ème année de BTS SIO SLAM, en alternance chez LMG sur une mission CNP Assurances. Passionné de développement web et de cybersécurité.</p>
+                <div class="a11y-hero">
+                    <div class="a11y-hero-eyebrow">BTS SIO SLAM · Promotion 2026</div>
+                    <h1 id="page-accueil-title" class="a11y-hero-title">Virgile<br><span class="a11y-gradient-text">Allix</span></h1>
+                    <p class="a11y-hero-sub">Développeur Full Stack en alternance chez <strong>LMG</strong> — mission <strong>CNP Assurances</strong>.<br>Passionné de dev web, de Java et de cybersécurité.</p>
+                    <div class="a11y-hero-cta">
+                        <a href="mailto:virgile.allix11@gmail.com" class="a11y-btn-primary">Me contacter</a>
+                        <a href="https://github.com/virgileallix" target="_blank" rel="noopener" class="a11y-btn-ghost">GitHub ↗</a>
+                    </div>
+                </div>
 
+                <div class="a11y-section-label">Formation &amp; Expérience</div>
                 <div class="a11y-cards-2">
                     <div class="a11y-card">
-                        <h2>🎓 Formation</h2>
+                        <div class="a11y-card-icon">🎓</div>
+                        <h2>Formation</h2>
                         <ul>
                             <li><strong>BTS SIO SLAM</strong> — Session 2026</li>
                             <li><strong>Bac STI2D option SIN</strong> — 2024</li>
                         </ul>
                     </div>
                     <div class="a11y-card">
-                        <h2>💼 Expérience</h2>
+                        <div class="a11y-card-icon">💼</div>
+                        <h2>Expérience</h2>
                         <p><strong>LMG</strong> — Alternance 2 ans (2024–2026)</p>
-                        <p>Mission CNP Assurances · Offre Collective</p>
+                        <p class="a11y-card-sub">Mission CNP Assurances · Offre Collective</p>
                         <ul>
                             <li>Évolutions IHM, BDD et XML sur appli Laravel</li>
                             <li>Migration PHP/Laravel, correctifs incidents</li>
@@ -122,8 +136,8 @@
                     </div>
                 </div>
 
+                <div class="a11y-section-label">Stack technique</div>
                 <div class="a11y-card a11y-stack-card">
-                    <h2>🛠️ Stack technique</h2>
                     <div class="a11y-tags-grid">
                         <span class="a11y-tag">PHP</span>
                         <span class="a11y-tag">Java</span>
@@ -147,18 +161,20 @@
 
             <!-- PAGE : MT-CONGÉS -->
             <section class="a11y-page" id="page-mtconges" aria-labelledby="page-mtconges-title" hidden>
-                <div class="a11y-page-badge">Projet BTS · Formation</div>
-                <h1 id="page-mtconges-title">ADP — MT-Congés</h1>
+                <div class="a11y-page-badge a11y-badge-blue">Projet BTS · Formation</div>
+                <h1 id="page-mtconges-title" class="a11y-page-title">ADP — <span class="a11y-gradient-text">MT-Congés</span></h1>
                 <p class="a11y-lead">Application de gestion des congés du personnel, développée en Java 17 avec une architecture MVC complète.</p>
                 <p class="a11y-period">📅 Septembre 2024 — Mars 2025</p>
 
                 <div class="a11y-cards-2">
                     <div class="a11y-card">
-                        <h2>🎯 Objectif</h2>
-                        <p>Permettre aux employés de soumettre des congés, aux responsables de les valider, et aux administrateurs de gérer les comptes — le tout dans un environnement sécurisé.</p>
+                        <div class="a11y-card-icon">🎯</div>
+                        <h2>Objectif</h2>
+                        <p>Permettre aux employés de soumettre des congés, aux responsables de les valider, et aux administrateurs de gérer les comptes dans un environnement sécurisé.</p>
                     </div>
                     <div class="a11y-card">
-                        <h2>👥 Rôles</h2>
+                        <div class="a11y-card-icon">👥</div>
+                        <h2>Rôles utilisateurs</h2>
                         <ul>
                             <li><strong>Super-Admin</strong> — gestion complète</li>
                             <li><strong>Responsable</strong> — validation des demandes</li>
@@ -166,7 +182,8 @@
                         </ul>
                     </div>
                     <div class="a11y-card">
-                        <h2>⚙️ Fonctionnalités</h2>
+                        <div class="a11y-card-icon">⚙️</div>
+                        <h2>Fonctionnalités</h2>
                         <ul>
                             <li>Authentification BCrypt + gestion de session</li>
                             <li>Gestion des rôles et permissions</li>
@@ -176,7 +193,8 @@
                         </ul>
                     </div>
                     <div class="a11y-card">
-                        <h2>🛠️ Technologies</h2>
+                        <div class="a11y-card-icon">🛠️</div>
+                        <h2>Technologies</h2>
                         <div class="a11y-tags-grid">
                             <span class="a11y-tag">Java 17</span>
                             <span class="a11y-tag">Swing</span>
@@ -194,7 +212,7 @@
                     <h2>📌 Compétences E4/E5</h2>
                     <div class="a11y-tags-grid">
                         <span class="a11y-tag a11y-tag-green">Patrimoine informatique</span>
-                        <span class="a11y-tag a11y-tag-green">Incidents & assistance</span>
+                        <span class="a11y-tag a11y-tag-green">Incidents &amp; assistance</span>
                         <span class="a11y-tag a11y-tag-green">Mode projet</span>
                     </div>
                 </div>
@@ -202,29 +220,33 @@
 
             <!-- PAGE : RFTG -->
             <section class="a11y-page" id="page-rftg" aria-labelledby="page-rftg-title" hidden>
-                <div class="a11y-page-badge">Projet BTS · Formation</div>
-                <h1 id="page-rftg-title">RFTG — Webservice Multi-Couches</h1>
+                <div class="a11y-page-badge a11y-badge-purple">Projet BTS · Formation</div>
+                <h1 id="page-rftg-title" class="a11y-page-title">RFTG — <span class="a11y-gradient-text">Webservice Multi-Couches</span></h1>
                 <p class="a11y-lead">Architecture microservices complète avec 4 composants indépendants communiquant via une API REST sécurisée.</p>
                 <p class="a11y-period">📅 Septembre 2025 — Mai 2026</p>
 
-                <div class="a11y-cards-2">
-                    <div class="a11y-card">
-                        <h2>🐸 Toad — API Spring Boot</h2>
+                <div class="a11y-rftg-grid">
+                    <div class="a11y-card a11y-card-accent-indigo">
+                        <div class="a11y-card-icon">🐸</div>
+                        <h2>Toad — API Spring Boot</h2>
                         <p>Backend principal. Authentification JWT partagée entre toutes les applications, endpoints REST, gestion des ressources.</p>
                         <div class="a11y-tags-grid"><span class="a11y-tag">Spring Boot</span><span class="a11y-tag">JWT</span><span class="a11y-tag">Java</span></div>
                     </div>
-                    <div class="a11y-card">
-                        <h2>🍄 Mario — Frontend Laravel</h2>
+                    <div class="a11y-card a11y-card-accent-cyan">
+                        <div class="a11y-card-icon">🍄</div>
+                        <h2>Mario — Frontend Laravel</h2>
                         <p>Interface web connectée à l'API Toad. Gestion des vues, formulaires et authentification partagée.</p>
                         <div class="a11y-tags-grid"><span class="a11y-tag">Laravel</span><span class="a11y-tag">PHP</span><span class="a11y-tag">Blade</span></div>
                     </div>
-                    <div class="a11y-card">
-                        <h2>🦎 Luigi — Application Android</h2>
+                    <div class="a11y-card a11y-card-accent-green">
+                        <div class="a11y-card-icon">🦎</div>
+                        <h2>Luigi — Application Android</h2>
                         <p>App mobile Java consommant l'API REST Toad. Interface native Android avec authentification JWT.</p>
                         <div class="a11y-tags-grid"><span class="a11y-tag">Android</span><span class="a11y-tag">Java</span><span class="a11y-tag">Retrofit</span></div>
                     </div>
-                    <div class="a11y-card">
-                        <h2>🍑 Peach — Base de données</h2>
+                    <div class="a11y-card a11y-card-accent-amber">
+                        <div class="a11y-card-icon">🍑</div>
+                        <h2>Peach — Base de données</h2>
                         <p>Base MySQL Sakila partagée entre les composants, requêtes optimisées.</p>
                         <div class="a11y-tags-grid"><span class="a11y-tag">MySQL</span><span class="a11y-tag">Sakila</span><span class="a11y-tag">JPA</span></div>
                     </div>
@@ -242,29 +264,32 @@
 
             <!-- PAGE : CNP -->
             <section class="a11y-page" id="page-cnp" aria-labelledby="page-cnp-title" hidden>
-                <div class="a11y-page-badge">Mission entreprise · LMG</div>
-                <h1 id="page-cnp-title">LMG — Mission CNP Assurances</h1>
+                <div class="a11y-page-badge a11y-badge-amber">Mission entreprise · LMG</div>
+                <h1 id="page-cnp-title" class="a11y-page-title">LMG — <span class="a11y-gradient-text">Mission CNP Assurances</span></h1>
                 <p class="a11y-lead">Mission en alternance chez LMG pour le client CNP Assurances — application Offre Collective (assurance santé collective).</p>
                 <p class="a11y-period">📅 Janvier 2025 → en cours</p>
 
                 <div class="a11y-cards-2">
                     <div class="a11y-card">
-                        <h2>🏢 Contexte</h2>
-                        <p>Application de proposition commerciale pour des contrats de santé collective. L'application gère les propositions, les contrats, les prestations et les paramétrages métier.</p>
-                        <p><strong>Rôle :</strong> Technico-Commercial & Paramètreur</p>
+                        <div class="a11y-card-icon">🏢</div>
+                        <h2>Contexte</h2>
+                        <p>Application de proposition commerciale pour des contrats de santé collective. Gestion des propositions, contrats, prestations et paramétrages métier.</p>
+                        <p class="a11y-card-sub">Rôle : Technico-Commercial &amp; Paramètreur</p>
                     </div>
                     <div class="a11y-card">
-                        <h2>⚙️ Réalisations</h2>
+                        <div class="a11y-card-icon">⚙️</div>
+                        <h2>Réalisations</h2>
                         <ul>
-                            <li>Ajout de vues et composants IHM (nouvelles fonctionnalités)</li>
+                            <li>Ajout de vues et composants IHM</li>
                             <li>Modifications BDD : nouvelles tables et colonnes</li>
-                            <li>Mise à jour des fichiers XML (PRGG contrats/prestations)</li>
+                            <li>Mise à jour des fichiers XML (PRGG)</li>
                             <li>Correctifs d'incidents signalés par le client</li>
                             <li>Migration Laravel et PHP vers versions récentes</li>
                         </ul>
                     </div>
                     <div class="a11y-card">
-                        <h2>🛠️ Technologies</h2>
+                        <div class="a11y-card-icon">🛠️</div>
+                        <h2>Technologies</h2>
                         <div class="a11y-tags-grid">
                             <span class="a11y-tag">Laravel</span>
                             <span class="a11y-tag">PHP</span>
@@ -277,7 +302,7 @@
                     <div class="a11y-card">
                         <h2>📌 Compétences E4/E5</h2>
                         <div class="a11y-tags-grid">
-                            <span class="a11y-tag a11y-tag-green">Incidents & évolutions</span>
+                            <span class="a11y-tag a11y-tag-green">Incidents &amp; évolutions</span>
                             <span class="a11y-tag a11y-tag-green">Mode projet</span>
                             <span class="a11y-tag a11y-tag-green">Patrimoine</span>
                         </div>
@@ -287,16 +312,17 @@
 
             <!-- PAGE : ANGLAIS-APPLI -->
             <section class="a11y-page" id="page-anglais" aria-labelledby="page-anglais-title" hidden>
-                <div class="a11y-page-badge">Projet personnel</div>
-                <h1 id="page-anglais-title">Anglais-Appli</h1>
+                <div class="a11y-page-badge a11y-badge-green">Projet personnel</div>
+                <h1 id="page-anglais-title" class="a11y-page-title"><span class="a11y-gradient-text">Anglais-Appli</span></h1>
                 <p class="a11y-lead">Application web de révision d'anglais : quiz interactif, vocabulaire thématique, suivi de progression.</p>
                 <p class="a11y-period">
-                    🌐 <a href="https://virgile-allix.github.io/anglais-appli/" target="_blank" rel="noopener">virgile-allix.github.io/anglais-appli/</a>
+                    🌐 <a href="https://virgile-allix.github.io/anglais-appli/" target="_blank" rel="noopener">virgile-allix.github.io/anglais-appli/ ↗</a>
                 </p>
 
                 <div class="a11y-cards-2">
                     <div class="a11y-card">
-                        <h2>✨ Fonctionnalités</h2>
+                        <div class="a11y-card-icon">✨</div>
+                        <h2>Fonctionnalités</h2>
                         <ul>
                             <li>Quiz interactif avec score</li>
                             <li>Vocabulaire classé par thèmes</li>
@@ -305,7 +331,8 @@
                         </ul>
                     </div>
                     <div class="a11y-card">
-                        <h2>🛠️ Technologies</h2>
+                        <div class="a11y-card-icon">🛠️</div>
+                        <h2>Technologies</h2>
                         <div class="a11y-tags-grid">
                             <span class="a11y-tag">React</span>
                             <span class="a11y-tag">Vite</span>
@@ -326,13 +353,14 @@
 
             <!-- PAGE : VEILLE -->
             <section class="a11y-page" id="page-veille" aria-labelledby="page-veille-title" hidden>
-                <div class="a11y-page-badge">Veille technologique · E5</div>
-                <h1 id="page-veille-title">L'IA dans la cybersécurité</h1>
-                <p class="a11y-lead">Sujet de veille : évolution de l'intelligence artificielle appliquée à la cybersécurité — aussi bien du côté défensif qu'offensif.</p>
+                <div class="a11y-page-badge a11y-badge-red">Veille technologique · E5</div>
+                <h1 id="page-veille-title" class="a11y-page-title">L'IA dans la <span class="a11y-gradient-text">cybersécurité</span></h1>
+                <p class="a11y-lead">Évolution de l'intelligence artificielle appliquée à la cybersécurité — aussi bien du côté défensif qu'offensif.</p>
 
                 <div class="a11y-cards-2">
-                    <div class="a11y-card">
-                        <h2>🛡️ IA défensive</h2>
+                    <div class="a11y-card a11y-card-accent-indigo">
+                        <div class="a11y-card-icon">🛡️</div>
+                        <h2>IA défensive</h2>
                         <ul>
                             <li>Détection d'intrusions par machine learning (IDS/IPS)</li>
                             <li>SIEM augmentés par IA : Splunk, Microsoft Sentinel</li>
@@ -340,8 +368,9 @@
                             <li>Threat intelligence automatisée : CrowdStrike, Darktrace</li>
                         </ul>
                     </div>
-                    <div class="a11y-card">
-                        <h2>⚔️ IA offensive</h2>
+                    <div class="a11y-card a11y-card-accent-red">
+                        <div class="a11y-card-icon">⚔️</div>
+                        <h2>IA offensive</h2>
                         <ul>
                             <li>Génération automatique de phishing ciblé (spear phishing)</li>
                             <li>Deepfakes pour l'ingénierie sociale</li>
@@ -350,7 +379,8 @@
                         </ul>
                     </div>
                     <div class="a11y-card">
-                        <h2>⚖️ Enjeux</h2>
+                        <div class="a11y-card-icon">⚖️</div>
+                        <h2>Enjeux</h2>
                         <ul>
                             <li>Course aux armements IA entre attaquants et défenseurs</li>
                             <li>AI Act européen et implications pour la cybersécurité</li>
@@ -359,11 +389,12 @@
                         </ul>
                     </div>
                     <div class="a11y-card">
-                        <h2>📚 Sources</h2>
+                        <div class="a11y-card-icon">📚</div>
+                        <h2>Sources</h2>
                         <ul>
-                            <li><a href="https://www.ssi.gouv.fr" target="_blank" rel="noopener">ANSSI — ssi.gouv.fr</a></li>
-                            <li><a href="https://www.cert.ssi.gouv.fr" target="_blank" rel="noopener">CERT-FR — cert.ssi.gouv.fr</a></li>
-                            <li><a href="https://thehackernews.com" target="_blank" rel="noopener">The Hacker News</a></li>
+                            <li><a href="https://www.ssi.gouv.fr" target="_blank" rel="noopener">ANSSI — ssi.gouv.fr ↗</a></li>
+                            <li><a href="https://www.cert.ssi.gouv.fr" target="_blank" rel="noopener">CERT-FR — cert.ssi.gouv.fr ↗</a></li>
+                            <li><a href="https://thehackernews.com" target="_blank" rel="noopener">The Hacker News ↗</a></li>
                             <li>Dev.to — #security #cybersecurity #ai</li>
                         </ul>
                     </div>
@@ -372,37 +403,41 @@
 
             <!-- PAGE : CONTACT -->
             <section class="a11y-page" id="page-contact" aria-labelledby="page-contact-title" hidden>
-                <h1 id="page-contact-title">Contact</h1>
-                <p class="a11y-lead">N'hésitez pas à me contacter pour toute question ou opportunité.</p>
+                <h1 id="page-contact-title" class="a11y-page-title">Entrons en <span class="a11y-gradient-text">contact</span></h1>
+                <p class="a11y-lead">N'hésitez pas à me contacter pour toute question ou opportunité professionnelle.</p>
 
-                <div class="a11y-cards-2">
+                <div class="a11y-contact-grid">
                     <a href="https://www.linkedin.com/in/virgile-allix/" target="_blank" rel="noopener" class="a11y-contact-card">
-                        <span class="a11y-contact-icon">🔗</span>
+                        <div class="a11y-contact-icon-wrap a11y-ci-blue">🔗</div>
                         <div>
                             <strong>LinkedIn</strong>
                             <span>linkedin.com/in/virgile-allix</span>
                         </div>
+                        <span class="a11y-contact-arrow">↗</span>
                     </a>
                     <a href="https://github.com/virgileallix" target="_blank" rel="noopener" class="a11y-contact-card">
-                        <span class="a11y-contact-icon">💻</span>
+                        <div class="a11y-contact-icon-wrap a11y-ci-purple">💻</div>
                         <div>
                             <strong>GitHub</strong>
                             <span>github.com/virgileallix</span>
                         </div>
+                        <span class="a11y-contact-arrow">↗</span>
                     </a>
                     <a href="mailto:virgile.allix11@gmail.com" class="a11y-contact-card">
-                        <span class="a11y-contact-icon">📧</span>
+                        <div class="a11y-contact-icon-wrap a11y-ci-cyan">📧</div>
                         <div>
                             <strong>Email</strong>
                             <span>virgile.allix11@gmail.com</span>
                         </div>
+                        <span class="a11y-contact-arrow">↗</span>
                     </a>
                     <a href="tableau-e5.xlsx" download="Tableau-Synthese-E5-Virgile-Allix.xlsx" class="a11y-contact-card">
-                        <span class="a11y-contact-icon">📊</span>
+                        <div class="a11y-contact-icon-wrap a11y-ci-green">📊</div>
                         <div>
                             <strong>Tableau E5</strong>
                             <span>Télécharger (Excel)</span>
                         </div>
+                        <span class="a11y-contact-arrow">↓</span>
                     </a>
                 </div>
             </section>
